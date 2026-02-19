@@ -3,11 +3,20 @@
 .nomedia
 /android/
 
+# gdUnit4 specific ignores
+reports/
+
 # Godot-specific ignores
 .import/
 export.cfg
 export_credentials.cfg
 *.tmp
+
+
+# Godot Export specific ignores
+build/
+*.old
+*.old.[0-9]
 
 # Imported translations (automatically generated from CSV files)
 *.translation
@@ -16,3 +25,7 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# Visual Studio Code specific ignores
+# .vscode/
+# .vs/
