@@ -1,6 +1,7 @@
-namespace rushhour;
+namespace rushhour.src;
 
 using System.Collections.Generic;
+using Godot;
 
 public interface ISolver
 {
@@ -13,7 +14,7 @@ public interface ISolver
     void Step();
     List<GameState> GetSolutionPath();
 
-    TimeSpan StepDelay { get; set; }
+    // TimeSpan StepDelay { get; set; }
 }
 
 public class BfsSolver : ISolver
@@ -22,7 +23,7 @@ public class BfsSolver : ISolver
     public bool FoundSolution { get; private set; }
     public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
     public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
-    public TimeSpan StepDelay { get; set; }
+    // public TimeSpan StepDelay { get; set; }
 
     public void Step() 
     { 
@@ -42,7 +43,7 @@ public class BacktrackingSolver : ISolver
     public bool FoundSolution { get; private set; }
     public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
     public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
-    public TimeSpan StepDelay { get; set; }
+    // public TimeSpan StepDelay { get; set; }
 
     public void Step() 
     { 
@@ -62,7 +63,7 @@ public class LocalSearchSolver : ISolver
     public bool FoundSolution { get; private set; }
     public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
     public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
-    public TimeSpan StepDelay { get; set; }
+    // public TimeSpan StepDelay { get; set; }
 
     public void Step() 
     { 

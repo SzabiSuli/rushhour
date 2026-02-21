@@ -1,10 +1,46 @@
-namespace rushhour;
+namespace rushhour.src;
+using Godot;
 
+
+class PlacedRHPiece
+{
+    public RushHourPiece Piece { get; set; }
+
+    /// Position of the front of the car
+    public Vector2I Position { get; set; }
+    public Direction FacingDirection { get; set; }
+
+    public PlacedRHPiece(RushHourPiece piece, Vector2I position, Direction facingDirection){
+        Piece = piece;
+        Position = position;
+        FacingDirection = facingDirection;
+    }
+    public PlacedRHPiece Move(Direction dir){
+        Vector2I newPosition = Position;
+        switch (dir){
+            case Direction.Up:
+                newPosition = Position + new Vector2I(0, -1);
+                break;
+            case Direction.Down:
+                newPosition = Position + new Vector2I(0, 1);
+                break;
+            case Direction.Left:
+                newPosition = Position + new Vector2I(-1, 0);
+                break;
+            case Direction.Right:
+                newPosition = Position + new Vector2I(1, 0);
+                break;
+        }
+        return new PlacedRHPiece(Piece, newPosition, FacingDirection);
+    }
+}
 abstract class Piece
 {
-    public int Id { get; set; }
-    public Coordinate Position { get; set; }
-    public Direction FacingDirection { get; set; }
+    // public int Id { get; set; }
+    
+    /// Position of the front of the car
+    // public Vector2I Position { get; set; }
+    // public Direction FacingDirection { get; set; }
 
     public abstract int Width { get; }
     public abstract int Length { get; }

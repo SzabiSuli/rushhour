@@ -1,4 +1,4 @@
-namespace rushhour;
+namespace rushhour.src;
 
 using Godot;
 using System.Collections.Generic;

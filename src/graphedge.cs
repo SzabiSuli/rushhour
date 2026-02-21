@@ -1,4 +1,4 @@
-namespace rushhour;
+namespace rushhour.src;
 
 public class GraphEdge
 {
