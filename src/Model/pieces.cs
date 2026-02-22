@@ -2,8 +2,7 @@ namespace rushhour.src;
 using Godot;
 
 
-public class PlacedRHPiece
-{
+public class PlacedRHPiece {
     public RushHourPiece Piece { get; init; }
 
     /// Position of the front of the car
@@ -34,8 +33,7 @@ public class PlacedRHPiece
         return new PlacedRHPiece(Piece, newPosition, FacingDirection);
     }
 }
-public abstract class Piece
-{
+public abstract class Piece {
     // public int Id { get; set; }
     
     /// Position of the front of the car
@@ -49,28 +47,24 @@ public abstract class Piece
     public abstract bool CanMoveSideways { get; }
 }
 
-public abstract class RushHourPiece : Piece
-{
+public abstract class RushHourPiece : Piece {
     public override bool CanMoveLengthwise => true;
     public override bool CanMoveSideways => false;
 }
 
-class Car : RushHourPiece
-{
+class Car : RushHourPiece {
     public override int Length => 2;
     public override int Width => 1;
 }
 
 class MainCar : Car { }
 
-class Bus : RushHourPiece
-{
+class Bus : RushHourPiece {
     public override int Length => 3;
     public override int Width => 1;
 }
 
-class Blocker : Piece
-{
+class Blocker : Piece {
     public override int Length => 1;
     public override int Width => 1;
     public override bool CanMoveLengthwise => false;

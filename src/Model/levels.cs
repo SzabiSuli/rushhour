@@ -2,15 +2,12 @@ namespace rushhour.src;
 
 using Godot;
 
-static class Levels
-{
+static class Levels {
     /// <summary>
     /// Rush Hour Puzzle #0 (Very Easy)
     /// </summary>
-    public static RHGameState Level0()
-    {
-        return new RHGameState(
-        [
+    public static RHGameState Level0() {
+        return new RHGameState([
             // Index 0: Red main car — horizontal, row 2, cols 0–1 (front at col 1, facing right, body extends left)
             new PlacedRHPiece(new MainCar(), new Vector2I(1, 2), Direction.Right),
 
@@ -45,10 +42,8 @@ static class Levels
     /// <summary>
     /// Rush Hour Puzzle #1 (Beginner)
     /// </summary>
-    public static RHGameState Level1()
-    {
-        return new RHGameState(
-        [
+    public static RHGameState Level1() {
+        return new RHGameState([
             // Index 0: Red main car — horizontal, row 2, cols 0–1 (front at col 1, facing right, body extends left)
             new PlacedRHPiece(new MainCar(), new Vector2I(1, 2), Direction.Right),
 

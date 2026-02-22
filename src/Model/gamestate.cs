@@ -6,8 +6,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using Godot;
 
-public abstract class GameState
-{
+public abstract class GameState {
     // public List<Piece> Pieces { get; protected set;}
     // public abstract int BoardWidth { get; protected set;}
     // public abstract int BoardHeight { get; protected set;}
@@ -30,6 +29,7 @@ public class RHGameState : GameState {
     // public PlacedRHPiece MainCar {get; protected set;}
     public int[,] BoardGrid { get; init;}
     public Vector2I ExitPosition => new Vector2I(BoardWidth - 1, 2);
+
 
     public RHGameState(PlacedRHPiece[] placedPieces) : base(){
         if (placedPieces.Length > maxPieces){
@@ -154,8 +154,7 @@ public class RHGameState : GameState {
         return new RHGameState(newPlacedPieces);
     }
 
-    public static bool operator ==(RHGameState left, RHGameState right)
-    {
+    public static bool operator ==(RHGameState left, RHGameState right) {
         // Check for null on both sides
         if (ReferenceEquals(left, right)) return true;
         if (left is null || right is null) return false;
@@ -164,8 +163,7 @@ public class RHGameState : GameState {
     }
 
     // 2. You MUST override != if you override ==
-    public static bool operator !=(RHGameState left, RHGameState right)
-    {
+    public static bool operator !=(RHGameState left, RHGameState right) {
         return !(left == right);
     }
 
@@ -174,11 +172,9 @@ public class RHGameState : GameState {
         for (int y = 0; y < BoardHeight; y++){
             for (int x = 0; x < BoardWidth; x++){
                 var i = BoardGrid[x, y];
-                if (i == -1)
-                {
+                if (i == -1) {
                     sb.Append(". ");
-                } else
-                {
+                } else {
                     sb.Append($"{i} ");
                 }
             }

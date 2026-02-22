@@ -2,30 +2,27 @@ namespace rushhour.src;
 
 using Godot;
 using System.Collections.Generic;
+using System.Dynamic;
 
-public class GraphNode
-{
+public class GraphNode {
     // Position for displaying on the gui
-    public Vector2 Position { get; set; }
+    // public Vector2 Position { get; set; }
 
     public GameState State { get; }
     public List<GraphEdge> Edges { get; set; } = new List<GraphEdge>();
     public GraphNode Parent { get; set; }
 
-    public GraphNode(Vector2 position, GameState state)
-    {
+    public GraphNode(Vector2 position, GameState state) {
         Position = position;
         State = state;
     }
 
 
-    public void AddEdge(GraphEdge edge)
-    {
+    public void AddEdge(GraphEdge edge) {
         Edges.Add(edge);
     }
 
-    public override bool Equals(object obj)
-    {
+    public override bool Equals(object obj) {
         // Check for null or different types
         if (obj == null || GetType() != obj.GetType())
             return false;
@@ -34,18 +31,32 @@ public class GraphNode
         return State.Equals(other.State);
     }
 
-    public override int GetHashCode()
-    {
+    public override int GetHashCode() {
         return State.GetHashCode();
     }
 }
 
-public class StateGraph
-{
-    public Dictionary<int, GraphNode> Nodes { get; } = new Dictionary<int, GraphNode>();
+public class StateGraph {
+    public Dictionary<RHGameState, GraphNode> Nodes { get; } = new ();
+    // public HashSet<GraphNode> Nodes {get; } = new();
 
-    public void AddState(GameState state)
-    {
-        // Implementation hidden
+    public void AddState(RHGameState fromState, Move move) {
+        RHGameState toState = fromState.WithMove(move);
+
+        GraphNode fromNode = Nodes[fromState];
+
+        GraphNode toNode = new GraphNode(
+
+        )
+
+        
+
+
+
+        GraphEdge edge = new GraphEdge {
+            From = fromState,
+            MoveUsed = move,
+            To = to
+        }
     }
 }

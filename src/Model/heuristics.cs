@@ -5,10 +5,8 @@ public abstract class Heuristic{
 }
 
 // TODO make this static or something
-public class DistanceHeuristic : Heuristic
-{
-    public override int Evaluate(RHGameState state)
-    {
+public class DistanceHeuristic : Heuristic {
+    public override int Evaluate(RHGameState state) {
         return 5 - state.PlacedPieces[0].Position.X;
     }
 }

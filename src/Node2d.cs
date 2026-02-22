@@ -3,12 +3,15 @@ namespace rushhour.src;
 using Godot;
 using rushhour.src;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-public partial class Node2d : Node2D
-{
+public partial class Node2d : Node2D {
 	// Called when the node enters the scene tree for the first time.
 
-	HillClimberSolver solver;
+	double time = 0;
+
+	BacktrackingSolver solver;
 	public override void _Ready(){
 		string version = System.Environment.Version.ToString();
 		GD.Print("🚀 C# is working!");
@@ -20,7 +23,8 @@ public partial class Node2d : Node2D
 		RHGameState lvl = Levels.Level0();
 		lvl.PrintState();
 
-		solver = new HillClimberSolver(new DistanceHeuristic(), lvl);
+		// solver = new HillClimberSolver(new DistanceHeuristic(), lvl);
+		solver = new BacktrackingSolver(new DistanceHeuristic(), lvl);
 
 		
 
@@ -46,7 +50,13 @@ public partial class Node2d : Node2D
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta) {
+	public async override void _Process(double delta) {
+		time += delta;
+		if (time < 0.5) {	
+			return;
+		} else {
+			time = 0;
+		}
 		if (!solver.Terminated){
 			solver.Current.PrintState();
 			solver.Step();

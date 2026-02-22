@@ -6,8 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public interface ISolver
-{
+public interface ISolver {
     // bool IsRunning { get; }
     bool FoundSolution { get; set;}
     bool Terminated { get; }
@@ -22,8 +21,7 @@ public interface ISolver
     // TimeSpan StepDelay { get; set; }
 }
 
-public class HillClimberSolver : ISolver
-{
+public class HillClimberSolver : ISolver {
     // public bool IsRunning { get; private set; }
     // public bool FoundSolution { get; private set; }
     // public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
@@ -112,19 +110,27 @@ public class BacktrackingSolver  {
     // public RHGameState Current { get; set; }
     Heuristic Heuristic { get; set; }
 
+    public RHGameState? Current => CurrentRoute.Last()?.Item1;
+
+
     public BacktrackingSolver(Heuristic heuristic, RHGameState initialState){
         Heuristic = heuristic;
-        var neighbours = initialState.GetPossibleMoves()
-        .Select(initialState.WithMove)
-        .Where(state => !CurrentRoute.Select(tuple => tuple.Item1).Contains(state)) // filter out states already in the current route
-        .OrderBy(Heuristic.Evaluate)
-        .ToList();
-        CurrentRoute.Add(new (initialState, neighbours));
-
         // Current = initialState;
         FoundSolution = false;
         Terminated = false;
+
+        AddAndExtend(initialState);
     }
+
+    private void AddAndExtend(RHGameState state){
+        var neighbours = state.GetPossibleMoves()
+        .Select(state.WithMove)
+        .Where(state => !CurrentRoute.Select(tuple => tuple.Item1).Contains(state)) // filter out states already in the current route
+        .OrderBy(Heuristic.Evaluate)
+        .ToList();
+        CurrentRoute.Add(new (state, neighbours));
+    }
+
 
     public void Step() { 
         if (CurrentRoute.Count == 0){
@@ -138,30 +144,70 @@ public class BacktrackingSolver  {
             Terminated = true;
             return;
         }
+        if (neighbours.Count == 0){
+            CurrentRoute.RemoveAt(CurrentRoute.Count() - 1);
+            return;
+        }
+        // choose the best neighbour to continue the path
+        var nextStep = CurrentRoute.Last().Item2.First();
 
+        // remove it from the choices list, so if we come back here, we won't check this one again.
+        CurrentRoute.Last().Item2.RemoveAt(0);
 
-
+        // add the state to the route, and discover it's neighbours
+        AddAndExtend(nextStep);
     }
 
-    public List<GameState> GetSolutionPath() { 
-        // Implementation hidden
-        return null; 
+    public IEnumerable<RHGameState> GetSolutionPath() { 
+        if (!FoundSolution) {
+            return null;
+        } 
+        return CurrentRoute.Select(tuple => tuple.Item1);
     }
 }
 
-// public class LocalSearchSolver : ISolver {
-//     public bool IsRunning { get; private set; }
-//     public bool FoundSolution { get; private set; }
-//     public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
-//     public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
-//     // public TimeSpan StepDelay { get; set; }
+public class GraphSolver  {
+    // public bool IsRunning { get; private set; }
+    public bool FoundSolution { get; private set; }
+    public bool Terminated { get; private set; }
+    // public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
+    // public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
+    // public TimeSpan StepDelay { get; set; }
 
-//     public void Step() { 
-//         // Implementation hidden
-//     }
+    public PriorityQueue<RHGameState, int> OpenStates { get; } = new ();
+    // public RHGameState Current { get; set; }
+    Heuristic Heuristic { get; set; }
 
-//     public List<GameState> GetSolutionPath() { 
-//         // Implementation hidden
-//         return null; 
-//     }
-// }
+    Dictionary<RHGameState, List<RHGameState>> RoutesGraph = new();
+
+    // public RHGameState? Current => CurrentRoute.Last()?.Item1;
+
+
+    public GraphSolver(Heuristic heuristic, RHGameState initialState){
+        Heuristic = heuristic;
+        // Current = initialState;
+        FoundSolution = false;
+        Terminated = false;
+
+        OpenStates.Enqueue(initialState, 0);
+    }
+
+    
+
+
+    public void Step() { 
+        var state = OpenStates.Dequeue();
+        Extend(state);
+    }
+
+    private void Extend(RHGameState state) {
+        
+    }
+
+    public IEnumerable<RHGameState> GetSolutionPath() { 
+        if (!FoundSolution) {
+            return null;
+        } 
+        return CurrentRoute.Select(tuple => tuple.Item1);
+    }
+}
