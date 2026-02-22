@@ -21,14 +21,14 @@ public abstract class GameState
     // public abstract bool IsSolved();
 }
 
-class RHGameState : GameState {
+public class RHGameState : GameState {
     // PlacedPiece at index 0 has to be the main car
-    public PlacedRHPiece[] PlacedPieces { get; protected set;}
+    public PlacedRHPiece[] PlacedPieces { get; init;}
     private const int maxPieces = 16;
     public int BoardWidth => 6;
     public int BoardHeight => 6;
     // public PlacedRHPiece MainCar {get; protected set;}
-    public int[,] BoardGrid { get; protected set;}
+    public int[,] BoardGrid { get; init;}
     public Vector2I ExitPosition => new Vector2I(BoardWidth - 1, 2);
 
     public RHGameState(PlacedRHPiece[] placedPieces) : base(){
@@ -154,6 +154,21 @@ class RHGameState : GameState {
         return new RHGameState(newPlacedPieces);
     }
 
+    public static bool operator ==(RHGameState left, RHGameState right)
+    {
+        // Check for null on both sides
+        if (ReferenceEquals(left, right)) return true;
+        if (left is null || right is null) return false;
+
+        return left.Equals(right);
+    }
+
+    // 2. You MUST override != if you override ==
+    public static bool operator !=(RHGameState left, RHGameState right)
+    {
+        return !(left == right);
+    }
+
     public void PrintState(){
         StringBuilder sb = new StringBuilder();
         for (int y = 0; y < BoardHeight; y++){
@@ -170,7 +185,5 @@ class RHGameState : GameState {
             sb.AppendLine();
         }
         GD.Print(sb.ToString());
-    }
-
-    
+    }    
 }

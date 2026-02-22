@@ -2,3 +2,7 @@ root = true
 
 [*]
 charset = utf-8
+
+[*.cs]
+# Ensure braces are on the same line for control blocks
+csharp_new_line_before_open_brace = none
