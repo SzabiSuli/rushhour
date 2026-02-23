@@ -1,4 +1,4 @@
-namespace rushhour.src;
+namespace rushhour.src.Model;
 
 
 using System;
@@ -204,10 +204,10 @@ public class GraphSolver  {
         
     }
 
-    public IEnumerable<RHGameState> GetSolutionPath() { 
-        if (!FoundSolution) {
-            return null;
-        } 
-        return CurrentRoute.Select(tuple => tuple.Item1);
-    }
+    // public IEnumerable<RHGameState> GetSolutionPath() { 
+    //     if (!FoundSolution) {
+    //         return null;
+    //     } 
+    //     return CurrentRoute.Select(tuple => tuple.Item1);
+    // }
 }

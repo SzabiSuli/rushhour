@@ -1,13 +1,18 @@
-namespace rushhour.src;
+namespace rushhour.src.Nodes;
 
 using Godot;
-using rushhour.src;
+using rushhour.src.Model;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-public partial class Node2d : Node2D {
+public partial class MainScene : Control {
 	// Called when the node enters the scene tree for the first time.
+
+	// 1. Export a PackedScene variable so you can drag-and-drop your .tscn file in the Inspector
+    // [Export]
+    public PackedScene NodeCreator = ResourceLoader.Load<PackedScene>("res://scenes/vertex.tscn");
+	Random random = new Random();
 
 	double time = 0;
 
@@ -52,14 +57,18 @@ public partial class Node2d : Node2D {
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public async override void _Process(double delta) {
 		time += delta;
-		if (time < 0.5) {	
+		if (time < 3) {	
 			return;
 		} else {
 			time = 0;
+			Node2D vertex = (Node2D)NodeCreator.Instantiate();
+			GD.Print(vertex);
+			AddChild(vertex);
+			vertex.Position = new Vector2(random.Next(100,500), random.Next(100,500));
 		}
-		if (!solver.Terminated){
-			solver.Current.PrintState();
-			solver.Step();
-		}
+		// if (!solver.Terminated){
+		// 	solver.Current.PrintState();
+		// 	solver.Step();
+		// }
 	}
 }

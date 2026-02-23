@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cdjjjlp5rpgc3"]
+
+[ext_resource type="Script" uid="uid://x4magystxd2i" path="res://src/Nodes/MainScene.cs" id="1_w2twt"]
+
+[node name="MainScene" type="Control" unique_id=203170334]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_w2twt")

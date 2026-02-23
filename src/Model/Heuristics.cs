@@ -1,4 +1,4 @@
-namespace rushhour.src;
+namespace rushhour.src.Model;
 
 public abstract class Heuristic{
     public abstract int Evaluate(RHGameState state);
