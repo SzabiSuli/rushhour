@@ -3,6 +3,15 @@ namespace rushhour.src.Model;
 using Godot;
 
 static class Levels {
+    
+    public static RHGameState TestLevel() {
+        return new RHGameState([
+            // Index 0: Red main car — horizontal, row 2, cols 0–1 (front at col 1, facing right, body extends left)
+            new PlacedRHPiece(new MainCar(), new Vector2I(1, 1), Direction.Right),
+            new PlacedRHPiece(new Car(), new Vector2I(1, 3), Direction.Right)
+        ]);
+    }
+    
     /// <summary>
     /// Rush Hour Puzzle #0 (Very Easy)
     /// </summary>

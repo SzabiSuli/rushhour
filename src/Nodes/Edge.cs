@@ -8,11 +8,18 @@ using rushhour.src.Model;
 public partial class Edge : Line2D
 {
 
-	public Vertex From { get; init; }
-	public Vertex To { get; init; }
-	public Move MoveUsed { get; init; }
+	public Vertex From { get; set; }
+	public Vertex To { get; set; }
+	public Move MoveUsed { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
+
+
+	public void Init(Vertex form, Vertex to, Move moveUsed){
+		From = form;
+		To = to;
+		MoveUsed = moveUsed;
+	}
 	public override void _Ready(){
 
 

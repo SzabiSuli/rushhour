@@ -5,209 +5,224 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using rushhour.src.Nodes;
 
 public interface ISolver {
-    // bool IsRunning { get; }
-    bool FoundSolution { get; set;}
-    bool Terminated { get; }
-    
-    // HashSet<GraphNode> WorkingSetNodes { get; }
-    // HashSet<GraphEdge> WorkingSetEdges { get; }
+	// bool IsRunning { get; }
+	bool FoundSolution { get; set;}
+	bool Terminated { get; }
+	
+	// HashSet<GraphNode> WorkingSetNodes { get; }
+	// HashSet<GraphEdge> WorkingSetEdges { get; }
 
-    void Step();
-    List<GameState> GetSolutionPath();
+	void Step();
+	List<GameState> GetSolutionPath();
 
 
-    // TimeSpan StepDelay { get; set; }
+	// TimeSpan StepDelay { get; set; }
 }
 
 public class HillClimberSolver : ISolver {
-    // public bool IsRunning { get; private set; }
-    // public bool FoundSolution { get; private set; }
-    // public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
-    // public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
-    // public TimeSpan StepDelay { get; set; }
+	// public bool IsRunning { get; private set; }
+	// public bool FoundSolution { get; private set; }
+	// public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
+	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
+	// public TimeSpan StepDelay { get; set; }
 
 	Random rand = new Random();
 
 
-    #nullable enable
-    public RHGameState? Parent { get; set; }
-    #nullable disable
+	#nullable enable
+	public RHGameState? Parent { get; set; }
+	#nullable disable
 
-    public RHGameState Current { get; set; }
+	public RHGameState Current { get; set; }
 
-    public Heuristic Heuristic { get; set; }
-    
-    public bool FoundSolution { get; set; }
-    public bool Terminated { get; set; }
-    public HillClimberSolver(Heuristic heuristic, RHGameState initialState){
+	public Heuristic Heuristic { get; set; }
+	
+	public bool FoundSolution { get; set; }
+	public bool Terminated { get; set; }
+	public HillClimberSolver(Heuristic heuristic, RHGameState initialState){
 
-        Heuristic = heuristic;
-        Current = initialState;
-        Parent = null;
-        FoundSolution = false;
-    }
+		Heuristic = heuristic;
+		Current = initialState;
+		Parent = null;
+		FoundSolution = false;
+	}
 
-    public void Step() { 
+	public void Step() { 
 
-        if (Current.IsSolved()){
-            FoundSolution = true;
-            Terminated = true;
-            return;
-        }
+		if (Current.IsSolved()){
+			FoundSolution = true;
+			Terminated = true;
+			return;
+		}
 
-        var possibleMoves = Current.GetPossibleMoves();
-        if (possibleMoves.Count() == 0){
-            Terminated = true;
-            return; 
-        }
+		var possibleMoves = Current.GetPossibleMoves();
+		if (possibleMoves.Count() == 0){
+			Terminated = true;
+			return; 
+		}
 
-        if (possibleMoves.Count() == 1){
-            // the only neighbour is the parent
-            RHGameState temp = Current;
-            Current = Parent;
-            Parent = temp;
-            return;
-        }
+		if (possibleMoves.Count() == 1){
+			// the only neighbour is the parent
+			RHGameState temp = Current;
+			Current = Parent;
+			Parent = temp;
+			return;
+		}
 
-        var possibleStates = possibleMoves.Select(
-            Current.WithMove 
-        ).ToList();
+		var possibleStates = possibleMoves.Select(
+			Current.WithMove 
+		).ToList();
 
 
-        var orderedStates = possibleStates.OrderBy(
-            // TODO add random value between 1 and 0
-            state => Heuristic.Evaluate(state) + rand.NextDouble()
-        );
+		var orderedStates = possibleStates.OrderBy(
+			// TODO add random value between 1 and 0
+			state => Heuristic.Evaluate(state) + rand.NextDouble()
+		);
 
-        RHGameState bestMove;
-        if (orderedStates.First() == Parent){
-            bestMove = orderedStates.Skip(1).First();
-        } else {
-            bestMove = orderedStates.First();
-        }
+		RHGameState bestMove;
+		if (orderedStates.First() == Parent){
+			bestMove = orderedStates.Skip(1).First();
+		} else {
+			bestMove = orderedStates.First();
+		}
 
-        Parent = Current;
-        Current = bestMove;
-    }
-    
-    public List<GameState> GetSolutionPath() { 
-        // Implementation hidden
-        return null; 
-    }
+		Parent = Current;
+		Current = bestMove;
+	}
+	
+	public List<GameState> GetSolutionPath() { 
+		// Implementation hidden
+		return null; 
+	}
 }
 
 public class BacktrackingSolver  {
-    // public bool IsRunning { get; private set; }
-    public bool FoundSolution { get; private set; }
-    public bool Terminated { get; private set; }
-    // public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
-    // public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
-    // public TimeSpan StepDelay { get; set; }
+	// public bool IsRunning { get; private set; }
+	public bool FoundSolution { get; private set; }
+	public bool Terminated { get; private set; }
+	// public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
+	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
+	// public TimeSpan StepDelay { get; set; }
 
-    public List<Tuple<RHGameState, List<RHGameState>>> CurrentRoute { get; } = new ();
-    // public RHGameState Current { get; set; }
-    Heuristic Heuristic { get; set; }
+	public List<Tuple<RHGameState, List<RHGameState>>> CurrentRoute { get; } = new ();
+	// public RHGameState Current { get; set; }
+	Heuristic Heuristic { get; set; }
 
-    public RHGameState? Current => CurrentRoute.Last()?.Item1;
+	public RHGameState? Current => CurrentRoute.Last()?.Item1;
 
+	
 
-    public BacktrackingSolver(Heuristic heuristic, RHGameState initialState){
-        Heuristic = heuristic;
-        // Current = initialState;
-        FoundSolution = false;
-        Terminated = false;
+	public MainScene MainScene { get; set; }
 
-        AddAndExtend(initialState);
-    }
+	public BacktrackingSolver(Heuristic heuristic, RHGameState initialState, MainScene mainScene){
 
-    private void AddAndExtend(RHGameState state){
-        var neighbours = state.GetPossibleMoves()
-        .Select(state.WithMove)
-        .Where(state => !CurrentRoute.Select(tuple => tuple.Item1).Contains(state)) // filter out states already in the current route
-        .OrderBy(Heuristic.Evaluate)
-        .ToList();
-        CurrentRoute.Add(new (state, neighbours));
-    }
+		// TODO fix it not terminating
 
+		Heuristic = heuristic;
+		MainScene = mainScene;
+		// Current = initialState;
+		FoundSolution = false;
+		Terminated = false;
 
-    public void Step() { 
-        if (CurrentRoute.Count == 0){
-            FoundSolution = false;
-            Terminated = true;
-            return;
-        }
-        var (current, neighbours) = CurrentRoute.Last();
-        if (current.IsSolved()){
-            FoundSolution = true;
-            Terminated = true;
-            return;
-        }
-        if (neighbours.Count == 0){
-            CurrentRoute.RemoveAt(CurrentRoute.Count() - 1);
-            return;
-        }
-        // choose the best neighbour to continue the path
-        var nextStep = CurrentRoute.Last().Item2.First();
+		AddAndExtend(initialState);
+	}
 
-        // remove it from the choices list, so if we come back here, we won't check this one again.
-        CurrentRoute.Last().Item2.RemoveAt(0);
+	private void AddAndExtend(RHGameState state){
+		var moves = state.GetPossibleMoves();
+		var neighbours = moves
+		.Select(move => (move, state.WithMove(move)))
+		.Where(move_and_state => !CurrentRoute.Select(tuple => tuple.Item1).Contains(move_and_state.Item2)) // filter out states already in the current route
+		.OrderBy(move_and_state => Heuristic.Evaluate(move_and_state.Item2))
+		.ToList();
+		
+		CurrentRoute.Add(new (state, neighbours.Select(x => x.Item2).ToList()));
+		Vertex from = MainScene.GetOrCreateVertex(state);
+		foreach (var move_and_state in neighbours){
+			Vertex to = MainScene.GetOrCreateVertex(move_and_state.Item2);
+			MainScene.GetOrCreateEdge(from, to, move_and_state.Item1);
+		}
+	}
 
-        // add the state to the route, and discover it's neighbours
-        AddAndExtend(nextStep);
-    }
+	public void Step() { 
+		if (CurrentRoute.Count == 0){
+			FoundSolution = false;
+			Terminated = true;
+			return;
+		}
+		var (current, neighbours) = CurrentRoute.Last();
+		if (current.IsSolved()){
+			FoundSolution = true;
+			Terminated = true;
+			return;
+		}
+		if (neighbours.Count == 0){
+			CurrentRoute.RemoveAt(CurrentRoute.Count() - 1);
+			return;
+		}
+		// choose the best neighbour to continue the path
+		var nextStep = CurrentRoute.Last().Item2.First();
 
-    public IEnumerable<RHGameState> GetSolutionPath() { 
-        if (!FoundSolution) {
-            return null;
-        } 
-        return CurrentRoute.Select(tuple => tuple.Item1);
-    }
+		// remove it from the choices list, so if we come back here, we won't check this one again.
+		CurrentRoute.Last().Item2.RemoveAt(0);
+
+		// add the state to the route, and discover it's neighbours
+		AddAndExtend(nextStep);
+	}
+
+	public IEnumerable<RHGameState> GetSolutionPath() { 
+		if (!FoundSolution) {
+			return null;
+		} 
+		return CurrentRoute.Select(tuple => tuple.Item1);
+	}
 }
 
 public class GraphSolver  {
-    // public bool IsRunning { get; private set; }
-    public bool FoundSolution { get; private set; }
-    public bool Terminated { get; private set; }
-    // public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
-    // public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
-    // public TimeSpan StepDelay { get; set; }
+	// public bool IsRunning { get; private set; }
+	public bool FoundSolution { get; private set; }
+	public bool Terminated { get; private set; }
+	// public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
+	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
+	// public TimeSpan StepDelay { get; set; }
 
-    public PriorityQueue<RHGameState, int> OpenStates { get; } = new ();
-    // public RHGameState Current { get; set; }
-    Heuristic Heuristic { get; set; }
+	public PriorityQueue<RHGameState, int> OpenStates { get; } = new ();
+	// public RHGameState Current { get; set; }
+	Heuristic Heuristic { get; set; }
 
-    Dictionary<RHGameState, List<RHGameState>> RoutesGraph = new();
+	Dictionary<RHGameState, List<RHGameState>> RoutesGraph = new();
 
-    // public RHGameState? Current => CurrentRoute.Last()?.Item1;
-
-
-    public GraphSolver(Heuristic heuristic, RHGameState initialState){
-        Heuristic = heuristic;
-        // Current = initialState;
-        FoundSolution = false;
-        Terminated = false;
-
-        OpenStates.Enqueue(initialState, 0);
-    }
-
-    
+	// public RHGameState? Current => CurrentRoute.Last()?.Item1;
 
 
-    public void Step() { 
-        var state = OpenStates.Dequeue();
-        Extend(state);
-    }
+	public GraphSolver(Heuristic heuristic, RHGameState initialState){
+		Heuristic = heuristic;
+		// Current = initialState;
+		FoundSolution = false;
+		Terminated = false;
 
-    private void Extend(RHGameState state) {
-        
-    }
+		OpenStates.Enqueue(initialState, 0);
+	}
 
-    // public IEnumerable<RHGameState> GetSolutionPath() { 
-    //     if (!FoundSolution) {
-    //         return null;
-    //     } 
-    //     return CurrentRoute.Select(tuple => tuple.Item1);
-    // }
+	
+
+
+	public void Step() { 
+		var state = OpenStates.Dequeue();
+		Extend(state);
+	}
+
+	private void Extend(RHGameState state) {
+		
+	}
+
+	// public IEnumerable<RHGameState> GetSolutionPath() { 
+	//     if (!FoundSolution) {
+	//         return null;
+	//     } 
+	//     return CurrentRoute.Select(tuple => tuple.Item1);
+	// }
 }
+ 
