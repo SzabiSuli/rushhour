@@ -127,10 +127,10 @@ public class BacktrackingSolver  {
 		FoundSolution = false;
 		Terminated = false;
 
-		AddAndExtend(initialState);
+		AddAndExtend(initialState, true);
 	}
 
-	private void AddAndExtend(RHGameState state){
+	private void AddAndExtend(RHGameState state, bool isFixed = false){
 		var moves = state.GetPossibleMoves();
 		var neighbours = moves
 		.Select(move => (move, state.WithMove(move)))
@@ -140,6 +140,7 @@ public class BacktrackingSolver  {
 		
 		CurrentRoute.Add(new (state, neighbours.Select(x => x.Item2).ToList()));
 		Vertex from = MainScene.GetOrCreateVertex(state);
+		from.IsFixed = isFixed;
 		foreach (var move_and_state in neighbours){
 			Vertex to = MainScene.GetOrCreateVertex(move_and_state.Item2);
 			MainScene.GetOrCreateEdge(from, to, move_and_state.Item1);

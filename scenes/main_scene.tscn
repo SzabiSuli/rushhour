@@ -1,8 +1,13 @@
 [gd_scene format=3 uid="uid://cdjjjlp5rpgc3"]
 
 [ext_resource type="Script" uid="uid://x4magystxd2i" path="res://src/Nodes/MainScene.cs" id="1_w2twt"]
+[ext_resource type="Script" uid="uid://bt3yynqbr5kn8" path="res://src/Nodes/Camera2d.cs" id="2_pw63i"]
 
 [node name="MainScene" type="Control" unique_id=203170334]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_w2twt")
+metadata/_edit_horizontal_guides_ = [-275.0]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2143369533]
+script = ExtResource("2_pw63i")

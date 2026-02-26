@@ -1,0 +1,7 @@
+1. Make 2d nodes repel, edges like springs,
+
+2. spacial optimisation
+
+3. Go 3d
+
+?. Multithread force calculation

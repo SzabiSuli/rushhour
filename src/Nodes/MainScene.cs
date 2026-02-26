@@ -28,6 +28,7 @@ public partial class MainScene : Control {
 
 		// RHGameState lvl = Levels.Level0();
 		RHGameState lvl = Levels.TestLevel();
+		// RHGameState lvl = Levels.TestLevel2();
 		lvl.PrintState();
 
 		// solver = new HillClimberSolver(new DistanceHeuristic(), lvl);
@@ -59,7 +60,7 @@ public partial class MainScene : Control {
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public async override void _Process(double delta) {
 		time += delta;
-		if (time < 0.0000001) {	
+		if (time < 0.5) {	
 			return;
 		} else {
 			time = 0;
@@ -76,6 +77,8 @@ public partial class MainScene : Control {
 
 	public Dictionary<RHGameState, Vertex> VertexDict { get; } = new();
 	// public Dictionary<(RHGameState, RHGameState), Edge> EdgeDict { get; } = new();
+	
+	// TODO move this to Edge as a static method and use VertexDict to get the vertices
 	public Dictionary<(Vertex, Vertex), Edge> EdgeDict { get; } = new();
 
 	public int i = 0;
@@ -89,19 +92,19 @@ public partial class MainScene : Control {
 
         vertex = VertexCreator.Instantiate<Vertex>();
         // TODO set position based on heuristic value
-        // vertex.Position = new Vector2(random.Next(0, 1000), Random.Shared.Next(0, 500));
-		vertex.Position = new Vector2(i * 150, j * 150);
-		if (i >= 5) {
-			i = 0;
-			j++;
-		} else {
-			i++;
-		}
+        vertex.Position = new Vector2(random.Next(0, 1000), Random.Shared.Next(0, 500));
+		// vertex.Position = new Vector2(i * 150, j * 150);
+		// if (i >= 5) {
+		// 	i = 0;
+		// 	j++;
+		// } else {
+		// 	i++;
+		// }
 
         // TODO add label with state info
         // vertex.GetNode<Label>("Label").Text = state.ToString();
         AddChild(vertex);
-		// TODO check it does not exist
+		vertex.AddToGroup("Vertices");
 		VertexDict[state] = vertex;
         return vertex;
     }
@@ -117,10 +120,17 @@ public partial class MainScene : Control {
 			GD.Print("Edge already exists");
 			return edge;
 		}
+
+
 		edge = EdgeCreator.Instantiate<Edge>();
 		edge.Init(from, to, moveUsed);
 		AddChild(edge);
+		edge.AddToGroup("Edges");
 		EdgeDict[(from, to)] = edge;
+		from.Neighbors.Add(to);
+		to.Neighbors.Add(from);
+
+
 		return edge;
 	}	
 

@@ -11,6 +11,14 @@ static class Levels {
             new PlacedRHPiece(new Car(), new Vector2I(1, 3), Direction.Right)
         ]);
     }
+    public static RHGameState TestLevel2() {
+        return new RHGameState([
+            // Index 0: Red main car — horizontal, row 2, cols 0–1 (front at col 1, facing right, body extends left)
+            new PlacedRHPiece(new MainCar(), new Vector2I(1, 1), Direction.Right),
+            new PlacedRHPiece(new Car(), new Vector2I(1, 3), Direction.Right),
+            new PlacedRHPiece(new Car(), new Vector2I(1, 4), Direction.Right)
+        ]);
+    }
     
     /// <summary>
     /// Rush Hour Puzzle #0 (Very Easy)
