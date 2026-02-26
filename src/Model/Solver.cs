@@ -111,7 +111,7 @@ public class BacktrackingSolver  {
 	// public RHGameState Current { get; set; }
 	Heuristic Heuristic { get; set; }
 
-	public RHGameState? Current => CurrentRoute.Last()?.Item1;
+	public RHGameState? Current => CurrentRoute.LastOrDefault()?.Item1;
 
 	
 
@@ -148,6 +148,20 @@ public class BacktrackingSolver  {
 	}
 
 	public void Step() { 
+
+		// DEBUG
+		for (int i = 0; i < CurrentRoute.Count; i++){
+			GD.Print("--------------------------------");
+			GD.Print($"Vertex {i}.:");
+			CurrentRoute[i].Item1.PrintState();
+			GD.Print($"{CurrentRoute[i].Item2.Count} Neighbours:");
+			foreach (var neighbour in CurrentRoute[i].Item2){
+				neighbour.PrintState();
+				GD.Print("-------");
+			}
+			GD.Print("--------------------------------");
+		}
+
 		if (CurrentRoute.Count == 0){
 			FoundSolution = false;
 			Terminated = true;

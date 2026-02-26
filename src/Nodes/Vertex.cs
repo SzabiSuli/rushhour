@@ -14,6 +14,7 @@ public partial class Vertex : Area2D
 	// TODO reconsider if the initial state should be fixed
 	public bool IsFixed = false;
 
+	// TODO might not even need this, edges can apply the forces
 	public HashSet<Vertex> Neighbors = new HashSet<Vertex>();
 
 	// Called when the node enters the scene tree for the first time.
@@ -23,7 +24,7 @@ public partial class Vertex : Area2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta) {
 
-		if (IsFixed) return;
+		// if (IsFixed) return;
 
 		// vertex squared repulsion
 		// get all vertices from Vertices group

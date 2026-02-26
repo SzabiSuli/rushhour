@@ -27,8 +27,9 @@ public partial class MainScene : Control {
 		RenderingServer.SetDefaultClearColor(Colors.MediumPurple);
 
 		// RHGameState lvl = Levels.Level0();
-		RHGameState lvl = Levels.TestLevel();
+		// RHGameState lvl = Levels.TestLevel();
 		// RHGameState lvl = Levels.TestLevel2();
+		RHGameState lvl = Levels.TestLevel3();
 		lvl.PrintState();
 
 		// solver = new HillClimberSolver(new DistanceHeuristic(), lvl);
@@ -60,7 +61,7 @@ public partial class MainScene : Control {
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public async override void _Process(double delta) {
 		time += delta;
-		if (time < 0.5) {	
+		if (time < 0.0000001) {	
 			return;
 		} else {
 			time = 0;
@@ -70,7 +71,7 @@ public partial class MainScene : Control {
 			// vertex.Position = new Vector2(random.Next(100,500), random.Next(100,500));
 		}
 		if (!solver.Terminated){
-			solver.Current.PrintState();
+			solver.Current?.PrintState();
 			solver.Step();
 		}
 	}
@@ -86,9 +87,10 @@ public partial class MainScene : Control {
 
 	public Vertex GetOrCreateVertex(RHGameState state) {
         if (VertexDict.TryGetValue(state, out Vertex vertex)) {
-			GD.Print("Vertex already exists");
+			// GD.Print("Vertex already exists");
 			return vertex;
 		}
+		// GD.Print("Creating vertex");
 
         vertex = VertexCreator.Instantiate<Vertex>();
         // TODO set position based on heuristic value
@@ -117,9 +119,10 @@ public partial class MainScene : Control {
 	// }	
 	public Edge GetOrCreateEdge(Vertex from, Vertex to, Move moveUsed) {
 		if (EdgeDict.TryGetValue((from, to), out Edge edge) || EdgeDict.TryGetValue((to, from), out edge)) {
-			GD.Print("Edge already exists");
+			// GD.Print("Edge already exists");
 			return edge;
 		}
+		// GD.Print("Creating edge");
 
 
 		edge = EdgeCreator.Instantiate<Edge>();
