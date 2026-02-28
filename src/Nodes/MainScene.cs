@@ -9,10 +9,10 @@ public partial class MainScene : Control {
 	// Called when the node enters the scene tree for the first time.
 
 	// 1. Export a PackedScene variable so you can drag-and-drop your .tscn file in the Inspector
-    // [Export]
+	// [Export]
 
 	public PackedScene VertexCreator = ResourceLoader.Load<PackedScene>("res://scenes/vertex.tscn");
-    public PackedScene EdgeCreator = ResourceLoader.Load<PackedScene>("res://scenes/edge.tscn");
+	public PackedScene EdgeCreator = ResourceLoader.Load<PackedScene>("res://scenes/edge.tscn");
 	Random random = new Random();
 
 	double time = 0;
@@ -28,8 +28,8 @@ public partial class MainScene : Control {
 
 		// RHGameState lvl = Levels.Level0();
 		// RHGameState lvl = Levels.TestLevel();
-		// RHGameState lvl = Levels.TestLevel2();
-		RHGameState lvl = Levels.TestLevel3();
+		RHGameState lvl = Levels.TestLevel2();
+		// RHGameState lvl = Levels.TestLevel3();
 		lvl.PrintState();
 
 		// solver = new HillClimberSolver(new DistanceHeuristic(), lvl);
@@ -71,7 +71,7 @@ public partial class MainScene : Control {
 			// vertex.Position = new Vector2(random.Next(100,500), random.Next(100,500));
 		}
 		if (!solver.Terminated){
-			solver.Current?.PrintState();
+			// solver.Current?.PrintState();
 			solver.Step();
 		}
 	}
@@ -85,16 +85,25 @@ public partial class MainScene : Control {
 	public int i = 0;
 	public int j = 0;
 
-	public Vertex GetOrCreateVertex(RHGameState state) {
-        if (VertexDict.TryGetValue(state, out Vertex vertex)) {
+	public Vertex GetOrCreateVertex(RHGameState state, Vertex? parent) {
+		if (VertexDict.TryGetValue(state, out Vertex vertex)) {
 			// GD.Print("Vertex already exists");
 			return vertex;
 		}
+
 		// GD.Print("Creating vertex");
 
-        vertex = VertexCreator.Instantiate<Vertex>();
-        // TODO set position based on heuristic value
-        vertex.Position = new Vector2(random.Next(0, 1000), Random.Shared.Next(0, 500));
+		vertex = VertexCreator.Instantiate<Vertex>();
+		vertex.GameState = state;
+
+		// TODO set position based on heuristic value
+		if (parent != null) {
+			// Place the vertex outwards
+			// TODO tweak this
+			vertex.Position = parent.Position + parent.Position.Normalized().Rotated((float)((random.NextDouble() - 0.5) * Math.PI)) * 100;
+		} else {
+			vertex.Position = new Vector2(random.Next(0, 1000), Random.Shared.Next(0, 500));		
+		}
 		// vertex.Position = new Vector2(i * 150, j * 150);
 		// if (i >= 5) {
 		// 	i = 0;
@@ -103,13 +112,13 @@ public partial class MainScene : Control {
 		// 	i++;
 		// }
 
-        // TODO add label with state info
-        // vertex.GetNode<Label>("Label").Text = state.ToString();
-        AddChild(vertex);
+		// TODO add label with state info
+		// vertex.GetNode<Label>("Label").Text = state.ToString();
+		AddChild(vertex);
 		vertex.AddToGroup("Vertices");
 		VertexDict[state] = vertex;
-        return vertex;
-    }
+		return vertex;
+	}
 
 	// public Edge GetOrCreateEdge(RHGameState from, RHGameState to, Move moveUsed) {
 	// 	Edge edge = EdgeCreator.Instantiate<Edge>();

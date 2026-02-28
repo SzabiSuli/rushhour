@@ -127,10 +127,10 @@ public class BacktrackingSolver  {
 		FoundSolution = false;
 		Terminated = false;
 
-		AddAndExtend(initialState, true);
+		AddAndExtend(initialState, null, true);
 	}
 
-	private void AddAndExtend(RHGameState state, bool isFixed = false){
+	private void AddAndExtend(RHGameState state, Vertex? parent, bool isFixed = false){
 		var moves = state.GetPossibleMoves();
 		var neighbours = moves
 		.Select(move => (move, state.WithMove(move)))
@@ -139,10 +139,10 @@ public class BacktrackingSolver  {
 		.ToList();
 		
 		CurrentRoute.Add(new (state, neighbours.Select(x => x.Item2).ToList()));
-		Vertex from = MainScene.GetOrCreateVertex(state);
+		Vertex from = MainScene.GetOrCreateVertex(state, parent);
 		from.IsFixed = isFixed;
 		foreach (var move_and_state in neighbours){
-			Vertex to = MainScene.GetOrCreateVertex(move_and_state.Item2);
+			Vertex to = MainScene.GetOrCreateVertex(move_and_state.Item2, from);
 			MainScene.GetOrCreateEdge(from, to, move_and_state.Item1);
 		}
 	}
@@ -150,17 +150,17 @@ public class BacktrackingSolver  {
 	public void Step() { 
 
 		// DEBUG
-		for (int i = 0; i < CurrentRoute.Count; i++){
-			GD.Print("--------------------------------");
-			GD.Print($"Vertex {i}.:");
-			CurrentRoute[i].Item1.PrintState();
-			GD.Print($"{CurrentRoute[i].Item2.Count} Neighbours:");
-			foreach (var neighbour in CurrentRoute[i].Item2){
-				neighbour.PrintState();
-				GD.Print("-------");
-			}
-			GD.Print("--------------------------------");
-		}
+		// for (int i = 0; i < CurrentRoute.Count; i++){
+		// 	GD.Print("--------------------------------");
+		// 	GD.Print($"Vertex {i}.:");
+		// 	CurrentRoute[i].Item1.PrintState();
+		// 	GD.Print($"{CurrentRoute[i].Item2.Count} Neighbours:");
+		// 	foreach (var neighbour in CurrentRoute[i].Item2){
+		// 		neighbour.PrintState();
+		// 		GD.Print("-------");
+		// 	}
+		// 	GD.Print("--------------------------------");
+		// }
 
 		if (CurrentRoute.Count == 0){
 			FoundSolution = false;
@@ -178,13 +178,16 @@ public class BacktrackingSolver  {
 			return;
 		}
 		// choose the best neighbour to continue the path
-		var nextStep = CurrentRoute.Last().Item2.First();
+		var nextStep = neighbours.First();
 
 		// remove it from the choices list, so if we come back here, we won't check this one again.
-		CurrentRoute.Last().Item2.RemoveAt(0);
+		neighbours.RemoveAt(0);
+
+		// get the current vertex
+		Vertex parent = MainScene.GetOrCreateVertex(current, null);
 
 		// add the state to the route, and discover it's neighbours
-		AddAndExtend(nextStep);
+		AddAndExtend(nextStep, parent);
 	}
 
 	public IEnumerable<RHGameState> GetSolutionPath() { 
