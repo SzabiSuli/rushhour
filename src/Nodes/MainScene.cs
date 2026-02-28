@@ -17,7 +17,7 @@ public partial class MainScene : Control {
 
 	double time = 0;
 
-	BacktrackingSolver solver;
+	BacktrackingSolver solver = null!;
 	public override void _Ready(){
 		string version = System.Environment.Version.ToString();
 		GD.Print("🚀 C# is working!");
@@ -27,8 +27,8 @@ public partial class MainScene : Control {
 		RenderingServer.SetDefaultClearColor(Colors.MediumPurple);
 
 		// RHGameState lvl = Levels.Level0();
-		// RHGameState lvl = Levels.TestLevel();
-		RHGameState lvl = Levels.TestLevel2();
+		RHGameState lvl = Levels.TestLevel();
+		// RHGameState lvl = Levels.TestLevel2();
 		// RHGameState lvl = Levels.TestLevel3();
 		lvl.PrintState();
 
@@ -61,7 +61,7 @@ public partial class MainScene : Control {
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public async override void _Process(double delta) {
 		time += delta;
-		if (time < 0.0000001) {	
+		if (time < 1) {	
 			return;
 		} else {
 			time = 0;
@@ -86,7 +86,7 @@ public partial class MainScene : Control {
 	public int j = 0;
 
 	public Vertex GetOrCreateVertex(RHGameState state, Vertex? parent) {
-		if (VertexDict.TryGetValue(state, out Vertex vertex)) {
+		if (VertexDict.TryGetValue(state, out Vertex? vertex)) {
 			// GD.Print("Vertex already exists");
 			return vertex;
 		}
@@ -94,7 +94,7 @@ public partial class MainScene : Control {
 		// GD.Print("Creating vertex");
 
 		vertex = VertexCreator.Instantiate<Vertex>();
-		vertex.GameState = state;
+		vertex.Init(state);
 
 		// TODO set position based on heuristic value
 		if (parent != null) {
@@ -127,7 +127,7 @@ public partial class MainScene : Control {
 	// 	return edge;
 	// }	
 	public Edge GetOrCreateEdge(Vertex from, Vertex to, Move moveUsed) {
-		if (EdgeDict.TryGetValue((from, to), out Edge edge) || EdgeDict.TryGetValue((to, from), out edge)) {
+		if (EdgeDict.TryGetValue((from, to), out Edge? edge) || EdgeDict.TryGetValue((to, from), out edge)) {
 			// GD.Print("Edge already exists");
 			return edge;
 		}

@@ -7,29 +7,46 @@ using rushhour.src.Model;
 
 public partial class Edge : Line2D
 {
+	// Physics constants
+	public const int springLength = 100;
+	public const double optimalIntervalLowerBound = springLength * 0.9;
+	public const double optimalIntervalUpperBound = springLength * 1.1;
+	public const float springForce = 1;
 
-	public Vertex From { get; set; }
-	public Vertex To { get; set; }
+	// Init must be called for initialization
+	public Vertex From { get; set; } = null!;
+	public Vertex To { get; set; } = null!;
 	public Move MoveUsed { get; set; }
-
-	// Called when the node enters the scene tree for the first time.
-
 
 	public void Init(Vertex form, Vertex to, Move moveUsed){
 		From = form;
 		To = to;
 		MoveUsed = moveUsed;
 	}
-	public override void _Ready(){
 
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready(){
 
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta) {
 		// TODO don't update this every frame
-		Vector2 fromPos = From.Position;
-		Vector2 toPos = To.Position;
-		Points = new Vector2[] { fromPos, toPos };
+		Points = [From.Position, To.Position];
+
+		ApplySpringForce(delta);
+	}
+
+	public void ApplySpringForce(double delta) {
+		var distanceVector = To.Position - From.Position;
+		var length = distanceVector.Length();
+		if (optimalIntervalLowerBound < length && length < optimalIntervalUpperBound) {
+			// Spring is close to the optimal lenght, skip applying force for performance
+			return;
+		}
+		var force = distanceVector * ((length - springLength) / length) * springForce;
+		var deltaVelocity = force * (float)delta;
+		From.Velocity += deltaVelocity;
+		To.Velocity -= deltaVelocity;		
 	}
 }

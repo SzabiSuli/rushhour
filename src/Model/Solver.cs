@@ -23,6 +23,7 @@ public interface ISolver {
 }
 
 public class HillClimberSolver : ISolver {
+	// TODO make this tabu search
 	// public bool IsRunning { get; private set; }
 	// public bool FoundSolution { get; private set; }
 	// public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
@@ -32,9 +33,7 @@ public class HillClimberSolver : ISolver {
 	Random rand = new Random();
 
 
-	#nullable enable
 	public RHGameState? Parent { get; set; }
-	#nullable disable
 
 	public RHGameState Current { get; set; }
 
@@ -66,8 +65,9 @@ public class HillClimberSolver : ISolver {
 
 		if (possibleMoves.Count() == 1){
 			// the only neighbour is the parent
+			// TODO it can also be the initial state with one option
 			RHGameState temp = Current;
-			Current = Parent;
+			Current = Parent!;
 			Parent = temp;
 			return;
 		}
@@ -83,7 +83,7 @@ public class HillClimberSolver : ISolver {
 		);
 
 		RHGameState bestMove;
-		if (orderedStates.First() == Parent){
+		if (orderedStates.First() == Parent!){
 			bestMove = orderedStates.Skip(1).First();
 		} else {
 			bestMove = orderedStates.First();
@@ -93,7 +93,7 @@ public class HillClimberSolver : ISolver {
 		Current = bestMove;
 	}
 	
-	public List<GameState> GetSolutionPath() { 
+	public List<GameState>? GetSolutionPath() { 
 		// Implementation hidden
 		return null; 
 	}
@@ -127,10 +127,10 @@ public class BacktrackingSolver  {
 		FoundSolution = false;
 		Terminated = false;
 
-		AddAndExtend(initialState, null, true);
+		AddAndExtend(initialState, null);
 	}
 
-	private void AddAndExtend(RHGameState state, Vertex? parent, bool isFixed = false){
+	private void AddAndExtend(RHGameState state, Vertex? parent){
 		var moves = state.GetPossibleMoves();
 		var neighbours = moves
 		.Select(move => (move, state.WithMove(move)))
@@ -140,7 +140,6 @@ public class BacktrackingSolver  {
 		
 		CurrentRoute.Add(new (state, neighbours.Select(x => x.Item2).ToList()));
 		Vertex from = MainScene.GetOrCreateVertex(state, parent);
-		from.IsFixed = isFixed;
 		foreach (var move_and_state in neighbours){
 			Vertex to = MainScene.GetOrCreateVertex(move_and_state.Item2, from);
 			MainScene.GetOrCreateEdge(from, to, move_and_state.Item1);
@@ -190,7 +189,7 @@ public class BacktrackingSolver  {
 		AddAndExtend(nextStep, parent);
 	}
 
-	public IEnumerable<RHGameState> GetSolutionPath() { 
+	public IEnumerable<RHGameState>? GetSolutionPath() { 
 		if (!FoundSolution) {
 			return null;
 		} 

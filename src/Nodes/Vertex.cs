@@ -10,11 +10,18 @@ using System.Collections.Generic;
 public partial class Vertex : Area2D
 {
 
-	public Vector2 Velocity = Vector2.Zero;
-	public RHGameState GameState { get; set; }
+	public const int repulsionForce = 1000000;
+	public const int influenceRadius = 1000;
+	public const int maxVelocity = 1000;
+	public const double dampingFactor = 0.25;
 
-	// TODO reconsider if the initial state should be fixed
-	public bool IsFixed = false;
+	public Vector2 Velocity = Vector2.Zero;
+	public RHGameState GameState { get; set; } = null!;
+
+	public void Init(RHGameState gameState) {
+		GameState = gameState;
+	}
+
 
 	// TODO might not even need this, edges can apply the forces
 	public HashSet<Vertex> Neighbors = new HashSet<Vertex>();
@@ -29,56 +36,43 @@ public partial class Vertex : Area2D
 			if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed) {
 				GD.Print("State of clicked vertex:");
 				GameState.PrintState();
-				// IsFixed = true;
-
 			} 
-			// else if (mouseEvent.ButtonIndex == MouseButton.Left && !mouseEvent.Pressed) {
-			// 	IsFixed = false;
-			// }
 		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta) {
-
-		// if (IsFixed) return;
-
-		// vertex squared repulsion
+		// TODO use spacial optimization
+		// Apply squared repulsion force for all vertices
 		// get all vertices from Vertices group
 		var vertices = GetTree().GetNodesInGroup("Vertices");
 		foreach (var v in vertices) {
 			if (v == this) continue;
 			var vertex = (Vertex)v;
-			var distanceVector = vertex.Position - Position;
-			if (distanceVector.Length() < 1000) {
-				// TODO tweak this
-				// Position -= distanceVector.Normalized() / 10;
-				var f = distanceVector.Normalized() / distanceVector.LengthSquared() * 1000000 * (float)delta;
-				// GD.Print($"Applying force {f} to vertex at position {Position}");
-				Velocity -= f;
-
-				// TODO TESTING make force cubed
-				// Velocity -= distanceVector * distanceVector.LengthSquared() / 1000000 * (float)delta;
-			}
-		}
-
-		// edge linear spring force
-		foreach (var v in Neighbors) {
-			var distanceVector = v.Position - Position;
-			int desiredDistance = 100; // TODO tweak this
-			if (distanceVector.Length() < desiredDistance - 10 || distanceVector.Length() > desiredDistance + 10) {
-				// Position += distanceVector.Normalized() * (distanceVector.Length() - desiredDistance) / 10;
-				Velocity += distanceVector * ((distanceVector.Length() - desiredDistance) / distanceVector.Length()) * (float)delta;
-			}
+			ApplyRepulsionForce(vertex, delta);
 		}
 
 		// Clamp velocity to prevent instability
-		if (Velocity.Length() > 500) {
-			Velocity = Velocity.Normalized() * 500;
+		if (Velocity.Length() > maxVelocity) {
+			Velocity = Velocity.Normalized() * maxVelocity;
 		}
-		Position += Velocity * (float)delta;
-		// damping with according to delta time
-		Velocity *= (float)Math.Pow(0.25, delta);
 
+		// Apply movement
+		Position += Velocity * (float)delta;
+
+		// damping with according to delta time
+		Velocity *= (float)Math.Pow(dampingFactor, delta);
 	}
+
+	public void ApplyRepulsionForce(Vertex other, double delta) {
+		var distanceVector = other.Position - Position;
+		if (distanceVector.Length() > influenceRadius) {
+			// Applied force would be very minimal, skip calculation for performance
+			return;
+		}
+		var force = distanceVector.Normalized() / distanceVector.LengthSquared() * (-repulsionForce);
+		var deltaVelocity = force * (float)delta;
+		Velocity += deltaVelocity;
+	}
+
 }
