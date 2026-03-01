@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cdjjjlp5rpgc3"]
 
 [ext_resource type="Script" uid="uid://x4magystxd2i" path="res://src/Nodes/MainScene.cs" id="1_w2twt"]
-[ext_resource type="Script" uid="uid://bt3yynqbr5kn8" path="res://src/Nodes/Camera2d.cs" id="2_pw63i"]
+[ext_resource type="Script" uid="uid://bkqpls8s2agia" path="res://src/Nodes/Camera3d.cs" id="2_pw63i"]
 
 [node name="MainScene" type="Control" unique_id=203170334]
 layout_mode = 3
@@ -9,5 +9,9 @@ anchors_preset = 0
 script = ExtResource("1_w2twt")
 metadata/_edit_horizontal_guides_ = [-275.0]
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=2143369533]
+[node name="GraphScene" type="Node3D" parent="." unique_id=869173185]
+
+[node name="Camera3D" type="Camera3D" parent="GraphScene" unique_id=1698493355]
+projection = 1
+size = 100.0
 script = ExtResource("2_pw63i")

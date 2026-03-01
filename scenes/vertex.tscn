@@ -3,17 +3,16 @@
 [ext_resource type="Script" uid="uid://cebh8ke6llo1k" path="res://src/Nodes/Vertex.cs" id="1_qio6b"]
 [ext_resource type="Texture2D" uid="uid://bojfww3w2tuft" path="res://icon.svg" id="2_h42fs"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_1tjk8"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_h42fs"]
 
-[node name="Vertex" type="Area2D" unique_id=653798838]
+[node name="Vertex" type="Area3D" unique_id=550009497]
 script = ExtResource("1_qio6b")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1336925023]
-shape = SubResource("CircleShape2D_1tjk8")
+[node name="CollisionShape2D" type="CollisionShape3D" parent="." unique_id=1650537890]
+shape = SubResource("SphereShape3D_h42fs")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1630205908]
+[node name="Sprite2D" type="Sprite3D" parent="." unique_id=788405527]
+pixel_size = 0.008
 texture = ExtResource("2_h42fs")
 
-[node name="Label" type="Label" parent="." unique_id=22443391]
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="Label" type="Label3D" parent="." unique_id=352317781]

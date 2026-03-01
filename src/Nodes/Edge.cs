@@ -5,18 +5,20 @@ using System;
 using rushhour.src.Model;
 
 
-public partial class Edge : Line2D
+public partial class Edge : MeshInstance3D
 {
 	// Physics constants
-	public const int springLength = 100;
+	public const int springLength = 5;
 	public const double optimalIntervalLowerBound = springLength * 0.9;
 	public const double optimalIntervalUpperBound = springLength * 1.1;
-	public const float springForce = 1;
+	public const float springForce = 10;
 
 	// Init must be called for initialization
 	public Vertex From { get; set; } = null!;
 	public Vertex To { get; set; } = null!;
 	public Move MoveUsed { get; set; }
+
+	private ImmediateMesh _mesh = new ImmediateMesh(); 
 
 	public void Init(Vertex form, Vertex to, Move moveUsed){
 		From = form;
@@ -26,15 +28,29 @@ public partial class Edge : Line2D
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready(){
-
+		Mesh = _mesh;
+		MaterialOverride = new StandardMaterial3D() {
+			AlbedoColor = Colors.White,
+			ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
+			// Metallic = 0.5f,
+			// Roughness = 0.5f
+		};
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta) {
 		// TODO don't update this every frame
-		Points = [From.Position, To.Position];
+		UpdateLine(From.Position, To.Position);
 
 		ApplySpringForce(delta);
+	}
+
+	public void UpdateLine(Vector3 from, Vector3 to) {
+		_mesh.ClearSurfaces();
+        _mesh.SurfaceBegin(Mesh.PrimitiveType.Lines);
+        _mesh.SurfaceAddVertex(from);
+        _mesh.SurfaceAddVertex(to);
+        _mesh.SurfaceEnd();
 	}
 
 	public void ApplySpringForce(double delta) {

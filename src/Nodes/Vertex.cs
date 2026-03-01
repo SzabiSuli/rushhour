@@ -7,15 +7,15 @@ using rushhour.src.Model;
 using System;
 using System.Collections.Generic;
 
-public partial class Vertex : Area2D
+public partial class Vertex : Area3D
 {
 
-	public const int repulsionForce = 1000000;
+	public const int repulsionForce = 1000;
 	public const int influenceRadius = 1000;
 	public const int maxVelocity = 1000;
 	public const double dampingFactor = 0.25;
 
-	public Vector2 Velocity = Vector2.Zero;
+	public Vector3 Velocity = Vector3.Zero;
 	public RHGameState GameState { get; set; } = null!;
 
 	public void Init(RHGameState gameState) {
@@ -31,16 +31,33 @@ public partial class Vertex : Area2D
 		this.InputEvent += OnInputEvent;
 	}
 
-	private void OnInputEvent(Node viewport, InputEvent inputEvent, long shapeIdx) {
-		if (inputEvent is InputEventMouseButton mouseEvent) {
-			if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed) {
-				GD.Print("State of clicked vertex:");
-				GameState.PrintState();
-			} 
+	// private void OnInputEvent(Node viewport, InputEvent @event, int shapeIdx) {
+	// 	if (@event is InputEventMouseButton mouseEvent) {
+	// 		if (mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
+	// 			GameState.OnVertexClicked(this);
+	// 		}
+	// 	}
+	// }
+
+	private void OnInputEvent(Node camera, InputEvent @event, Vector3 eventPosition, Vector3 normal, long shapeIdx)
+	{
+		// Check if the event is a mouse button click
+		if (@event is InputEventMouseButton mouseEvent)
+		{
+			// Specifically look for the Left Mouse Button being pressed
+			if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed)
+			{
+				GD.Print("Object clicked at: " + eventPosition);
+				HandleClick();
+			}
 		}
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	private void HandleClick()
+	{
+		GameState.PrintState();
+	}
+
 	public override void _Process(double delta) {
 		// TODO use spacial optimization
 		// Apply squared repulsion force for all vertices

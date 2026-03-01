@@ -24,11 +24,11 @@ public partial class MainScene : Control {
 		GD.Print($"System .NET Version: {version}");
 		
 		// Let's also change the background color to prove it's running
-		RenderingServer.SetDefaultClearColor(Colors.MediumPurple);
+		RenderingServer.SetDefaultClearColor(Colors.Black);
 
 		// RHGameState lvl = Levels.Level0();
-		RHGameState lvl = Levels.TestLevel();
-		// RHGameState lvl = Levels.TestLevel2();
+		// RHGameState lvl = Levels.TestLevel();
+		RHGameState lvl = Levels.TestLevel2();
 		// RHGameState lvl = Levels.TestLevel3();
 		lvl.PrintState();
 
@@ -82,9 +82,6 @@ public partial class MainScene : Control {
 	// TODO move this to Edge as a static method and use VertexDict to get the vertices
 	public Dictionary<(Vertex, Vertex), Edge> EdgeDict { get; } = new();
 
-	public int i = 0;
-	public int j = 0;
-
 	public Vertex GetOrCreateVertex(RHGameState state, Vertex? parent) {
 		if (VertexDict.TryGetValue(state, out Vertex? vertex)) {
 			// GD.Print("Vertex already exists");
@@ -100,17 +97,23 @@ public partial class MainScene : Control {
 		if (parent != null) {
 			// Place the vertex outwards
 			// TODO tweak this
-			vertex.Position = parent.Position + parent.Position.Normalized().Rotated((float)((random.NextDouble() - 0.5) * Math.PI)) * 100;
+
+			Vector3 randUnitVector = new Vector3(
+				GD.Randf() - 0.5f,
+				GD.Randf() - 0.5f,
+				GD.Randf() - 0.5f
+			).Normalized();
+
+			var outwardUnit = parent.Position.Normalized();
+
+			if (randUnitVector.Dot(outwardUnit) < 0)
+				randUnitVector = -randUnitVector;
+
+
+			vertex.Position = parent.Position + randUnitVector * Edge.springLength;
 		} else {
-			vertex.Position = new Vector2(random.Next(0, 1000), Random.Shared.Next(0, 500));		
+			vertex.Position = Vector3.Zero;		
 		}
-		// vertex.Position = new Vector2(i * 150, j * 150);
-		// if (i >= 5) {
-		// 	i = 0;
-		// 	j++;
-		// } else {
-		// 	i++;
-		// }
 
 		// TODO add label with state info
 		// vertex.GetNode<Label>("Label").Text = state.ToString();

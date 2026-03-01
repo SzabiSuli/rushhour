@@ -2,5 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bulg66bu6u0g8" path="res://src/Nodes/Edge.cs" id="1_73j6r"]
 
-[node name="Edge" type="Line2D" unique_id=2087022174]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_73j6r"]
+
+[node name="Edge" type="MeshInstance3D" unique_id=1828184313]
+mesh = SubResource("ImmediateMesh_73j6r")
 script = ExtResource("1_73j6r")
