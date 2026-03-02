@@ -35,6 +35,8 @@ public partial class MainScene : Control {
 		// solver = new HillClimberSolver(new DistanceHeuristic(), lvl);
 		solver = new BacktrackingSolver(new DistanceHeuristic(), lvl, this);
 
+		solver.PathChange += OnPathChange;
+
 		
 
 		// RHGameState other = lvl;
@@ -80,7 +82,7 @@ public partial class MainScene : Control {
 	// public Dictionary<(RHGameState, RHGameState), Edge> EdgeDict { get; } = new();
 	
 	// TODO move this to Edge as a static method and use VertexDict to get the vertices
-	public Dictionary<(Vertex, Vertex), Edge> EdgeDict { get; } = new();
+	public Dictionary<StateMove, Edge> EdgeDict { get; } = new();
 
 	public Vertex GetOrCreateVertex(RHGameState state, Vertex? parent) {
 		if (VertexDict.TryGetValue(state, out Vertex? vertex)) {
@@ -129,8 +131,8 @@ public partial class MainScene : Control {
 	// 	AddChild(edge);
 	// 	return edge;
 	// }	
-	public Edge GetOrCreateEdge(Vertex from, Vertex to, Move moveUsed) {
-		if (EdgeDict.TryGetValue((from, to), out Edge? edge) || EdgeDict.TryGetValue((to, from), out edge)) {
+	public Edge GetOrCreateEdge(StateMove move) {
+		if (EdgeDict.TryGetValue(move, out Edge? edge)) {
 			// GD.Print("Edge already exists");
 			return edge;
 		}
@@ -138,17 +140,19 @@ public partial class MainScene : Control {
 
 
 		edge = EdgeCreator.Instantiate<Edge>();
-		edge.Init(from, to, moveUsed);
+		edge.Init(
+			VertexDict[move.From], 
+			VertexDict[move.To], 
+			move
+		);
 		AddChild(edge);
 		edge.AddToGroup("Edges");
-		EdgeDict[(from, to)] = edge;
-		from.Neighbors.Add(to);
-		to.Neighbors.Add(from);
-
+		EdgeDict[move] = edge;
 
 		return edge;
 	}	
 
-
-
+	public void OnPathChange(object? sender, PathChangeArgs args) {
+		EdgeDict[args.move].UpdateColor(args.onPath); 
+	}
 }

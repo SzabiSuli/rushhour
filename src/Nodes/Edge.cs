@@ -16,11 +16,11 @@ public partial class Edge : MeshInstance3D
 	// Init must be called for initialization
 	public Vertex From { get; set; } = null!;
 	public Vertex To { get; set; } = null!;
-	public Move MoveUsed { get; set; }
+	public StateMove MoveUsed { get; set; } = null!;
 
 	private ImmediateMesh _mesh = new ImmediateMesh(); 
 
-	public void Init(Vertex form, Vertex to, Move moveUsed){
+	public void Init(Vertex form, Vertex to, StateMove moveUsed){
 		From = form;
 		To = to;
 		MoveUsed = moveUsed;
@@ -51,6 +51,16 @@ public partial class Edge : MeshInstance3D
         _mesh.SurfaceAddVertex(from);
         _mesh.SurfaceAddVertex(to);
         _mesh.SurfaceEnd();
+	}
+
+	public void UpdateColor(bool onPath) {
+		// change color to yellow
+		// TODO maybe make new material instead?
+		if (onPath) {
+			MaterialOverride.Set("albedo_color", Colors.Yellow);
+		} else {
+			MaterialOverride.Set("albedo_color", Colors.White);
+		}
 	}
 
 	public void ApplySpringForce(double delta) {

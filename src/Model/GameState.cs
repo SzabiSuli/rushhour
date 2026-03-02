@@ -20,6 +20,7 @@ public abstract class GameState {
     // public abstract bool IsSolved();
 }
 
+// Immutable object
 public class RHGameState : GameState {
     // PlacedPiece at index 0 has to be the main car
     public PlacedRHPiece[] PlacedPieces { get; init;}
@@ -29,6 +30,8 @@ public class RHGameState : GameState {
     // public PlacedRHPiece MainCar {get; protected set;}
     public int[,] BoardGrid { get; init;}
     public Vector2I ExitPosition => new Vector2I(BoardWidth - 1, 2);
+
+    private readonly int _hashCode;
 
 
     public RHGameState(PlacedRHPiece[] placedPieces) : base(){
@@ -77,21 +80,25 @@ public class RHGameState : GameState {
                 BoardGrid[x, y] = i;
             }
         }
+
+        _hashCode = CalculateHashCode();
     }
 
-    public bool IsSolved(){
-        return PlacedPieces[0].Position == ExitPosition;
-    }
-    public override int GetHashCode(){
+    public bool IsSolved() => PlacedPieces[0].Position == ExitPosition;
+    
+    public override int GetHashCode() => _hashCode;
+
+    private int CalculateHashCode() {
         int hash = 17;
         for (int i = 0; i < PlacedPieces.Length; i++){
-            var piece = PlacedPieces[i];
-            hash = hash * 31 + i.GetHashCode();
+            PlacedRHPiece piece = PlacedPieces[i];
+            // hash = hash * 31 + i.GetHashCode();
             hash = hash * 31 + piece.Position.GetHashCode();
         }
         return hash;
     }
-    public override bool Equals(object obj){
+
+    public override bool Equals(object? obj){
         if (obj is not RHGameState other) return false;
         if (GetHashCode() != other.GetHashCode()) return false;
         if (PlacedPieces.Length != other.PlacedPieces.Length) return false;
@@ -101,6 +108,18 @@ public class RHGameState : GameState {
             }
         }
         return true;
+    }
+
+    public static bool operator ==(RHGameState? left, RHGameState? right) {
+        // Check for null on both sides
+        if (ReferenceEquals(left, right)) return true;
+        if (left is null || right is null) return false;
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(RHGameState? left, RHGameState? right) {
+        return !(left == right);
     }
 
     public IEnumerable<Move> GetPossibleMoves(){
@@ -148,23 +167,10 @@ public class RHGameState : GameState {
         // create a shallow copy of the placed pieces array
         PlacedRHPiece[] newPlacedPieces = (PlacedRHPiece[])PlacedPieces.Clone();
         // copy the piece to move and update its position
-        var movedPiece = newPlacedPieces[move.PieceIndex].Move(move.Dir);
+        var movedPiece = newPlacedPieces[move.PieceIndex].WithMove(move.Dir);
         newPlacedPieces[move.PieceIndex] = movedPiece;
 
         return new RHGameState(newPlacedPieces);
-    }
-
-    public static bool operator ==(RHGameState left, RHGameState right) {
-        // Check for null on both sides
-        if (ReferenceEquals(left, right)) return true;
-        if (left is null || right is null) return false;
-
-        return left.Equals(right);
-    }
-
-    // 2. You MUST override != if you override ==
-    public static bool operator !=(RHGameState left, RHGameState right) {
-        return !(left == right);
     }
 
     public void PrintState(){

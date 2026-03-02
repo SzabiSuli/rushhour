@@ -113,13 +113,13 @@ public class BacktrackingSolver  {
 
 	public RHGameState? Current => CurrentRoute.LastOrDefault()?.Item1;
 
-	
+	// TODO use these
+	public event EventHandler<RHGameState> NewCurrent; // = new ?
+	public event EventHandler<PathChangeArgs> PathChange; // = new ?
 
 	public MainScene MainScene { get; set; }
 
 	public BacktrackingSolver(Heuristic heuristic, RHGameState initialState, MainScene mainScene){
-
-		// TODO fix it not terminating
 
 		Heuristic = heuristic;
 		MainScene = mainScene;
@@ -138,12 +138,37 @@ public class BacktrackingSolver  {
 		.OrderBy(move_and_state => Heuristic.Evaluate(move_and_state.Item2))
 		.ToList();
 		
+		
+
+		// TODO instead of tuple make a data structure
 		CurrentRoute.Add(new (state, neighbours.Select(x => x.Item2).ToList()));
 		Vertex from = MainScene.GetOrCreateVertex(state, parent);
 		foreach (var move_and_state in neighbours){
 			Vertex to = MainScene.GetOrCreateVertex(move_and_state.Item2, from);
-			MainScene.GetOrCreateEdge(from, to, move_and_state.Item1);
+			MainScene.GetOrCreateEdge(new StateMove(
+				from.GameState,
+				to.GameState,
+				new Move() // TODO create correct move
+			));
 		}
+		
+		// TODO subscribe a thing
+		NewCurrent?.Invoke(this, state);
+		
+
+
+		if (parent is null) return;
+		StateMove move = new StateMove(
+			parent.GameState,
+			state,
+			// TODO actual move here
+			new Move()
+		);
+
+		PathChange?.Invoke(this, new PathChangeArgs {	
+			onPath = true,
+			move = move
+		});
 	}
 
 	public void Step() { 
@@ -174,6 +199,7 @@ public class BacktrackingSolver  {
 		}
 		if (neighbours.Count == 0){
 			CurrentRoute.RemoveAt(CurrentRoute.Count() - 1);
+			// TODO remove an edge from the path
 			return;
 		}
 		// choose the best neighbour to continue the path
@@ -243,3 +269,7 @@ public class GraphSolver  {
 	// }
 }
  
+public struct PathEdge {
+	public StateMove selectedEdge;
+	public List<StateMove> alternatives;
+}

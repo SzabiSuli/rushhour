@@ -14,7 +14,7 @@ public class PlacedRHPiece {
         Position = position;
         FacingDirection = facingDirection;
     }
-    public PlacedRHPiece Move(Direction dir){
+    public PlacedRHPiece WithMove(Direction dir){
         Vector2I newPosition = Position;
         switch (dir){
             case Direction.Up:

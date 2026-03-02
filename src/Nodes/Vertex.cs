@@ -24,7 +24,7 @@ public partial class Vertex : Area3D
 
 
 	// TODO might not even need this, edges can apply the forces
-	public HashSet<Vertex> Neighbors = new HashSet<Vertex>();
+	// public HashSet<Vertex> Neighbors = new HashSet<Vertex>();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
