@@ -4,6 +4,7 @@ using Godot;
 using rushhour.src.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class MainScene : Control {
 	// Called when the node enters the scene tree for the first time.
@@ -16,6 +17,9 @@ public partial class MainScene : Control {
 	Random random = new Random();
 
 	double time = 0;
+
+	private RHGameState? _current;
+
 
 	BacktrackingSolver solver = null!;
 	public override void _Ready(){
@@ -36,6 +40,8 @@ public partial class MainScene : Control {
 		solver = new BacktrackingSolver(new DistanceHeuristic(), lvl, this);
 
 		solver.PathChange += OnPathChange;
+		solver.NewCurrent += OnNewCurrent;
+		solver.DiscoveredEdges += OnDiscoveredEdges;
 
 		
 
@@ -131,6 +137,9 @@ public partial class MainScene : Control {
 	// 	AddChild(edge);
 	// 	return edge;
 	// }	
+
+	// Looks like a hash code error is not creating the edges
+	// TODO CONTINUE HERE 
 	public Edge GetOrCreateEdge(StateMove move) {
 		if (EdgeDict.TryGetValue(move, out Edge? edge)) {
 			// GD.Print("Edge already exists");
@@ -154,5 +163,42 @@ public partial class MainScene : Control {
 
 	public void OnPathChange(object? sender, PathChangeArgs args) {
 		EdgeDict[args.move].UpdateColor(args.onPath); 
+	}
+
+	public void OnNewCurrent(object? sender, RHGameState newCurrent) {
+		if (_current == newCurrent) return;
+		if (_current is not null) {
+			VertexDict[_current].UpdateColor(false);
+		}
+
+		VertexDict[newCurrent].UpdateColor(true);
+	}
+
+	public void OnDiscoveredEdges(object? sender, List<StateMove> edges) {
+
+		if (edges.Count == 0) return;
+
+		// assume the vertex extended already exists, find it
+		Vertex from = VertexDict[edges.First().From];
+
+		foreach (var edge in edges) {
+			// TODO unify the methods
+			Vertex to = GetOrCreateVertex(edge.To, from);
+			GetOrCreateEdge(edge);
+		}
+
+		// TODO godot node creation logic
+		// move to MainScene
+
+		// CurrentRoute.Add(new (state, neighbours.Select(x => x.Item2).ToList()));
+		// Vertex from = MainScene.GetOrCreateVertex(state, parent);
+		// foreach (var move_and_state in neighbours){
+		// 	Vertex to = MainScene.GetOrCreateVertex(move_and_state.Item2, from);
+		// 	MainScene.GetOrCreateEdge(new StateMove(
+		// 		from.GameState,
+		// 		to.GameState,
+		// 		new Move() // TODO create correct move
+		// 	));
+		// }
 	}
 }

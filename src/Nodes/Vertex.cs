@@ -92,4 +92,12 @@ public partial class Vertex : Area3D
 		Velocity += deltaVelocity;
 	}
 
+	public void UpdateColor(bool isCurrent) {
+		var sprite = GetChild<Sprite3D>(0);
+		if (isCurrent) {
+			sprite.Scale = Vector3.One * 2;
+		} else {
+			sprite.Scale = Vector3.One;
+		}
+	}
 }

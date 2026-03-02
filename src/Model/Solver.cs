@@ -3,6 +3,7 @@ namespace rushhour.src.Model;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Godot;
 using rushhour.src.Nodes;
@@ -107,18 +108,21 @@ public class BacktrackingSolver  {
 	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
 	// public TimeSpan StepDelay { get; set; }
 
-	public List<Tuple<RHGameState, List<RHGameState>>> CurrentRoute { get; } = new ();
+	public List<List<StateMove>> CurrentRoute { get; } = new ();
 	// public RHGameState Current { get; set; }
 	Heuristic Heuristic { get; set; }
 
-	public RHGameState? Current => CurrentRoute.LastOrDefault()?.Item1;
+	// TODO Make Mainscene sub to this
+	public event EventHandler<RHGameState>? NewCurrent;
+	public event EventHandler<PathChangeArgs>? PathChange;
+	// TODO Make Mainscene sub to this
+	public event EventHandler<List<StateMove>>? DiscoveredEdges;
 
-	// TODO use these
-	public event EventHandler<RHGameState> NewCurrent; // = new ?
-	public event EventHandler<PathChangeArgs> PathChange; // = new ?
-
+	// TODO singleton .Instance instead
 	public MainScene MainScene { get; set; }
 
+
+	// TODO don't extend initial state on creation
 	public BacktrackingSolver(Heuristic heuristic, RHGameState initialState, MainScene mainScene){
 
 		Heuristic = heuristic;
@@ -127,48 +131,67 @@ public class BacktrackingSolver  {
 		FoundSolution = false;
 		Terminated = false;
 
-		AddAndExtend(initialState, null);
+		MainScene.GetOrCreateVertex(initialState, null);
+
+		Extend(initialState);
 	}
 
-	private void AddAndExtend(RHGameState state, Vertex? parent){
-		var moves = state.GetPossibleMoves();
-		var neighbours = moves
-		.Select(move => (move, state.WithMove(move)))
-		.Where(move_and_state => !CurrentRoute.Select(tuple => tuple.Item1).Contains(move_and_state.Item2)) // filter out states already in the current route
-		.OrderBy(move_and_state => Heuristic.Evaluate(move_and_state.Item2))
-		.ToList();
-		
-		
-
-		// TODO instead of tuple make a data structure
-		CurrentRoute.Add(new (state, neighbours.Select(x => x.Item2).ToList()));
-		Vertex from = MainScene.GetOrCreateVertex(state, parent);
-		foreach (var move_and_state in neighbours){
-			Vertex to = MainScene.GetOrCreateVertex(move_and_state.Item2, from);
-			MainScene.GetOrCreateEdge(new StateMove(
-				from.GameState,
-				to.GameState,
-				new Move() // TODO create correct move
-			));
-		}
-		
+	private void Extend(RHGameState initial){
 		// TODO subscribe a thing
-		NewCurrent?.Invoke(this, state);
+		NewCurrent?.Invoke(this, initial);
+
+		// TODO if initial has no moves, initial vertex does not get created
+
+		var moves = initial.GetPossibleMoves();
 		
+		if (moves.Count() == 0) return; // TODO add vertex 
 
+		var stateMoves = moves
+		.Select(move => new StateMove(initial, initial.WithMove(move), move))
+		// Note: we don't filter out moves that end up in the same state as the current last one, 
+		// because they don't exist in our context
+		.Where(stateMove => !CurrentRoute.Select(pathOptions => pathOptions.First().From).Contains(stateMove.To)) // filter out states already in the current route
+		.OrderBy(stateMove => Heuristic.Evaluate(stateMove.To))
+		.ToList();
 
-		if (parent is null) return;
-		StateMove move = new StateMove(
-			parent.GameState,
-			state,
-			// TODO actual move here
-			new Move()
-		);
+		DiscoveredEdges?.Invoke(this, stateMoves);
+
+		CurrentRoute.Add(stateMoves);
+		// Vertex from = MainScene.GetOrCreateVertex(initial, parent);
+	}
+
+	// returns true if the extended edge leads to a solution
+	private bool Extend(StateMove bestMove){
 
 		PathChange?.Invoke(this, new PathChangeArgs {	
 			onPath = true,
-			move = move
+			move = bestMove
 		});
+		// TODO subscribe a thing
+		NewCurrent?.Invoke(this, bestMove.To);
+
+		if (bestMove.To.IsSolved()) {
+			return true;
+		}
+
+		var moves = bestMove.To.GetPossibleMoves();
+		var stateMoves = moves
+		.Select(move => new StateMove(bestMove.To, bestMove.To.WithMove(move), move))
+		// Note: we don't filter out moves that end up in the same state as the current last one, 
+		// because they don't exist in our context
+		.Where( 
+			stateMove => // filter out states already in the current route
+			!CurrentRoute.Select(pathOptions => pathOptions.First().From).Contains(stateMove.To)
+		) 
+		.OrderBy(stateMove => Heuristic.Evaluate(stateMove.To))
+		.ToList();
+
+		DiscoveredEdges?.Invoke(this, stateMoves);
+		
+
+		CurrentRoute.Add(stateMoves);
+
+		return false;
 	}
 
 	public void Step() { 
@@ -186,40 +209,43 @@ public class BacktrackingSolver  {
 		// 	GD.Print("--------------------------------");
 		// }
 
-		if (CurrentRoute.Count == 0){
-			FoundSolution = false;
-			Terminated = true;
-			return;
-		}
-		var (current, neighbours) = CurrentRoute.Last();
-		if (current.IsSolved()){
-			FoundSolution = true;
-			Terminated = true;
-			return;
-		}
-		if (neighbours.Count == 0){
+		
+		var options = CurrentRoute.Last();
+		// if (currentEdge.selectedEdge.To.IsSolved()){
+		// 	FoundSolution = true;
+		// 	Terminated = true;
+		// 	return;
+		// }
+		if (options.Count == 0){
 			CurrentRoute.RemoveAt(CurrentRoute.Count() - 1);
-			// TODO remove an edge from the path
+			
+			if (CurrentRoute.Count == 0){
+				// TODO make this into status
+				FoundSolution = false;
+				Terminated = true;
+				return;
+			}
+
+			// There has to be a first, since we had an options after it
+			var edgeToRemove = CurrentRoute.Last().First();
+			PathChange?.Invoke(this, new PathChangeArgs {
+				onPath = false,
+				move = edgeToRemove
+			});
 			return;
 		}
-		// choose the best neighbour to continue the path
-		var nextStep = neighbours.First();
-
-		// remove it from the choices list, so if we come back here, we won't check this one again.
-		neighbours.RemoveAt(0);
-
-		// get the current vertex
-		Vertex parent = MainScene.GetOrCreateVertex(current, null);
 
 		// add the state to the route, and discover it's neighbours
-		AddAndExtend(nextStep, parent);
+		if (Extend(CurrentRoute.Last().First())) {
+			// Solution found.
+		}
 	}
 
-	public IEnumerable<RHGameState>? GetSolutionPath() { 
+	public IEnumerable<StateMove>? GetSolutionPath() { 
 		if (!FoundSolution) {
 			return null;
 		} 
-		return CurrentRoute.Select(tuple => tuple.Item1);
+		return CurrentRoute.Select(options => options.First());
 	}
 }
 
