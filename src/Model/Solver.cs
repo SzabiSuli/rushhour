@@ -123,14 +123,16 @@ public class BacktrackingSolver  {
 
 
 	// TODO don't extend initial state on creation
-	public BacktrackingSolver(Heuristic heuristic, RHGameState initialState, MainScene mainScene){
+	public BacktrackingSolver(Heuristic heuristic, MainScene mainScene){
 
 		Heuristic = heuristic;
 		MainScene = mainScene;
 		// Current = initialState;
 		FoundSolution = false;
 		Terminated = false;
+	}
 
+	public void Start(RHGameState initialState) {
 		MainScene.GetOrCreateVertex(initialState, null);
 
 		Extend(initialState);
@@ -228,16 +230,20 @@ public class BacktrackingSolver  {
 
 			// There has to be a first, since we had an options after it
 			var edgeToRemove = CurrentRoute.Last().First();
+			NewCurrent?.Invoke(this, edgeToRemove.From);
 			PathChange?.Invoke(this, new PathChangeArgs {
 				onPath = false,
 				move = edgeToRemove
 			});
+			CurrentRoute.Last().RemoveAt(0);
+
 			return;
 		}
 
 		// add the state to the route, and discover it's neighbours
 		if (Extend(CurrentRoute.Last().First())) {
-			// Solution found.
+			GD.Print("Found Solution!");
+			CurrentRoute.Last().First().To.PrintState();
 		}
 	}
 

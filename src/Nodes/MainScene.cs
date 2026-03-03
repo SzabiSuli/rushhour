@@ -31,17 +31,20 @@ public partial class MainScene : Control {
 		RenderingServer.SetDefaultClearColor(Colors.Black);
 
 		// RHGameState lvl = Levels.Level0();
+		// RHGameState lvl = Levels.Level1();
 		// RHGameState lvl = Levels.TestLevel();
 		RHGameState lvl = Levels.TestLevel2();
 		// RHGameState lvl = Levels.TestLevel3();
 		lvl.PrintState();
 
 		// solver = new HillClimberSolver(new DistanceHeuristic(), lvl);
-		solver = new BacktrackingSolver(new DistanceHeuristic(), lvl, this);
+		solver = new BacktrackingSolver(new DistanceHeuristic(), this);
 
 		solver.PathChange += OnPathChange;
 		solver.NewCurrent += OnNewCurrent;
 		solver.DiscoveredEdges += OnDiscoveredEdges;
+
+		solver.Start(lvl);
 
 		
 
@@ -172,10 +175,10 @@ public partial class MainScene : Control {
 		}
 
 		VertexDict[newCurrent].UpdateColor(true);
+		_current = newCurrent;
 	}
 
 	public void OnDiscoveredEdges(object? sender, List<StateMove> edges) {
-
 		if (edges.Count == 0) return;
 
 		// assume the vertex extended already exists, find it
