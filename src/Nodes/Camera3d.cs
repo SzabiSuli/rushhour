@@ -42,12 +42,10 @@ public partial class Camera3d : Camera3D
 	private float _yaw = 0.0f;
 	private float _pitch = 0.8f; // radians (~45° initial)
 
+	public const float farDistance = 2000.0f;
+
 	public override void _Ready()
 	{
-
-		Near = -4000f;
-		Far = 4000f;
-
 		float pmin = Mathf.DegToRad(PitchMinDeg);
 		float pmax = Mathf.DegToRad(PitchMaxDeg);
 		_pitch = Mathf.Clamp(_pitch, pmin, pmax);
@@ -152,11 +150,11 @@ public partial class Camera3d : Camera3D
 			Mathf.Cos(_yaw) * Mathf.Cos(_pitch)
 		).Normalized();
 
-		Position = OrbitCenter + dir * OrbitDistance;
+		Position = OrbitCenter + dir * farDistance;
 		LookAt(OrbitCenter, Vector3.Up);
 
 		// Derived values (useful if other systems read them)
-		CurrentHeight = OrbitDistance * Mathf.Sin(_pitch);
-		OrbitRadius = OrbitDistance * Mathf.Cos(_pitch);
+		CurrentHeight = farDistance * Mathf.Sin(_pitch);
+		OrbitRadius = farDistance * Mathf.Cos(_pitch);
 	}
 }
