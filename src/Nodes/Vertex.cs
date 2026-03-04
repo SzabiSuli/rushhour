@@ -95,9 +95,9 @@ public partial class Vertex : Area3D
 	public void UpdateColor(bool isCurrent) {
 		var sprite = GetChild<Sprite3D>(1);
 		if (isCurrent) {
-			sprite.Scale = Vector3.One * 2;
-		} else {
 			sprite.Scale = Vector3.One;
+		} else {
+			sprite.Scale = Vector3.One * 0.5f;
 		}
 	}
 }

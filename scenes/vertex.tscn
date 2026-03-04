@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://f0dbi6jfu58w"]
 
 [ext_resource type="Script" uid="uid://cebh8ke6llo1k" path="res://src/Nodes/Vertex.cs" id="1_qio6b"]
-[ext_resource type="Texture2D" uid="uid://bojfww3w2tuft" path="res://icon.svg" id="2_h42fs"]
+[ext_resource type="Texture2D" uid="uid://dj70iw8g1q63o" path="res://assets/circle.png" id="2_h42fs"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_h42fs"]
 
@@ -12,7 +12,9 @@ script = ExtResource("1_qio6b")
 shape = SubResource("SphereShape3D_h42fs")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=788405527]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 pixel_size = 0.008
+billboard = 1
 texture = ExtResource("2_h42fs")
 
 [node name="Label" type="Label3D" parent="." unique_id=352317781]
