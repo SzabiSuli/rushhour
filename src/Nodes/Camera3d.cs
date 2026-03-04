@@ -46,9 +46,6 @@ public partial class Camera3d : Camera3D
 
 	public override void _Ready()
 	{
-		float pmin = Mathf.DegToRad(PitchMinDeg);
-		float pmax = Mathf.DegToRad(PitchMaxDeg);
-		_pitch = Mathf.Clamp(_pitch, pmin, pmax);
 		UpdateCameraPosition();
 	}
 
@@ -129,10 +126,6 @@ public partial class Camera3d : Camera3D
 
 			_yaw -= dx;
 			_pitch += dy; // flip for inverted tilt
-
-			float pmin = Mathf.DegToRad(PitchMinDeg);
-			float pmax = Mathf.DegToRad(PitchMaxDeg);
-			_pitch = Mathf.Clamp(_pitch, pmin, pmax);
 
 			UpdateCameraPosition();
 		}
