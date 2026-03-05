@@ -14,7 +14,7 @@ public static class OctTree
 	/// Barnes-Hut approximation parameter. Higher values = faster but less accurate.
 	/// Typical range: 0.5 (accurate) to 1.5 (fast). 0.8 is a good default.
 	/// </summary>
-	public const float Theta = 1.5f;
+	public const float Theta = 1f;
 
 	/// <summary>
 	/// The OctTree built for the current frame. Set by BuildAndSetCurrent().

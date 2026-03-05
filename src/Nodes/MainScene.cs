@@ -45,38 +45,10 @@ public partial class MainScene : Control {
 		solver.DiscoveredEdges += OnDiscoveredEdges;
 
 		solver.Start(lvl);
-
-		
-
-		// RHGameState other = lvl;
-
-		// foreach (var move in lvl.GetPossibleMoves()){
-		// 	other = lvl.WithMove(move);
-		// 	// do something with newState
-		// 	other.PrintState();
-		// 	break;
-		// }
-
-		// other.PlacedPieces[2].Position += new Vector2I(0, -1);
-
-		// GD.Print(lvl.PlacedPieces[1].Position); // Should print the original position
-		// GD.Print(other.PlacedPieces[1].Position); // Should print the updated position
-
-		// lvl.PrintState();
-		// other.PrintState();
-
-
-
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public async override void _Process(double delta) {
-		// Rebuild the Barnes-Hut OctTree once per frame for repulsion forces
-		var vertexNodes = GetTree().GetNodesInGroup("Vertices");
-		var vertexList = new List<Vertex>();
-		foreach (var v in vertexNodes) vertexList.Add((Vertex)v);
-		OctTree.BuildAndSetCurrent(vertexList);
-
 		time += delta;
 		if (time < 0.01) {	
 			return;
@@ -93,8 +65,15 @@ public partial class MainScene : Control {
 		}
 	}
 
+	public async override void _PhysicsProcess(double delta) {
+		// Rebuild the Barnes-Hut OctTree once per physics update for repulsion forces
+		var vertexNodes = GetTree().GetNodesInGroup("Vertices");
+		var vertexList = new List<Vertex>();
+		foreach (var v in vertexNodes) vertexList.Add((Vertex)v);
+		OctTree.BuildAndSetCurrent(vertexList);
+	}
+
 	public Dictionary<RHGameState, Vertex> VertexDict { get; } = new();
-	// public Dictionary<(RHGameState, RHGameState), Edge> EdgeDict { get; } = new();
 	
 	// TODO move this to Edge as a static method and use VertexDict to get the vertices
 	public Dictionary<StateMove, Edge> EdgeDict { get; } = new();
@@ -140,22 +119,10 @@ public partial class MainScene : Control {
 		return vertex;
 	}
 
-	// public Edge GetOrCreateEdge(RHGameState from, RHGameState to, Move moveUsed) {
-	// 	Edge edge = EdgeCreator.Instantiate<Edge>();
-	// 	edge.Init(VertexDict[from], VertexDict[to], moveUsed);
-	// 	AddChild(edge);
-	// 	return edge;
-	// }	
-
-	// Looks like a hash code error is not creating the edges
-	// TODO CONTINUE HERE 
 	public Edge GetOrCreateEdge(StateMove move) {
 		if (EdgeDict.TryGetValue(move, out Edge? edge)) {
-			// GD.Print("Edge already exists");
 			return edge;
 		}
-		// GD.Print("Creating edge");
-
 
 		edge = EdgeCreator.Instantiate<Edge>();
 		edge.Init(
@@ -195,19 +162,5 @@ public partial class MainScene : Control {
 			Vertex to = GetOrCreateVertex(edge.To, from);
 			GetOrCreateEdge(edge);
 		}
-
-		// TODO godot node creation logic
-		// move to MainScene
-
-		// CurrentRoute.Add(new (state, neighbours.Select(x => x.Item2).ToList()));
-		// Vertex from = MainScene.GetOrCreateVertex(state, parent);
-		// foreach (var move_and_state in neighbours){
-		// 	Vertex to = MainScene.GetOrCreateVertex(move_and_state.Item2, from);
-		// 	MainScene.GetOrCreateEdge(new StateMove(
-		// 		from.GameState,
-		// 		to.GameState,
-		// 		new Move() // TODO create correct move
-		// 	));
-		// }
 	}
 }

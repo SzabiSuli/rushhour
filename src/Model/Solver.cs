@@ -244,6 +244,8 @@ public class BacktrackingSolver  {
 		if (Extend(CurrentRoute.Last().First())) {
 			GD.Print("Found Solution!");
 			CurrentRoute.Last().First().To.PrintState();
+			Terminated = true;
+			FoundSolution = true;
 		}
 	}
 

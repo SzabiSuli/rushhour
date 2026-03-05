@@ -37,12 +37,12 @@ public partial class Edge : MeshInstance3D
 		};
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta) {
+	// Called every physics frame. 'delta' is the elapsed time since the previous frame.
+	public override void _PhysicsProcess(double delta) {
 		// TODO don't update this every frame
 		UpdateLine(From.Position, To.Position);
 
-		ApplySpringForce(delta);
+		ApplySpringForce();
 	}
 
 	public void UpdateLine(Vector3 from, Vector3 to) {
@@ -63,7 +63,7 @@ public partial class Edge : MeshInstance3D
 		}
 	}
 
-	public void ApplySpringForce(double delta) {
+	public void ApplySpringForce() {
 		var distanceVector = To.Position - From.Position;
 		var length = distanceVector.Length();
 		if (optimalIntervalLowerBound < length && length < optimalIntervalUpperBound) {
@@ -71,10 +71,9 @@ public partial class Edge : MeshInstance3D
 			return;
 		}
 		var force = distanceVector * ((length - springLength) / length) * springForce;
-		var deltaVelocity = force * (float)delta;
 
 		// TODO make this thread safe
-		From.Velocity += deltaVelocity;
-		To.Velocity -= deltaVelocity;		
+		From.ApplyCentralForce(force);
+		To.ApplyCentralForce(-force);
 	}
 }
