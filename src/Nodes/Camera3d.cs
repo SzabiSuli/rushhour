@@ -40,17 +40,15 @@ public partial class Camera3d : Camera3D
 
 	private bool _isMmbRotating = false;
 	private float _yaw = 0.0f;
-	private float _pitch = 0.8f; // radians (~45° initial)
+	private float _pitch = Mathf.Pi / 2;
 
 	public const float farDistance = 2000.0f;
 
-	public override void _Ready()
-	{
+	public override void _Ready() {
 		UpdateCameraPosition();
 	}
 
-	public override void _Process(double delta)
-	{
+	public override void _Process(double delta) {
 		var movement = Vector3.Zero;
 
 		// Keyboard movement (uses default ui_* actions)
@@ -67,49 +65,41 @@ public partial class Camera3d : Camera3D
 		float speedMultiplier = Input.IsActionPressed("ui_shift") ? 2.0f : 1.0f;
 
 		// Move orbit center in camera's yaw frame
-		if (movement.Length() > 0.0f)
-		{
+		if (movement.Length() > 0.0f) {
 			movement = movement.Normalized().Rotated(Vector3.Up, _yaw);
 			OrbitCenter += movement * CameraSpeed * speedMultiplier * (float)delta;
 			UpdateCameraPosition();
 		}
 	}
 
-	public override void _UnhandledInput(InputEvent @event)
-	{
+	public override void _UnhandledInput(InputEvent @event) {
 		// Mouse wheel zoom (changes orbit_distance)
-		if (@event is InputEventMouseButton mouseButton)
-		{
-			if (mouseButton.Pressed && mouseButton.ButtonIndex == MouseButton.WheelUp)
-			{
+		if (@event is InputEventMouseButton mouseButton) {
+			if (mouseButton.Pressed && mouseButton.ButtonIndex == MouseButton.WheelUp) {
 				// OrbitDistance = Mathf.Max(CameraZoomMin, OrbitDistance - CameraZoomSpeed * (float)GetProcessDeltaTime());
 				if (Size >= 20) {
 					Size -= 10;
 				}
 				UpdateCameraPosition();
 			}
-			else if (mouseButton.Pressed && mouseButton.ButtonIndex == MouseButton.WheelDown)
-			{
+			else if (mouseButton.Pressed && mouseButton.ButtonIndex == MouseButton.WheelDown) {
 				// OrbitDistance = Mathf.Min(CameraZoomMax, OrbitDistance + CameraZoomSpeed * (float)GetProcessDeltaTime());
 				Size += 10;
 				UpdateCameraPosition();
 			}
 
-			// Start/stop rotate+tilt with Middle Mouse
-			if (mouseButton.ButtonIndex == MouseButton.Right)
-			{
+			// Start/stop rotate+tilt with M2
+			if (mouseButton.ButtonIndex == MouseButton.Right) {
 				_isMmbRotating = mouseButton.Pressed;
-				if (CaptureMouseOnMmb)
-				{
+				if (CaptureMouseOnMmb) {
 					Input.MouseMode = mouseButton.Pressed
 						? Input.MouseModeEnum.Captured
 						: Input.MouseModeEnum.Visible;
 				}
 			}
 		}
-		// Delta-based rotation while dragging with MMB
-		else if (@event is InputEventMouseMotion mouseMotion && _isMmbRotating)
-		{
+		// Delta-based rotation while dragging with M2
+		else if (@event is InputEventMouseMotion mouseMotion && _isMmbRotating) {
 			Vector2I vp = GetViewport().GetWindow().Size;
 			float vmin = Mathf.Min(vp.X, vp.Y);
 			float dt = (float)GetProcessDeltaTime();
@@ -118,11 +108,6 @@ public partial class Camera3d : Camera3D
 			// px -> normalized fraction of screen -> radians, scaled by dt
 			float dx = (mouseMotion.Relative.X / vmin) * YawSensitivity * Mathf.Tau * sixtyFps;
 			float dy = (mouseMotion.Relative.Y / vmin) * PitchSensitivity * Mathf.Tau * sixtyFps;
-
-			// Safety cap per event
-			float maxStep = Mathf.DegToRad(MaxStepDeg);
-			dx = Mathf.Clamp(dx, -maxStep, maxStep);
-			dy = Mathf.Clamp(dy, -maxStep, maxStep);
 
 			_yaw -= dx;
 			_pitch += dy; // flip for inverted tilt
@@ -134,8 +119,7 @@ public partial class Camera3d : Camera3D
 	// =========================
 	// Helpers
 	// =========================
-	private void UpdateCameraPosition()
-	{
+	private void UpdateCameraPosition() {
 		// Spherical direction from yaw/pitch
 		var dir = new Vector3(
 			Mathf.Sin(_yaw) * Mathf.Cos(_pitch),
@@ -144,7 +128,14 @@ public partial class Camera3d : Camera3D
 		).Normalized();
 
 		Position = OrbitCenter + dir * farDistance;
-		LookAt(OrbitCenter, Vector3.Up);
+
+		var up = new Vector3(
+			-Mathf.Sin(_yaw) * Mathf.Sin(_pitch),
+			Mathf.Cos(_pitch),
+			-Mathf.Cos(_yaw) * Mathf.Sin(_pitch)
+		).Normalized();
+
+		LookAt(OrbitCenter, up);
 
 		// Derived values (useful if other systems read them)
 		CurrentHeight = farDistance * Mathf.Sin(_pitch);
