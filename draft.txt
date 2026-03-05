@@ -1,7 +1,13 @@
-1. Make 2d nodes repel, edges like springs,
+make game board
 
-2. spacial optimisation
+implement searches
 
-3. Go 3d
+implement heuristics
 
-?. Multithread force calculation
+clean up code
+
+make class diagram
+
+make tests
+
+make docs
