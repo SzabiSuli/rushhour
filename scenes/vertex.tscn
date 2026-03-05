@@ -9,6 +9,9 @@
 script = ExtResource("1_qio6b")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1650537890]
+process_thread_group = 2
+process_thread_group_order = 0
+process_thread_messages = 0
 shape = SubResource("SphereShape3D_h42fs")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=788405527]

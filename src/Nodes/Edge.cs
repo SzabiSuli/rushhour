@@ -72,6 +72,8 @@ public partial class Edge : MeshInstance3D
 		}
 		var force = distanceVector * ((length - springLength) / length) * springForce;
 		var deltaVelocity = force * (float)delta;
+
+		// TODO make this thread safe
 		From.Velocity += deltaVelocity;
 		To.Velocity -= deltaVelocity;		
 	}

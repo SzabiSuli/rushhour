@@ -5,5 +5,8 @@
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_73j6r"]
 
 [node name="Edge" type="MeshInstance3D" unique_id=1828184313]
+process_thread_group = 2
+process_thread_group_order = 0
+process_thread_messages = 0
 mesh = SubResource("ImmediateMesh_73j6r")
 script = ExtResource("1_73j6r")
