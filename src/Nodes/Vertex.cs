@@ -59,14 +59,11 @@ public partial class Vertex : Area3D
 	}
 
 	public override void _Process(double delta) {
-		// TODO use spacial optimization
-		// Apply squared repulsion force for all vertices
-		// get all vertices from Vertices group
-		var vertices = GetTree().GetNodesInGroup("Vertices");
-		foreach (var v in vertices) {
-			if (v == this) continue;
-			var vertex = (Vertex)v;
-			ApplyRepulsionForce(vertex, delta);
+		// Barnes-Hut approximation via OctTree (O(n log n) instead of O(n²))
+		var tree = OctTree.GetCurrent();
+		if (tree != null) {
+			var force = OctTree.ComputeForce(tree, this, OctTree.Theta);
+			Velocity += force * (float)delta;
 		}
 
 		// Clamp velocity to prevent instability

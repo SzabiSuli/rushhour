@@ -31,9 +31,9 @@ public partial class MainScene : Control {
 		RenderingServer.SetDefaultClearColor(Colors.Black);
 
 		// RHGameState lvl = Levels.Level0();
-		// RHGameState lvl = Levels.Level1();
+		RHGameState lvl = Levels.Level1();
 		// RHGameState lvl = Levels.TestLevel();
-		RHGameState lvl = Levels.TestLevel2();
+		// RHGameState lvl = Levels.TestLevel2();
 		// RHGameState lvl = Levels.TestLevel3();
 		lvl.PrintState();
 
@@ -71,8 +71,14 @@ public partial class MainScene : Control {
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public async override void _Process(double delta) {
+		// Rebuild the Barnes-Hut OctTree once per frame for repulsion forces
+		var vertexNodes = GetTree().GetNodesInGroup("Vertices");
+		var vertexList = new List<Vertex>();
+		foreach (var v in vertexNodes) vertexList.Add((Vertex)v);
+		OctTree.BuildAndSetCurrent(vertexList);
+
 		time += delta;
-		if (time < 1) {	
+		if (time < 0.01) {	
 			return;
 		} else {
 			time = 0;
