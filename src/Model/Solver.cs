@@ -59,7 +59,7 @@ public class HillClimberSolver : ISolver {
 		}
 
 		var possibleMoves = Current.GetPossibleMoves();
-		if (possibleMoves.Count() == 0){
+		if (!possibleMoves.Any()){
 			Terminated = true;
 			return; 
 		}
@@ -79,7 +79,6 @@ public class HillClimberSolver : ISolver {
 
 
 		var orderedStates = possibleStates.OrderBy(
-			// TODO add random value between 1 and 0
 			state => Heuristic.Evaluate(state) + rand.NextDouble()
 		);
 
@@ -102,51 +101,37 @@ public class HillClimberSolver : ISolver {
 
 public class BacktrackingSolver  {
 	// public bool IsRunning { get; private set; }
-	public bool FoundSolution { get; private set; }
-	public bool Terminated { get; private set; }
 	// public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
 	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
 	// public TimeSpan StepDelay { get; set; }
 
+	public SolverStatus Status {get; set;} = SolverStatus.NotStarted;
 	public List<List<StateMove>> CurrentRoute { get; } = new ();
 	// public RHGameState Current { get; set; }
 	Heuristic Heuristic { get; set; }
 
-	// TODO Make Mainscene sub to this
 	public event EventHandler<RHGameState>? NewCurrent;
 	public event EventHandler<PathChangeArgs>? PathChange;
-	// TODO Make Mainscene sub to this
 	public event EventHandler<List<StateMove>>? DiscoveredEdges;
 
-	// TODO singleton .Instance instead
-	public MainScene MainScene { get; set; }
-
-
-	// TODO don't extend initial state on creation
-	public BacktrackingSolver(Heuristic heuristic, MainScene mainScene){
-
+	public BacktrackingSolver(Heuristic heuristic){
 		Heuristic = heuristic;
-		MainScene = mainScene;
-		// Current = initialState;
-		FoundSolution = false;
-		Terminated = false;
 	}
 
 	public void Start(RHGameState initialState) {
-		MainScene.GetOrCreateVertex(initialState, null);
+		Status = SolverStatus.Running;
+
+		MainScene.Instance.GetOrCreateVertex(initialState, null);
 
 		Extend(initialState);
 	}
 
 	private void Extend(RHGameState initial){
-		// TODO subscribe a thing
 		NewCurrent?.Invoke(this, initial);
-
-		// TODO if initial has no moves, initial vertex does not get created
 
 		var moves = initial.GetPossibleMoves();
 		
-		if (moves.Count() == 0) return; // TODO add vertex 
+		if (!moves.Any()) return;
 
 		var stateMoves = moves
 		.Select(move => new StateMove(initial, initial.WithMove(move), move))
@@ -156,20 +141,19 @@ public class BacktrackingSolver  {
 		.OrderBy(stateMove => Heuristic.Evaluate(stateMove.To))
 		.ToList();
 
-		DiscoveredEdges?.Invoke(this, stateMoves);
+		if (stateMoves.Count > 0) {
+			DiscoveredEdges?.Invoke(this, stateMoves);
+		}
 
 		CurrentRoute.Add(stateMoves);
-		// Vertex from = MainScene.GetOrCreateVertex(initial, parent);
 	}
 
 	// returns true if the extended edge leads to a solution
 	private bool Extend(StateMove bestMove){
-
 		PathChange?.Invoke(this, new PathChangeArgs {	
 			onPath = true,
 			move = bestMove
 		});
-		// TODO subscribe a thing
 		NewCurrent?.Invoke(this, bestMove.To);
 
 		if (bestMove.To.IsSolved()) {
@@ -188,8 +172,9 @@ public class BacktrackingSolver  {
 		.OrderBy(stateMove => Heuristic.Evaluate(stateMove.To))
 		.ToList();
 
-		DiscoveredEdges?.Invoke(this, stateMoves);
-		
+		if (stateMoves.Count > 0) {
+			DiscoveredEdges?.Invoke(this, stateMoves);
+		}
 
 		CurrentRoute.Add(stateMoves);
 
@@ -197,34 +182,12 @@ public class BacktrackingSolver  {
 	}
 
 	public void Step() { 
-
-		// DEBUG
-		// for (int i = 0; i < CurrentRoute.Count; i++){
-		// 	GD.Print("--------------------------------");
-		// 	GD.Print($"Vertex {i}.:");
-		// 	CurrentRoute[i].Item1.PrintState();
-		// 	GD.Print($"{CurrentRoute[i].Item2.Count} Neighbours:");
-		// 	foreach (var neighbour in CurrentRoute[i].Item2){
-		// 		neighbour.PrintState();
-		// 		GD.Print("-------");
-		// 	}
-		// 	GD.Print("--------------------------------");
-		// }
-
-		
 		var options = CurrentRoute.Last();
-		// if (currentEdge.selectedEdge.To.IsSolved()){
-		// 	FoundSolution = true;
-		// 	Terminated = true;
-		// 	return;
-		// }
 		if (options.Count == 0){
-			CurrentRoute.RemoveAt(CurrentRoute.Count() - 1);
+			CurrentRoute.RemoveAt(CurrentRoute.Count - 1);
 			
 			if (CurrentRoute.Count == 0){
-				// TODO make this into status
-				FoundSolution = false;
-				Terminated = true;
+				Status = SolverStatus.NoSolution;
 				return;
 			}
 
@@ -244,13 +207,12 @@ public class BacktrackingSolver  {
 		if (Extend(CurrentRoute.Last().First())) {
 			GD.Print("Found Solution!");
 			CurrentRoute.Last().First().To.PrintState();
-			Terminated = true;
-			FoundSolution = true;
+			Status = SolverStatus.Solved;
 		}
 	}
 
 	public IEnumerable<StateMove>? GetSolutionPath() { 
-		if (!FoundSolution) {
+		if (Status != SolverStatus.Solved) {
 			return null;
 		} 
 		return CurrentRoute.Select(options => options.First());

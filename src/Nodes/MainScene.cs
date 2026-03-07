@@ -12,8 +12,8 @@ public partial class MainScene : Control {
 	// 1. Export a PackedScene variable so you can drag-and-drop your .tscn file in the Inspector
 	// [Export]
 
-	public PackedScene VertexCreator = ResourceLoader.Load<PackedScene>("res://scenes/vertex.tscn");
-	public PackedScene EdgeCreator = ResourceLoader.Load<PackedScene>("res://scenes/edge.tscn");
+	public static MainScene Instance {get; private set;} = null!;
+
 	Random random = new Random();
 
 	double time = 0;
@@ -23,6 +23,8 @@ public partial class MainScene : Control {
 
 	BacktrackingSolver solver = null!;
 	public override void _Ready(){
+		Instance = this;
+
 		string version = System.Environment.Version.ToString();
 		GD.Print("🚀 C# is working!");
 		GD.Print($"System .NET Version: {version}");
@@ -31,14 +33,14 @@ public partial class MainScene : Control {
 		RenderingServer.SetDefaultClearColor(Colors.Black);
 
 		// RHGameState lvl = Levels.Level0();
-		RHGameState lvl = Levels.Level1();
+		// RHGameState lvl = Levels.Level1();
 		// RHGameState lvl = Levels.TestLevel();
-		// RHGameState lvl = Levels.TestLevel2();
+		RHGameState lvl = Levels.TestLevel2();
 		// RHGameState lvl = Levels.TestLevel3();
 		lvl.PrintState();
 
 		// solver = new HillClimberSolver(new DistanceHeuristic(), lvl);
-		solver = new BacktrackingSolver(new DistanceHeuristic(), this);
+		solver = new BacktrackingSolver(new DistanceHeuristic());
 
 		solver.PathChange += OnPathChange;
 		solver.NewCurrent += OnNewCurrent;
@@ -54,12 +56,8 @@ public partial class MainScene : Control {
 			return;
 		} else {
 			time = 0;
-			// Node2D vertex = (Node2D)VertexCreator.Instantiate();
-			// GD.Print(vertex);
-			// AddChild(vertex);
-			// vertex.Position = new Vector2(random.Next(100,500), random.Next(100,500));
 		}
-		if (!solver.Terminated){
+		if (solver.Status == SolverStatus.Running){
 			// solver.Current?.PrintState();
 			solver.Step();
 		}
@@ -73,93 +71,84 @@ public partial class MainScene : Control {
 		OctTree.BuildAndSetCurrent(vertexList);
 	}
 
-	public Dictionary<RHGameState, Vertex> VertexDict { get; } = new();
-	
-	// TODO move this to Edge as a static method and use VertexDict to get the vertices
-	public Dictionary<StateMove, Edge> EdgeDict { get; } = new();
-
 	public Vertex GetOrCreateVertex(RHGameState state, Vertex? parent) {
-		if (VertexDict.TryGetValue(state, out Vertex? vertex)) {
+		if (Vertex.Dict.TryGetValue(state, out Vertex? vertex)) {
 			// GD.Print("Vertex already exists");
 			return vertex;
 		}
 
 		// GD.Print("Creating vertex");
 
-		vertex = VertexCreator.Instantiate<Vertex>();
+		vertex = Vertex.Creator.Instantiate<Vertex>();
 		vertex.Init(state);
 
-		// TODO set position based on heuristic value
-		if (parent != null) {
+		if (parent == null) {
+			vertex.Position = Vector3.Zero;
+		} else {
+			var outwardUnit = parent.Position.Normalized();
+
 			// Place the vertex outwards
 			// TODO tweak this
-
 			Vector3 randUnitVector = new Vector3(
 				GD.Randf() - 0.5f,
 				GD.Randf() - 0.5f,
 				GD.Randf() - 0.5f
 			).Normalized();
 
-			var outwardUnit = parent.Position.Normalized();
-
-			if (randUnitVector.Dot(outwardUnit) < 0)
+			if (randUnitVector.Dot(outwardUnit) < 0) {
 				randUnitVector = -randUnitVector;
-
-
+			}
 			vertex.Position = parent.Position + randUnitVector * Edge.springLength;
-		} else {
-			vertex.Position = Vector3.Zero;		
 		}
 
 		// TODO add label with state info
 		// vertex.GetNode<Label>("Label").Text = state.ToString();
 		AddChild(vertex);
 		vertex.AddToGroup("Vertices");
-		VertexDict[state] = vertex;
+		Vertex.Dict[state] = vertex;
 		return vertex;
 	}
 
 	public Edge GetOrCreateEdge(StateMove move) {
-		if (EdgeDict.TryGetValue(move, out Edge? edge)) {
+		if (Edge.Dict.TryGetValue(move, out Edge? edge)) {
 			return edge;
 		}
 
-		edge = EdgeCreator.Instantiate<Edge>();
+		edge = Edge.Creator.Instantiate<Edge>();
 		edge.Init(
-			VertexDict[move.From], 
-			VertexDict[move.To], 
+			Vertex.Dict[move.From], 
+			Vertex.Dict[move.To], 
 			move
 		);
 		AddChild(edge);
 		edge.AddToGroup("Edges");
-		EdgeDict[move] = edge;
+		Edge.Dict[move] = edge;
 
 		return edge;
 	}	
 
 	public void OnPathChange(object? sender, PathChangeArgs args) {
-		EdgeDict[args.move].UpdateColor(args.onPath); 
+		Edge.Dict[args.move].UpdateColor(args.onPath); 
 	}
 
 	public void OnNewCurrent(object? sender, RHGameState newCurrent) {
 		if (_current == newCurrent) return;
 		if (_current is not null) {
-			VertexDict[_current].UpdateColor(false);
+			Vertex.Dict[_current].UpdateColor(false);
 		}
 
-		VertexDict[newCurrent].UpdateColor(true);
+		Vertex.Dict[newCurrent].UpdateColor(true);
 		_current = newCurrent;
 	}
 
 	public void OnDiscoveredEdges(object? sender, List<StateMove> edges) {
-		if (edges.Count == 0) return;
+		// Assume list is not empty
 
 		// assume the vertex extended already exists, find it
-		Vertex from = VertexDict[edges.First().From];
+		Vertex from = Vertex.Dict[edges.First().From];
 
 		foreach (var edge in edges) {
-			// TODO unify the methods
-			Vertex to = GetOrCreateVertex(edge.To, from);
+			GetOrCreateVertex(edge.To, from);
 			GetOrCreateEdge(edge);
 		}
 	}

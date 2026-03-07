@@ -3,6 +3,7 @@ namespace rushhour.src.Nodes;
 using Godot;
 using System;
 using rushhour.src.Model;
+using System.Collections.Generic;
 
 
 public partial class Edge : MeshInstance3D
@@ -17,6 +18,11 @@ public partial class Edge : MeshInstance3D
 	public Vertex From { get; set; } = null!;
 	public Vertex To { get; set; } = null!;
 	public StateMove MoveUsed { get; set; } = null!;
+	public const String scenePath = "res://scenes/edge.tscn";
+	public static PackedScene Creator { get; } = 
+		ResourceLoader.Load<PackedScene>(scenePath);
+
+	public static Dictionary<StateMove, Edge> Dict { get; } = new();
 
 	private ImmediateMesh _mesh = new ImmediateMesh(); 
 
@@ -64,15 +70,14 @@ public partial class Edge : MeshInstance3D
 	}
 
 	public void ApplySpringForce() {
-		var distanceVector = To.Position - From.Position;
+		Vector3 distanceVector = To.Position - From.Position;
 		var length = distanceVector.Length();
 		if (optimalIntervalLowerBound < length && length < optimalIntervalUpperBound) {
 			// Spring is close to the optimal lenght, skip applying force for performance
 			return;
 		}
-		var force = distanceVector * ((length - springLength) / length) * springForce;
+		Vector3 force = distanceVector * ((length - springLength) / length) * springForce;
 
-		// TODO make this thread safe
 		From.ApplyCentralForce(force);
 		To.ApplyCentralForce(-force);
 	}

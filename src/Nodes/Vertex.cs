@@ -13,6 +13,10 @@ public partial class Vertex : RigidBody3D
 	public readonly Vector3 maxVelocity = Vector3.One * 100;
 	public readonly Vector3 negMaxVelocity = Vector3.One * (-100);
 	public RHGameState GameState { get; set; } = null!;
+	public const String scenePath = "res://scenes/vertex.tscn";
+	public static PackedScene Creator {get;} = ResourceLoader.Load<PackedScene>(scenePath);
+	public static Dictionary<RHGameState, Vertex> Dict { get; } = new();
+	
 
 	public void Init(RHGameState gameState) {
 		GameState = gameState;

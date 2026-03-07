@@ -2,8 +2,9 @@ using rushhour.src.Nodes;
 
 namespace rushhour.src.Model;
 
-public enum Status {
+public enum SolverStatus {
+    NotStarted,
     Running,
     Solved,
-    Unsolvable
+    NoSolution
 }
