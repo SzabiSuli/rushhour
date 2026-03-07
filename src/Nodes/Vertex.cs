@@ -42,6 +42,15 @@ public partial class Vertex : RigidBody3D
 		GameState.PrintState();
 	}
 
+	// Put direct manipulation of Velocity here,
+	// as this executes in sync with applying momentum.
+    public override void _IntegrateForces(PhysicsDirectBodyState3D state) {
+		// Clamp velocity to prevent instability
+		state.LinearVelocity = state.LinearVelocity.Clamp(negMaxVelocity, maxVelocity);
+
+        base._IntegrateForces(state);
+    }
+
 	public override void _PhysicsProcess(double delta) {
 		// Barnes-Hut approximation via OctTree (O(n log n) instead of O(n²))
 		var tree = OctTree.GetCurrent();
@@ -49,9 +58,6 @@ public partial class Vertex : RigidBody3D
 			var force = OctTree.ComputeForce(tree, this, OctTree.Theta);
 			ApplyCentralForce(force);
 		}
-
-		// Clamp velocity to prevent instability
-		LinearVelocity.Clamp(negMaxVelocity, maxVelocity);
 	}
 
 	public void UpdateColor(bool isCurrent) {

@@ -33,9 +33,9 @@ public partial class MainScene : Control {
 		RenderingServer.SetDefaultClearColor(Colors.Black);
 
 		// RHGameState lvl = Levels.Level0();
-		// RHGameState lvl = Levels.Level1();
+		RHGameState lvl = Levels.Level1();
 		// RHGameState lvl = Levels.TestLevel();
-		RHGameState lvl = Levels.TestLevel2();
+		// RHGameState lvl = Levels.TestLevel2();
 		// RHGameState lvl = Levels.TestLevel3();
 		lvl.PrintState();
 
