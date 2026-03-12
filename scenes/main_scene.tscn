@@ -2,16 +2,76 @@
 
 [ext_resource type="Script" uid="uid://x4magystxd2i" path="res://src/Nodes/MainScene.cs" id="1_w2twt"]
 [ext_resource type="Script" uid="uid://bkqpls8s2agia" path="res://src/Nodes/Camera3d.cs" id="2_pw63i"]
+[ext_resource type="PackedScene" uid="uid://rjwtn202o4sa" path="res://scenes/game_board.tscn" id="3_7ykc4"]
 
-[node name="MainScene" type="Control" unique_id=203170334]
+[node name="MainScene" type="Control" unique_id=203170334 node_paths=PackedStringArray("gameBoard")]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_w2twt")
+gameBoard = NodePath("HSplitContainer/MenuPanelContainer/VBoxContainer/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport/GameBoard")
 metadata/_edit_horizontal_guides_ = [-275.0]
 
-[node name="GraphScene" type="Node3D" parent="." unique_id=869173185]
+[node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=887258662]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Camera3D" type="Camera3D" parent="GraphScene" unique_id=1698493355]
+[node name="3DSubViewContainer" type="SubViewportContainer" parent="HSplitContainer" unique_id=56734458]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+mouse_target = true
+
+[node name="3DSubViewport" type="SubViewport" parent="HSplitContainer/3DSubViewContainer" unique_id=1927452465]
+physics_object_picking = true
+size = Vector2i(1716, 1080)
+render_target_update_mode = 4
+
+[node name="GraphScene" type="Node3D" parent="HSplitContainer/3DSubViewContainer/3DSubViewport" unique_id=869173185]
+
+[node name="Camera3D" type="Camera3D" parent="HSplitContainer/3DSubViewContainer/3DSubViewport/GraphScene" unique_id=1698493355]
 projection = 1
 size = 100.0
 script = ExtResource("2_pw63i")
+
+[node name="MenuPanelContainer" type="PanelContainer" parent="HSplitContainer" unique_id=716870133]
+custom_minimum_size = Vector2(192, 192)
+layout_mode = 2
+
+[node name="HSeparator" type="VSeparator" parent="HSplitContainer/MenuPanelContainer" unique_id=418677575]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="ColorRect" type="ColorRect" parent="HSplitContainer/MenuPanelContainer" unique_id=1496019322]
+layout_mode = 2
+color = Color(0.50928617, 0.50928617, 0.50928617, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer" unique_id=1575641859]
+custom_minimum_size = Vector2(192, 192)
+layout_mode = 2
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="HSplitContainer/MenuPanelContainer/VBoxContainer" unique_id=1754232532]
+layout_mode = 2
+size_flags_vertical = 8
+stretch_mode = 0
+alignment_vertical = 0
+
+[node name="BoardSubViewContainer" type="SubViewportContainer" parent="HSplitContainer/MenuPanelContainer/VBoxContainer/AspectRatioContainer" unique_id=29632429]
+custom_minimum_size = Vector2(192, 192)
+layout_mode = 2
+stretch = true
+
+[node name="BoardSubViewport" type="SubViewport" parent="HSplitContainer/MenuPanelContainer/VBoxContainer/AspectRatioContainer/BoardSubViewContainer" unique_id=536987835]
+handle_input_locally = false
+size = Vector2i(192, 192)
+render_target_update_mode = 4
+
+[node name="GameBoard" parent="HSplitContainer/MenuPanelContainer/VBoxContainer/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport" unique_id=1514233621 instance=ExtResource("3_7ykc4")]
+centered = false

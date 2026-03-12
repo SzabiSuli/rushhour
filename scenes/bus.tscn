@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bokoo8lj2ooid"]
+
+[ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="1_t7ha2"]
+
+[node name="Bus" type="Sprite2D" unique_id=926115389]
+texture = ExtResource("1_t7ha2")
+region_enabled = true
+region_rect = Rect2(24, 0, 24, 72)

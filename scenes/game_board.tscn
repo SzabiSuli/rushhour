@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://rjwtn202o4sa"]
+
+[ext_resource type="Script" uid="uid://cexthht87gg41" path="res://src/Nodes/GameBoard.cs" id="1_tqoos"]
+[ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="2_3wu0g"]
+
+[node name="GameBoard" type="Sprite2D" unique_id=1879139364]
+texture_filter = 3
+texture = ExtResource("2_3wu0g")
+region_enabled = true
+region_rect = Rect2(48, 0, 192, 192)
+script = ExtResource("1_tqoos")

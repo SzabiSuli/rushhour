@@ -12,6 +12,8 @@ public partial class MainScene : Control {
 	// 1. Export a PackedScene variable so you can drag-and-drop your .tscn file in the Inspector
 	// [Export]
 
+	[Export] public GameBoard gameBoard;
+
 	public static MainScene Instance {get; private set;} = null!;
 
 	Random random = new Random();
@@ -33,9 +35,9 @@ public partial class MainScene : Control {
 		RenderingServer.SetDefaultClearColor(Colors.Black);
 
 		// RHGameState lvl = Levels.Level0();
-		RHGameState lvl = Levels.Level1();
+		// RHGameState lvl = Levels.Level1();
 		// RHGameState lvl = Levels.TestLevel();
-		// RHGameState lvl = Levels.TestLevel2();
+		RHGameState lvl = Levels.TestLevel2();
 		// RHGameState lvl = Levels.TestLevel3();
 		lvl.PrintState();
 
