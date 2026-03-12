@@ -8,22 +8,32 @@ using System.Linq;
 using Godot;
 using rushhour.src.Nodes;
 
-public interface ISolver {
-	// bool IsRunning { get; }
-	bool FoundSolution { get; set;}
-	bool Terminated { get; }
-	
-	// HashSet<GraphNode> WorkingSetNodes { get; }
-	// HashSet<GraphEdge> WorkingSetEdges { get; }
+public abstract class Solver {
+	public SolverStatus Status { get; set; } = SolverStatus.NotStarted;
 
-	void Step();
-	List<GameState> GetSolutionPath();
+	public event EventHandler<RHGameState>? NewCurrent;
+	public event EventHandler<PathChangeArgs>? PathChange;
+	public event EventHandler<List<StateMove>>? DiscoveredEdges;
+
+	protected void OnNewCurrent(RHGameState state) => NewCurrent?.Invoke(this, state);
+	protected void OnPathChange(PathChangeArgs args) => PathChange?.Invoke(this, args);
+	protected void OnDiscoveredEdges(List<StateMove> edges) => DiscoveredEdges?.Invoke(this, edges);
+	
+	public Heuristic Heuristic { get; protected set; }
+
+	public Solver(Heuristic heuristic) {
+		Heuristic = heuristic;
+	}
+
+
+	// void Step();
+	// List<GameState> GetSolutionPath();
 
 
 	// TimeSpan StepDelay { get; set; }
 }
 
-public class HillClimberSolver : ISolver {
+public class HillClimberSolver(Heuristic h) : Solver(h) {
 	// TODO make this tabu search
 	// public bool IsRunning { get; private set; }
 	// public bool FoundSolution { get; private set; }
@@ -38,17 +48,17 @@ public class HillClimberSolver : ISolver {
 
 	public RHGameState Current { get; set; }
 
-	public Heuristic Heuristic { get; set; }
+	// public Heuristic Heuristic { get; set; }
 	
 	public bool FoundSolution { get; set; }
 	public bool Terminated { get; set; }
-	public HillClimberSolver(Heuristic heuristic, RHGameState initialState){
+	// public HillClimberSolver(Heuristic heuristic, RHGameState initialState){
 
-		Heuristic = heuristic;
-		Current = initialState;
-		Parent = null;
-		FoundSolution = false;
-	}
+	// 	Heuristic = heuristic;
+	// 	Current = initialState;
+	// 	Parent = null;
+	// 	FoundSolution = false;
+	// }
 
 	public void Step() { 
 
@@ -99,35 +109,25 @@ public class HillClimberSolver : ISolver {
 	}
 }
 
-public class BacktrackingSolver  {
+public class BacktrackingSolver(Heuristic h) : Solver(h) {
 	// public bool IsRunning { get; private set; }
 	// public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
 	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
 	// public TimeSpan StepDelay { get; set; }
 
-	public SolverStatus Status {get; set;} = SolverStatus.NotStarted;
 	public List<List<StateMove>> CurrentRoute { get; } = new ();
-	// public RHGameState Current { get; set; }
-	Heuristic Heuristic { get; set; }
 
-	public event EventHandler<RHGameState>? NewCurrent;
-	public event EventHandler<PathChangeArgs>? PathChange;
-	public event EventHandler<List<StateMove>>? DiscoveredEdges;
-
-	public BacktrackingSolver(Heuristic heuristic){
-		Heuristic = heuristic;
-	}
-
-	public void Start(RHGameState initialState) {
+    public void Start(RHGameState initialState) {
 		Status = SolverStatus.Running;
 
+		// TODO Maybe not here
 		MainScene.Instance.GetOrCreateVertex(initialState, null);
 
 		Extend(initialState);
 	}
 
 	private void Extend(RHGameState initial){
-		NewCurrent?.Invoke(this, initial);
+		OnNewCurrent(initial);
 
 		var moves = initial.GetPossibleMoves();
 		
@@ -142,7 +142,7 @@ public class BacktrackingSolver  {
 		.ToList();
 
 		if (stateMoves.Count > 0) {
-			DiscoveredEdges?.Invoke(this, stateMoves);
+			OnDiscoveredEdges(stateMoves);
 		}
 
 		CurrentRoute.Add(stateMoves);
@@ -150,11 +150,11 @@ public class BacktrackingSolver  {
 
 	// returns true if the extended edge leads to a solution
 	private bool Extend(StateMove bestMove){
-		PathChange?.Invoke(this, new PathChangeArgs {	
+		OnPathChange(new PathChangeArgs {	
 			onPath = true,
 			move = bestMove
 		});
-		NewCurrent?.Invoke(this, bestMove.To);
+		OnNewCurrent(bestMove.To);
 
 		if (bestMove.To.IsSolved()) {
 			return true;
@@ -173,7 +173,7 @@ public class BacktrackingSolver  {
 		.ToList();
 
 		if (stateMoves.Count > 0) {
-			DiscoveredEdges?.Invoke(this, stateMoves);
+			OnDiscoveredEdges(stateMoves);
 		}
 
 		CurrentRoute.Add(stateMoves);
@@ -193,8 +193,8 @@ public class BacktrackingSolver  {
 
 			// There has to be a first, since we had an options after it
 			var edgeToRemove = CurrentRoute.Last().First();
-			NewCurrent?.Invoke(this, edgeToRemove.From);
-			PathChange?.Invoke(this, new PathChangeArgs {
+			OnNewCurrent(edgeToRemove.From);
+			OnPathChange(new PathChangeArgs {
 				onPath = false,
 				move = edgeToRemove
 			});
@@ -219,34 +219,22 @@ public class BacktrackingSolver  {
 	}
 }
 
-public class GraphSolver  {
-	// public bool IsRunning { get; private set; }
-	public bool FoundSolution { get; private set; }
-	public bool Terminated { get; private set; }
+public class GraphSolver(Heuristic h) : Solver(h) {
 	// public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
 	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
 	// public TimeSpan StepDelay { get; set; }
 
 	public PriorityQueue<RHGameState, int> OpenStates { get; } = new ();
 	// public RHGameState Current { get; set; }
-	Heuristic Heuristic { get; set; }
 
 	Dictionary<RHGameState, List<RHGameState>> RoutesGraph = new();
 
 	// public RHGameState? Current => CurrentRoute.Last()?.Item1;
 
 
-	public GraphSolver(Heuristic heuristic, RHGameState initialState){
-		Heuristic = heuristic;
-		// Current = initialState;
-		FoundSolution = false;
-		Terminated = false;
-
+	public void Start(RHGameState initialState){
 		OpenStates.Enqueue(initialState, 0);
 	}
-
-	
-
 
 	public void Step() { 
 		var state = OpenStates.Dequeue();
@@ -263,9 +251,4 @@ public class GraphSolver  {
 	//     } 
 	//     return CurrentRoute.Select(tuple => tuple.Item1);
 	// }
-}
- 
-public struct PathEdge {
-	public StateMove selectedEdge;
-	public List<StateMove> alternatives;
 }

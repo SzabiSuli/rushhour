@@ -7,11 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 public partial class MainScene : Control {
-	// Called when the node enters the scene tree for the first time.
-
-	// 1. Export a PackedScene variable so you can drag-and-drop your .tscn file in the Inspector
-	// [Export]
-
 	[Export] public GameBoard gameBoard = null!;
 
 	public static MainScene Instance {get; private set;} = null!;
