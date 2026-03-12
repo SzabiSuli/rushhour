@@ -12,7 +12,7 @@ public partial class MainScene : Control {
 	// 1. Export a PackedScene variable so you can drag-and-drop your .tscn file in the Inspector
 	// [Export]
 
-	[Export] public GameBoard gameBoard;
+	[Export] public GameBoard gameBoard = null!;
 
 	public static MainScene Instance {get; private set;} = null!;
 
@@ -46,6 +46,7 @@ public partial class MainScene : Control {
 
 		solver.PathChange += OnPathChange;
 		solver.NewCurrent += OnNewCurrent;
+		solver.NewCurrent += gameBoard.DisplayState;
 		solver.DiscoveredEdges += OnDiscoveredEdges;
 
 		solver.Start(lvl);

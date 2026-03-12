@@ -4,5 +4,7 @@
 
 [node name="Bus" type="Sprite2D" unique_id=926115389]
 texture = ExtResource("1_t7ha2")
+centered = false
+offset = Vector2(-12, -12)
 region_enabled = true
 region_rect = Rect2(24, 0, 24, 72)

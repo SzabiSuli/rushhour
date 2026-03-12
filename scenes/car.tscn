@@ -4,5 +4,7 @@
 
 [node name="Car" type="Sprite2D" unique_id=610309531]
 texture = ExtResource("1_c35m8")
+centered = false
+offset = Vector2(-12, -12)
 region_enabled = true
 region_rect = Rect2(0, 0, 24, 48)
