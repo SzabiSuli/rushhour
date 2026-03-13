@@ -38,14 +38,25 @@ public partial class GameBoard : Sprite2D
 		}
 	}
 	public void BuildBoard(RHGameState state) {
+		int carCount = 0;
+		int busCount = 0;
+
 		foreach (var placedPiece in state.PlacedPieces) {
-			PutOnBoard(placedPiece);
+			VehicleNode v = PutOnBoard(placedPiece);
+			
+			if (v is CarNode) {
+				v.SetSprite(carCount);
+				carCount++; 
+			} else {
+				v.SetSprite(busCount);
+				busCount++;
+			}
 		}
 	}
 
 
-	private void PutOnBoard(PlacedRHPiece placedPiece) {
-		Sprite2D pieceNode = (placedPiece.Piece is Car ? CarCreator : BusCreator).Instantiate<Sprite2D>();
+	private VehicleNode PutOnBoard(PlacedRHPiece placedPiece) {
+		VehicleNode pieceNode = (placedPiece.Piece is Car ? CarCreator : BusCreator).Instantiate<VehicleNode>();
 			
 		pieceNode.Position = tileSize * 1.5f + placedPiece.Position * tileSize;
 
@@ -64,6 +75,7 @@ public partial class GameBoard : Sprite2D
 				break;
 		}
 		AddChild(pieceNode);
+		return pieceNode;
 	}
 
 
@@ -75,4 +87,8 @@ public partial class GameBoard : Sprite2D
 		}
 		Scale = parentControl.Size / spriteSize;
 	}
+}
+
+public abstract partial class VehicleNode : Sprite2D {
+	public abstract void SetSprite(int index);
 }
