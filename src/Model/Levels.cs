@@ -1,102 +1,150 @@
 namespace rushhour.src.Model;
 
+using System;
+using System.Collections.Generic;
 using Godot;
 
 static class Levels {
-    
-    public static RHGameState TestLevel() {
-        return new RHGameState([
-            // Index 0: Red main car — horizontal, row 2, cols 0–1 (front at col 1, facing right, body extends left)
-            new PlacedRHPiece(new MainCar(), new Vector2I(1, 1), Direction.Right),
-            new PlacedRHPiece(new Car(), new Vector2I(1, 3), Direction.Right)
-        ]);
+    // return the title, and the state
+    public static (string, RHGameState) LoadLevel(int index) {
+        if (index < 0 || index >= levelStrings.Length) {
+            throw new ArgumentException($"Level index must be between 0 and {levelStrings.Length}");
+        }
+        string[] lvlS = levelStrings[index].Split("\n");
+        if (lvlS.Length != 7) {
+            throw new Exception($"Level {index} is not formatted correctly.");
+        }
+        string title = lvlS[0];
+
+        List<PlacedRHPiece> vehicles = new();
+
+        for (int i = 1; i <= 6; i++) {
+            string row = lvlS[i];
+            for (int j = 0; j < 6; j++) {
+                char c = row[j];
+                
+                // keep going until we find a capital letter
+                if (Char.IsUpper(c)) {
+                    PlacedRHPiece pp = GetPiece(lvlS, c, i, j);
+                    if (pp.Piece is MainCar) {
+                        // MainCar must be inserted to index 0
+                        vehicles.Insert(0, pp);
+                    } else {
+                        vehicles.Add(pp);
+                    }
+                }
+            }
+        }
+
+        return (title, new RHGameState(vehicles.ToArray()));
     }
-    public static RHGameState TestLevel2() {
-        return new RHGameState([
-            // Index 0: Red main car — horizontal, row 2, cols 0–1 (front at col 1, facing right, body extends left)
-            new PlacedRHPiece(new MainCar(), new Vector2I(1, 1), Direction.Right),
-            new PlacedRHPiece(new Car(), new Vector2I(1, 3), Direction.Right),
-            new PlacedRHPiece(new Car(), new Vector2I(1, 4), Direction.Right)
-        ]);
+
+    public static PlacedRHPiece GetPiece(string[] lvlS, char c, int i, int j) {
+        if (lvlS[i][j] != c) {
+            throw new ArgumentException($"The front of car labeled with {c} is not at cooridinates {i}, {j}.");
+        }
+        char lower = Char.ToLower(c);
+
+        // find its neighbouring cell
+        foreach (Direction d in Enum.GetValues<Direction>()) {
+            if (GetChar(lvlS, i, j, d, 1) == lower) {
+                RushHourPiece piece;
+                if (GetChar(lvlS, i, j, d, 2) == lower) {
+                    // we found a bus
+                    piece = new Bus();
+                } else {
+                    // we found a car
+                    if (c == 'A') {
+                        piece = new MainCar();    
+                    } else {
+                        piece = new Car();
+                    }
+                }
+
+                return new PlacedRHPiece(piece, new Vector2I(j, i - 1), d.GetOpposite());
+            }
+        }
+
+        throw new Exception($"No neighbouring cell for {c} at ({i},{j}) contains its lower-case body.");
     }
-    public static RHGameState TestLevel3() {
-        return new RHGameState([
-            // Index 0: Red main car — horizontal, row 2, cols 0–1 (front at col 1, facing right, body extends left)
-            new PlacedRHPiece(new MainCar(), new Vector2I(1, 1), Direction.Right),
-            new PlacedRHPiece(new Car(), new Vector2I(3, 1), Direction.Right),
-        ]);
+
+    public static char? GetChar(string[] lvlS, int i, int j, Direction d, int tiles = 1) {
+        
+        int[,] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+
+        int ni = i + directions[(int)d, 0] * tiles;
+        int nj = j + directions[(int)d, 1] * tiles;
+
+        if (ni < 1 || ni > 6 || nj < 0 || nj > 5){
+            return null;
+        }
+        return lvlS[ni][nj];
     }
-    
-    /// <summary>
-    /// Rush Hour Puzzle #0 (Very Easy)
-    /// </summary>
-    public static RHGameState Level0() {
-        return new RHGameState([
-            // Index 0: Red main car — horizontal, row 2, cols 0–1 (front at col 1, facing right, body extends left)
-            new PlacedRHPiece(new MainCar(), new Vector2I(1, 2), Direction.Right),
 
-            // Index 1: Light-blue car — vertical, col 2, rows 1–2 (front at row 1, facing up, body extends down)
-            new PlacedRHPiece(new Car(), new Vector2I(2, 1), Direction.Up),
-
-            // Index 2: Yellow truck — vertical, col 4, rows 1–3 (front at row 1, facing up, body extends down)
-            new PlacedRHPiece(new Bus(), new Vector2I(4, 1), Direction.Up),
-
-            // Index 3: Orange car — vertical, col 5, rows 2–3 (front at row 2, facing up, body extends down)
-            new PlacedRHPiece(new Car(), new Vector2I(5, 2), Direction.Up),
-
-            // Index 4: Lavender truck — horizontal, row 3, cols 0–2 (front at col 0, facing left, body extends right)
-            new PlacedRHPiece(new Bus(), new Vector2I(0, 3), Direction.Left),
-
-            // Index 5: Blue car — vertical, col 0, rows 4–5 (front at row 4, facing up, body extends down)
-            new PlacedRHPiece(new Car(), new Vector2I(0, 4), Direction.Up),
-
-            // Index 6: Pink car — vertical, col 1, rows 4–5 (front at row 4, facing up, body extends down)
-            new PlacedRHPiece(new Car(), new Vector2I(1, 4), Direction.Up),
-
-            // Index 7: Dark purple car — vertical, col 2, rows 4–5 (front at row 4, facing up, body extends down)
-            // new PlacedRHPiece(new Car(), new Vector2I(2, 4), Direction.Up),
-
-            // Index 8: Teal car — horizontal, row 4, cols 4–5 (front at col 4, facing left, body extends right)
-            new PlacedRHPiece(new Car(), new Vector2I(4, 4), Direction.Left),
-
-            // Index 9: Gray car — horizontal, row 5, cols 4–5 (front at col 4, facing left, body extends right)
-            new PlacedRHPiece(new Car(), new Vector2I(4, 5), Direction.Left),
-        ]);
-    }
-    /// <summary>
-    /// Rush Hour Puzzle #1 (Beginner)
-    /// </summary>
-    public static RHGameState Level1() {
-        return new RHGameState([
-            // Index 0: Red main car — horizontal, row 2, cols 0–1 (front at col 1, facing right, body extends left)
-            new PlacedRHPiece(new MainCar(), new Vector2I(1, 2), Direction.Right),
-
-            // Index 1: Light-blue car — vertical, col 2, rows 1–2 (front at row 1, facing up, body extends down)
-            new PlacedRHPiece(new Car(), new Vector2I(2, 1), Direction.Up),
-
-            // Index 2: Yellow truck — vertical, col 4, rows 1–3 (front at row 1, facing up, body extends down)
-            new PlacedRHPiece(new Bus(), new Vector2I(4, 1), Direction.Up),
-
-            // Index 3: Orange car — vertical, col 5, rows 2–3 (front at row 2, facing up, body extends down)
-            new PlacedRHPiece(new Car(), new Vector2I(5, 2), Direction.Up),
-
-            // Index 4: Lavender truck — horizontal, row 3, cols 0–2 (front at col 0, facing left, body extends right)
-            new PlacedRHPiece(new Bus(), new Vector2I(0, 3), Direction.Left),
-
-            // Index 5: Blue car — vertical, col 0, rows 4–5 (front at row 4, facing up, body extends down)
-            new PlacedRHPiece(new Car(), new Vector2I(0, 4), Direction.Up),
-
-            // Index 6: Pink car — vertical, col 1, rows 4–5 (front at row 4, facing up, body extends down)
-            new PlacedRHPiece(new Car(), new Vector2I(1, 4), Direction.Up),
-
-            // Index 7: Dark purple car — vertical, col 2, rows 4–5 (front at row 4, facing up, body extends down)
-            new PlacedRHPiece(new Car(), new Vector2I(2, 4), Direction.Up),
-
-            // Index 8: Teal car — horizontal, row 4, cols 4–5 (front at col 4, facing left, body extends right)
-            new PlacedRHPiece(new Car(), new Vector2I(4, 4), Direction.Left),
-
-            // Index 9: Gray car — horizontal, row 5, cols 4–5 (front at col 4, facing left, body extends right)
-            new PlacedRHPiece(new Car(), new Vector2I(4, 5), Direction.Left),
-        ]);
-    }
+    // Capital letter marks the front of the vehicle
+    public static readonly string[] levelStrings = [
+        """
+        Template
+        aA....
+        ......
+        ......
+        ......
+        ......
+        ......
+        """,
+        """
+        Square
+        aA....
+        bB....
+        ......
+        ......
+        ......
+        ......
+        """,
+        """
+        Cube
+        ......
+        aA....
+        ......
+        bB....
+        cC....
+        ......
+        """,
+        """
+        Level 1
+        bB...C
+        e..h.c
+        eaAh.c
+        E..H..
+        F...Dd
+        f.ggG.
+        """,
+        """
+        Level 8
+        ...nNm
+        ..jJkm
+        aAhiKM
+        bBHIlL
+        cCGeeE
+        dDgffF
+        """,
+        """
+        Level ? Easy
+        ......
+        ..E.f.
+        aAe.fg
+        bbB.FG
+        CD..hH
+        cd..iI
+        """,
+        """
+        Level ?
+        ......
+        ..E.f.
+        aAe.fg
+        bbB.FG
+        CDJ.hH
+        cdj.iI
+        """
+    ];
 }

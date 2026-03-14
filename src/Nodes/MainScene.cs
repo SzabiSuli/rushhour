@@ -29,11 +29,9 @@ public partial class MainScene : Control {
 		// Let's also change the background color to prove it's running
 		RenderingServer.SetDefaultClearColor(Colors.Black);
 
-		RHGameState lvl = Levels.Level0();
-		// RHGameState lvl = Levels.Level1();
-		// RHGameState lvl = Levels.TestLevel();
-		// RHGameState lvl = Levels.TestLevel2();
-		// RHGameState lvl = Levels.TestLevel3();
+		var (title, lvl) = Levels.LoadLevel(5);
+
+		GD.Print(title);
 		lvl.PrintState();
 
 		// solver = new HillClimberSolver(new DistanceHeuristic(), lvl);

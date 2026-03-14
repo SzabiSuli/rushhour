@@ -11,10 +11,22 @@ public struct Move {
 }
 
 public enum Direction {
-    Up,
+    Right,
     Down,
     Left,
-    Right
+    Up
+}
+
+public static class DirectionMethods{
+    public static Direction GetOpposite(this Direction d) {
+        return d switch {
+            Direction.Right => Direction.Left,
+            Direction.Down => Direction.Up,
+            Direction.Left => Direction.Right,
+            Direction.Up => Direction.Down,
+            _ => throw new ArgumentOutOfRangeException(nameof(d), $"Invalid direction: {d}")
+        };
+    }
 }
 
 public class StateMove {

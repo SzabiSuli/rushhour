@@ -8,5 +8,5 @@ texture = ExtResource("1_c35m8")
 centered = false
 offset = Vector2(-12, -12)
 region_enabled = true
-region_rect = Rect2(0, 192, 24, 48)
+region_rect = Rect2(24, 144, 24, 48)
 script = ExtResource("2_qt2eu")
