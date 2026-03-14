@@ -42,13 +42,16 @@ public partial class MainScene : Control {
 		solver.NewCurrent += gameBoard.DisplayState;
 		solver.DiscoveredEdges += OnDiscoveredEdges;
 
+		// We have to create the first vertex
+		GetOrCreateVertex(lvl, null);
+
 		solver.Start(lvl);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public async override void _Process(double delta) {
 		time += delta;
-		if (time < 0.01) {	
+		if (time < 1) {	
 			return;
 		} else {
 			time = 0;

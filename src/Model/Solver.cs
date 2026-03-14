@@ -1,12 +1,9 @@
 namespace rushhour.src.Model;
 
-
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Godot;
-using rushhour.src.Nodes;
 
 public abstract class Solver {
 	public SolverStatus Status { get; set; } = SolverStatus.NotStarted;
@@ -119,13 +116,11 @@ public class BacktrackingSolver(Heuristic h) : Solver(h) {
 
     public void Start(RHGameState initialState) {
 		Status = SolverStatus.Running;
-
-		// TODO Maybe not here
-		MainScene.Instance.GetOrCreateVertex(initialState, null);
-
 		Extend(initialState);
 	}
 
+
+	// TODO extend should be for state
 	private void Extend(RHGameState initial){
 		OnNewCurrent(initial);
 
@@ -148,6 +143,7 @@ public class BacktrackingSolver(Heuristic h) : Solver(h) {
 		CurrentRoute.Add(stateMoves);
 	}
 
+	// TODO this should be a different method
 	// returns true if the extended edge leads to a solution
 	private bool Extend(StateMove bestMove){
 		OnPathChange(new PathChangeArgs {	

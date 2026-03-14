@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Concurrent;
-using System.Numerics;
-
 namespace rushhour.src.Model;
 
+using System;
 
 public struct Move {
     public int PieceIndex { get; init; }

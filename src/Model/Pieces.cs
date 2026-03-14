@@ -1,6 +1,6 @@
 namespace rushhour.src.Model;
-using Godot;
 
+using Godot;
 
 public class PlacedRHPiece {
     public RushHourPiece Piece { get; init; }
