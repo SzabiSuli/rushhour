@@ -24,7 +24,7 @@ public abstract class Solver {
 
 	
 
-	public void Start(RHGameState initialState) {
+	public virtual void Start(RHGameState initialState) {
 		Status = SolverStatus.Running;
 		Extend(initialState);
 	}
@@ -59,7 +59,7 @@ public abstract class Solver {
 	public abstract IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves);
 
 
-	// void Step();
+	public abstract void Step();
 	// List<GameState> GetSolutionPath();
 
 
@@ -99,7 +99,7 @@ public class HillClimberSolver(Heuristic h) : Solver(h) {
 		return new List<StateMove>();
 	}
 
-	public void Step() {
+	public override void Step() {
 
 		if (Route.Last().IsSolved()) {
 			Status = SolverStatus.Solved;
@@ -175,7 +175,7 @@ public class BacktrackingSolver(Heuristic h) : Solver(h) {
 		return validMoves;
 	}
 
-	public void Step() { 
+	public override void Step() { 
 		var options = CurrentRoute.Last();
 		if (options.Count == 0){
 			CurrentRoute.RemoveAt(CurrentRoute.Count - 1);
@@ -220,7 +220,8 @@ public class BacktrackingSolver(Heuristic h) : Solver(h) {
 	}
 }
 
-public class GraphSolver(Heuristic h) : Solver(h) {
+// TODO make A and A* searches?
+public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
 	// public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
 	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
 	// public TimeSpan StepDelay { get; set; }
@@ -228,23 +229,51 @@ public class GraphSolver(Heuristic h) : Solver(h) {
 	public PriorityQueue<RHGameState, int> OpenStates { get; } = new ();
 	// public RHGameState Current { get; set; }
 
-	Dictionary<RHGameState, List<RHGameState>> RoutesGraph = new();
 
-	// public RHGameState? Current => CurrentRoute.Last()?.Item1;
-
-
-	public void Start(RHGameState initialState){
-		OpenStates.Enqueue(initialState, 0);
+	struct DiscoveredState {
+		public int depth;
+		public RHGameState? parent;
 	}
 
-	public void Step() { 
+	Dictionary<RHGameState, DiscoveredState> DiscoveredStates = new();
+
+	public override void Start(RHGameState initialState) {
+		DiscoveredStates.Add(initialState, new DiscoveredState{depth = 0, parent = null});
+		GD.Print(DiscoveredStates.Keys);
+		GD.Print(DiscoveredStates.Values);
+		// Status = SolverStatus.Running;
+		// Extend(initialState);
+		base.Start(initialState);
+	}
+
+	public override void Step() { 
 		var state = OpenStates.Dequeue();
-		Extend(state);
+		if (Extend(state)) {
+			GD.Print("Found Solution!");
+			state.PrintState();
+			Status = SolverStatus.Solved;
+		}
 	}
 
-	private void Extend(RHGameState state) {
-		
+	public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
+		var validMoves = stateMoves.Where(
+			stateMove => !DiscoveredStates.Keys.Contains(stateMove.To)
+		);
+
+		if (!validMoves.Any()) return validMoves;
+
+
+		RHGameState parent = validMoves.First().From;
+		int depth = DiscoveredStates[parent].depth + 1;
+
+		foreach (var move in validMoves) {
+			DiscoveredStates.Add(move.To, new DiscoveredState{depth = depth, parent = parent});
+			OpenStates.Enqueue(move.To, depth + Heuristic.Evaluate(move.To));
+		}
+
+		return validMoves;
 	}
+
 
 	// public IEnumerable<RHGameState> GetSolutionPath() { 
 	//     if (!FoundSolution) {

@@ -18,7 +18,7 @@ public partial class MainScene : Control {
 	private RHGameState? _current;
 
 
-	BacktrackingSolver solver = null!;
+	Solver solver = null!;
 	public override void _Ready(){
 		Instance = this;
 
@@ -36,7 +36,8 @@ public partial class MainScene : Control {
 
 		// solver = new BacktrackingSolver(new DistanceHeuristic());
 		// solver = new BacktrackingSolver(new FreeSpacesHeuristic());
-		solver = new BacktrackingSolver(new MoverHeuristic());
+		// solver = new BacktrackingSolver(new MoverHeuristic());
+		solver = new AcGraphSolver(new MoverHeuristic());
 
 		solver.PathChange += OnPathChange;
 		solver.NewCurrent += OnNewCurrent;
