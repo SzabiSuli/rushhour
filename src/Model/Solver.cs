@@ -10,17 +10,53 @@ public abstract class Solver {
 
 	public event EventHandler<RHGameState>? NewCurrent;
 	public event EventHandler<PathChangeArgs>? PathChange;
-	public event EventHandler<List<StateMove>>? DiscoveredEdges;
+	public event EventHandler<IEnumerable<StateMove>>? DiscoveredEdges;
 
 	protected void OnNewCurrent(RHGameState state) => NewCurrent?.Invoke(this, state);
 	protected void OnPathChange(PathChangeArgs args) => PathChange?.Invoke(this, args);
-	protected void OnDiscoveredEdges(List<StateMove> edges) => DiscoveredEdges?.Invoke(this, edges);
+	protected void OnDiscoveredEdges(IEnumerable<StateMove> edges) => DiscoveredEdges?.Invoke(this, edges);
 	
 	public Heuristic Heuristic { get; protected set; }
 
 	public Solver(Heuristic heuristic) {
 		Heuristic = heuristic;
 	}
+
+	
+
+	public void Start(RHGameState initialState) {
+		Status = SolverStatus.Running;
+		Extend(initialState);
+	}
+
+	public bool Extend(RHGameState state) {
+		OnNewCurrent(state);
+
+		if (state.IsSolved()) {
+			return true;
+		}
+
+		var moves = state.GetPossibleMoves();
+		
+		if (!moves.Any()) return false;
+
+		IEnumerable<StateMove> stateMoves = moves.Select(
+			move => new StateMove(state, state.WithMove(move), move)
+		);
+
+		// We expect ProcessMoves to have side effects
+		// such as putting the filteredMoves in a structure
+		// where in the next step the best move is selected
+		IEnumerable<StateMove> filteredMoves = ProcessMoves(stateMoves);
+		
+		if (filteredMoves.Any()) {
+			OnDiscoveredEdges(filteredMoves);
+		}
+
+		return false;
+	}
+
+	public abstract IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves);
 
 
 	// void Step();
@@ -40,6 +76,8 @@ public class HillClimberSolver(Heuristic h) : Solver(h) {
 
 	Random rand = new Random();
 
+	public List<RHGameState> Route { get; set; } = new();
+	public int TabuSize { get; set; }
 
 	public RHGameState? Parent { get; set; }
 
@@ -57,7 +95,17 @@ public class HillClimberSolver(Heuristic h) : Solver(h) {
 	// 	FoundSolution = false;
 	// }
 
-	public void Step() { 
+	public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
+		return new List<StateMove>();
+	}
+
+	public void Step() {
+
+		if (Route.Last().IsSolved()) {
+			Status = SolverStatus.Solved;
+			return;
+		}
+
 
 		if (Current.IsSolved()){
 			FoundSolution = true;
@@ -107,74 +155,24 @@ public class HillClimberSolver(Heuristic h) : Solver(h) {
 }
 
 public class BacktrackingSolver(Heuristic h) : Solver(h) {
-	// public bool IsRunning { get; private set; }
-	// public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
-	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
-	// public TimeSpan StepDelay { get; set; }
 
+	Random rand = new Random();
 	public List<List<StateMove>> CurrentRoute { get; } = new ();
 
-    public void Start(RHGameState initialState) {
-		Status = SolverStatus.Running;
-		Extend(initialState);
-	}
+	public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
+		var validMoves = stateMoves.Where(
+			stateMove => 
+				!CurrentRoute.Select(
+					pathOptions => pathOptions.First().From
+				).Contains(stateMove.To)
+		) // filter out states already in the current route
+		// TODO random thing
+		.OrderBy(stateMove => Heuristic.Evaluate(stateMove.To) + rand.NextDouble())
+		.ToList();
 
-
-	// TODO extend should be for state
-	private void Extend(RHGameState initial){
-		OnNewCurrent(initial);
-
-		var moves = initial.GetPossibleMoves();
+		CurrentRoute.Add(validMoves);
 		
-		if (!moves.Any()) return;
-
-		var stateMoves = moves
-		.Select(move => new StateMove(initial, initial.WithMove(move), move))
-		// Note: we don't filter out moves that end up in the same state as the current last one, 
-		// because they don't exist in our context
-		.Where(stateMove => !CurrentRoute.Select(pathOptions => pathOptions.First().From).Contains(stateMove.To)) // filter out states already in the current route
-		.OrderBy(stateMove => Heuristic.Evaluate(stateMove.To))
-		.ToList();
-
-		if (stateMoves.Count > 0) {
-			OnDiscoveredEdges(stateMoves);
-		}
-
-		CurrentRoute.Add(stateMoves);
-	}
-
-	// TODO this should be a different method
-	// returns true if the extended edge leads to a solution
-	private bool Extend(StateMove bestMove){
-		OnPathChange(new PathChangeArgs {	
-			onPath = true,
-			move = bestMove
-		});
-		OnNewCurrent(bestMove.To);
-
-		if (bestMove.To.IsSolved()) {
-			return true;
-		}
-
-		var moves = bestMove.To.GetPossibleMoves();
-		var stateMoves = moves
-		.Select(move => new StateMove(bestMove.To, bestMove.To.WithMove(move), move))
-		// Note: we don't filter out moves that end up in the same state as the current last one, 
-		// because they don't exist in our context
-		.Where( 
-			stateMove => // filter out states already in the current route
-			!CurrentRoute.Select(pathOptions => pathOptions.First().From).Contains(stateMove.To)
-		) 
-		.OrderBy(stateMove => Heuristic.Evaluate(stateMove.To))
-		.ToList();
-
-		if (stateMoves.Count > 0) {
-			OnDiscoveredEdges(stateMoves);
-		}
-
-		CurrentRoute.Add(stateMoves);
-
-		return false;
+		return validMoves;
 	}
 
 	public void Step() { 
@@ -200,9 +198,16 @@ public class BacktrackingSolver(Heuristic h) : Solver(h) {
 		}
 
 		// add the state to the route, and discover it's neighbours
-		if (Extend(CurrentRoute.Last().First())) {
+		var bestMove = CurrentRoute.Last().First();
+		
+		OnPathChange(new PathChangeArgs {	
+			onPath = true,
+			move = bestMove
+		});
+
+		if (Extend(bestMove.To)) {
 			GD.Print("Found Solution!");
-			CurrentRoute.Last().First().To.PrintState();
+			bestMove.To.PrintState();
 			Status = SolverStatus.Solved;
 		}
 	}

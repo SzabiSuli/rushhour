@@ -1,5 +1,3 @@
-make game board
-
 implement searches
 
 implement heuristics
@@ -11,3 +9,23 @@ make class diagram
 make tests
 
 make docs
+
+Őszi szünet - user story
+
+Dec elejéig - Valamilyen modellezés UML/osztálydiagram
+
+Jan. - Ápr. végéig - kód szinte teljesen kész
+Május vége - végső leadási idő
+
+
+
+Heurisztikák:
+- 0 heurisztika
+- táv heurisztika
+- táv heurisztika + szabad mezők az útban
+- táv heurisztika + kocsik távolsága a bejárattól
+- min lépések heurisztika rekurzívan kiszámolva (ez az egyszerű módon nem monoton!)
+
+
+uml:
+puml-gen ./main.cs

@@ -34,8 +34,9 @@ public partial class MainScene : Control {
 		GD.Print(title);
 		lvl.PrintState();
 
-		// solver = new HillClimberSolver(new DistanceHeuristic(), lvl);
-		solver = new BacktrackingSolver(new DistanceHeuristic());
+		// solver = new BacktrackingSolver(new DistanceHeuristic());
+		// solver = new BacktrackingSolver(new FreeSpacesHeuristic());
+		solver = new BacktrackingSolver(new MoverHeuristic());
 
 		solver.PathChange += OnPathChange;
 		solver.NewCurrent += OnNewCurrent;
@@ -140,7 +141,7 @@ public partial class MainScene : Control {
 		_current = newCurrent;
 	}
 
-	public void OnDiscoveredEdges(object? sender, List<StateMove> edges) {
+	public void OnDiscoveredEdges(object? sender, IEnumerable<StateMove> edges) {
 		// Assume list is not empty
 
 		// assume the vertex extended already exists, find it
