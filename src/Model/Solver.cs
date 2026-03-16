@@ -226,7 +226,7 @@ public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
 	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
 	// public TimeSpan StepDelay { get; set; }
 
-	public PriorityQueue<RHGameState, int> OpenStates { get; } = new ();
+	public PriorityQueue<StateMove, int> OpenStates { get; } = new ();
 	// public RHGameState Current { get; set; }
 
 
@@ -247,10 +247,11 @@ public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
 	}
 
 	public override void Step() { 
-		var state = OpenStates.Dequeue();
-		if (Extend(state)) {
+		var move = OpenStates.Dequeue();
+		OnPathChange(new PathChangeArgs{ onPath = true, move = move});
+		if (Extend(move.To)) {
 			GD.Print("Found Solution!");
-			state.PrintState();
+			move.To.PrintState();
 			Status = SolverStatus.Solved;
 		}
 	}
@@ -265,13 +266,21 @@ public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
 
 		RHGameState parent = validMoves.First().From;
 		int depth = DiscoveredStates[parent].depth + 1;
+		
+		OnDiscoveredEdges(validMoves);
 
 		foreach (var move in validMoves) {
 			DiscoveredStates.Add(move.To, new DiscoveredState{depth = depth, parent = parent});
-			OpenStates.Enqueue(move.To, depth + Heuristic.Evaluate(move.To));
+			OpenStates.Enqueue(move, EvalPriority(depth, move.To));
 		}
 
 		return validMoves;
+	}
+
+	public int EvalPriority(int depth, RHGameState state) {
+		// balanced search:
+		// f = g + h
+		return depth + Heuristic.Evaluate(state);
 	}
 
 
