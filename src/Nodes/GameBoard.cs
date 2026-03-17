@@ -6,24 +6,24 @@ using System;
 
 public partial class GameBoard : Sprite2D
 {
-	public static readonly Vector2 tileSize = new Vector2(24,24);
-	public static readonly Vector2 spriteSize = tileSize * 8;
+    public static readonly Vector2 tileSize = new Vector2(24,24);
+    public static readonly Vector2 spriteSize = tileSize * 8;
 
-	public const string carScenePath = "res://scenes/car.tscn";
-	public const string busScenePath = "res://scenes/bus.tscn";
+    public const string carScenePath = "res://scenes/car.tscn";
+    public const string busScenePath = "res://scenes/bus.tscn";
 
-	public static PackedScene CarCreator { get; } = 
-		ResourceLoader.Load<PackedScene>(carScenePath);
-	public static PackedScene BusCreator { get; } = 
-		ResourceLoader.Load<PackedScene>(busScenePath);
+    public static PackedScene CarCreator { get; } = 
+        ResourceLoader.Load<PackedScene>(carScenePath);
+    public static PackedScene BusCreator { get; } = 
+        ResourceLoader.Load<PackedScene>(busScenePath);
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready() {
-	}
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready() {
+    }
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta) {
-		// TODO don't call this every frame
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta) {
+        // TODO don't call this every frame
 		RescaleToParent();
 	}
 
@@ -83,7 +83,7 @@ public partial class GameBoard : Sprite2D
 	public void RescaleToParent() {
 		var parent = GetParent().GetParent();
 		if (parent is not Control parentControl) {
-			throw new Exception("Gameboard is missing it's parent!");
+            throw new Exception("Gameboard is missing it's parent!");
 		}
 		Scale = parentControl.Size / spriteSize;
 	}

@@ -9,81 +9,81 @@ using Godot;
 
 public partial class Edge : MeshInstance3D
 {
-	// Physics constants
-	public const int springLength = 5;
-	public const double optimalIntervalLowerBound = springLength * 0.9;
-	public const double optimalIntervalUpperBound = springLength * 1.1;
-	public const float springForce = 10;
+    // Physics constants
+    public const int springLength = 5;
+    public const double optimalIntervalLowerBound = springLength * 0.9;
+    public const double optimalIntervalUpperBound = springLength * 1.1;
+    public const float springForce = 10;
 
-	// Init must be called for initialization
-	public Vertex From { get; set; } = null!;
-	public Vertex To { get; set; } = null!;
-	public StateMove MoveUsed { get; set; } = null!;
-	public const String scenePath = "res://scenes/edge.tscn";
-	public static PackedScene Creator { get; } = 
-		ResourceLoader.Load<PackedScene>(scenePath);
+    // Init must be called for initialization
+    public Vertex From { get; set; } = null!;
+    public Vertex To { get; set; } = null!;
+    public StateMove MoveUsed { get; set; } = null!;
+    public const String scenePath = "res://scenes/edge.tscn";
+    public static PackedScene Creator { get; } = 
+        ResourceLoader.Load<PackedScene>(scenePath);
 
-	public static Dictionary<StateMove, Edge> Dict { get; } = new();
+    public static Dictionary<StateMove, Edge> Dict { get; } = new();
 
-	private ImmediateMesh _mesh = new ImmediateMesh(); 
+    private ImmediateMesh _mesh = new ImmediateMesh(); 
 
-	public static Edge GetOrCreate(StateMove move) {
-		if (Dict.TryGetValue(move, out Edge? edge)) {
-			// GD.Print("returning already existing edge");
-			return edge;
-		}
+    public static Edge GetOrCreate(StateMove move) {
+        if (Dict.TryGetValue(move, out Edge? edge)) {
+            // GD.Print("returning already existing edge");
+            return edge;
+        }
 
-		// GD.Print("createing edge");
+        // GD.Print("createing edge");
 
-		edge = Creator.Instantiate<Edge>();
-		edge.Init(
-			Vertex.Dict[move.From], 
-			Vertex.Dict[move.To], 
-			move
-		);
-		MainScene.Instance.GraphScene.AddChild(edge);
-		edge.AddToGroup("Edges");
-		Dict[move] = edge;
+        edge = Creator.Instantiate<Edge>();
+        edge.Init(
+            Vertex.Dict[move.From], 
+            Vertex.Dict[move.To], 
+            move
+        );
+        MainScene.Instance.GraphScene.AddChild(edge);
+        edge.AddToGroup("Edges");
+        Dict[move] = edge;
 
-		return edge;
-	}
+        return edge;
+    }
 
-	public static void OnDiscoveredEdges(object? sender, IEnumerable<StateMove> edges) {
-		// Assume list is not empty
+    public static void OnDiscoveredEdges(object? sender, IEnumerable<StateMove> edges) {
+        // Assume list is not empty
 
-		// assume the vertex extended already exists, find it
-		Vertex from = Vertex.Dict[edges.First().From];
+        // assume the vertex extended already exists, find it
+        Vertex from = Vertex.Dict[edges.First().From];
 
-		foreach (var edge in edges) {
-			Vertex.GetOrCreate(edge.To, from);
-			Edge.GetOrCreate(edge);
-		}
-	}
+        foreach (var edge in edges) {
+            Vertex.GetOrCreate(edge.To, from);
+            Edge.GetOrCreate(edge);
+        }
+    }
 
-	public static void OnPathChange(object? sender, PathChangeArgs args) {
-		Dict[args.move].UpdateColor(args.onPath); 
-	}
+    public static void OnPathChange(object? sender, PathChangeArgs args) {
+        Dict[args.move].UpdateColor(args.onPath); 
+    }
 
-	public void Init(Vertex form, Vertex to, StateMove moveUsed){
-		From = form;
-		To = to;
-		MoveUsed = moveUsed;
-	}
+    public void Init(Vertex form, Vertex to, StateMove moveUsed){
+        From = form;
+        To = to;
+        MoveUsed = moveUsed;
+    }
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready(){
-		Mesh = _mesh;
-		MaterialOverride = new StandardMaterial3D() {
-			AlbedoColor = Colors.White,
-			ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
-			// Metallic = 0.5f,
-			// Roughness = 0.5f
-		};
-	}
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready(){
+        Mesh = _mesh;
+        MaterialOverride = new StandardMaterial3D() {
+            AlbedoColor = Colors.White,
+            ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
+            // Metallic = 0.5f,
+            // Roughness = 0.5f
+        };
+    }
 
-	// Called every physics frame. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(double delta) {
-		// TODO don't update this every frame
+    // Called every physics frame. 'delta' is the elapsed time since the previous frame.
+    public override void _PhysicsProcess(double delta) {
+        // TODO don't update this every frame
 		UpdateLine(From.Position, To.Position);
 
 		ApplySpringForce();

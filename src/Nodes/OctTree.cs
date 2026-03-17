@@ -10,104 +10,104 @@ using System.Collections.Generic;
 /// </summary>
 public static class OctTree
 {
-	/// <summary>
-	/// Barnes-Hut approximation parameter. Higher values = faster but less accurate.
-	/// Typical range: 0.5 (accurate) to 1.5 (fast). 0.8 is a good default.
-	/// </summary>
-	public const float Theta = 1f;
+    /// <summary>
+    /// Barnes-Hut approximation parameter. Higher values = faster but less accurate.
+    /// Typical range: 0.5 (accurate) to 1.5 (fast). 0.8 is a good default.
+    /// </summary>
+    public const float Theta = 1f;
 
-	/// <summary>
-	/// The OctTree built for the current frame. Set by BuildAndSetCurrent().
-	/// </summary>
-	private static OctTreeNode? _current;
+    /// <summary>
+    /// The OctTree built for the current frame. Set by BuildAndSetCurrent().
+    /// </summary>
+    private static OctTreeNode? _current;
 
-	public static OctTreeNode? GetCurrent() => _current;
+    public static OctTreeNode? GetCurrent() => _current;
 
-	/// <summary>
-	/// Builds the OctTree from the given vertices and stores it as the current tree.
-	/// Should be called once per frame in MainScene._Process(), before vertices process.
-	/// </summary>
-	public static void BuildAndSetCurrent(List<Vertex> vertices)
-	{
-		if (vertices.Count == 0)
-		{
-			_current = null;
-			return;
-		}
+    /// <summary>
+    /// Builds the OctTree from the given vertices and stores it as the current tree.
+    /// Should be called once per frame in MainScene._Process(), before vertices process.
+    /// </summary>
+    public static void BuildAndSetCurrent(List<Vertex> vertices)
+    {
+        if (vertices.Count == 0)
+        {
+            _current = null;
+            return;
+        }
 
-		_current = Build(vertices);
-	}
+        _current = Build(vertices);
+    }
 
-	/// <summary>
-	/// Builds an OctTree from a list of vertices.
-	/// </summary>
-	public static OctTreeNode Build(List<Vertex> vertices)
-	{
-		// Compute bounding box enclosing all vertices with padding
-		Vector3 min = vertices[0].Position;
-		Vector3 max = vertices[0].Position;
+    /// <summary>
+    /// Builds an OctTree from a list of vertices.
+    /// </summary>
+    public static OctTreeNode Build(List<Vertex> vertices)
+    {
+        // Compute bounding box enclosing all vertices with padding
+        Vector3 min = vertices[0].Position;
+        Vector3 max = vertices[0].Position;
 
-		for (int i = 1; i < vertices.Count; i++)
-		{
-			Vector3 pos = vertices[i].Position;
-			min = min.Min(pos);
-			max = max.Max(pos);
-		}
+        for (int i = 1; i < vertices.Count; i++)
+        {
+            Vector3 pos = vertices[i].Position;
+            min = min.Min(pos);
+            max = max.Max(pos);
+        }
 
-		// TODO is this necessary?
-		// Add small padding so no vertex sits exactly on the boundary
-		Vector3 padding = (max - min) * 0.01f + Vector3.One * 0.1f;
-		min -= padding;
-		max += padding;
+        // TODO is this necessary?
+        // Add small padding so no vertex sits exactly on the boundary
+        Vector3 padding = (max - min) * 0.01f + Vector3.One * 0.1f;
+        min -= padding;
+        max += padding;
 
-		// Make the bounding box cubic (equal side lengths) for uniform subdivision
-		float maxSide = Mathf.Max(max.X - min.X, Mathf.Max(max.Y - min.Y, max.Z - min.Z));
-		Vector3 center = (min + max) / 2f;
-		Vector3 halfExtent = Vector3.One * (maxSide / 2f);
-		min = center - halfExtent;
-		max = center + halfExtent;
+        // Make the bounding box cubic (equal side lengths) for uniform subdivision
+        float maxSide = Mathf.Max(max.X - min.X, Mathf.Max(max.Y - min.Y, max.Z - min.Z));
+        Vector3 center = (min + max) / 2f;
+        Vector3 halfExtent = Vector3.One * (maxSide / 2f);
+        min = center - halfExtent;
+        max = center + halfExtent;
 
-		OctTreeNode root = new OctTreeNode(min, max);
+        OctTreeNode root = new OctTreeNode(min, max);
 
-		foreach (var vertex in vertices)
-		{
-			Insert(root, vertex);
-		}
+        foreach (var vertex in vertices)
+        {
+            Insert(root, vertex);
+        }
 
-		return root;
-	}
+        return root;
+    }
 
-	/// <summary>
-	/// Inserts a vertex into the OctTree, subdividing as needed.
-	/// </summary>
-	private static void Insert(OctTreeNode node, Vertex vertex)
-	{
-		if (node.Count == 0)
-		{
-			// Empty node — place the vertex here as a leaf
-			node.Body = vertex;
-			node.CenterOfMass = vertex.Position;
-			node.Count = 1;
-			return;
-		}
+    /// <summary>
+    /// Inserts a vertex into the OctTree, subdividing as needed.
+    /// </summary>
+    private static void Insert(OctTreeNode node, Vertex vertex)
+    {
+        if (node.Count == 0)
+        {
+            // Empty node — place the vertex here as a leaf
+            node.Body = vertex;
+            node.CenterOfMass = vertex.Position;
+            node.Count = 1;
+            return;
+        }
 
-		if (node.IsLeaf)
-		{
-			// This leaf already has a body — subdivide
-			Vertex existing = node.Body!;
-			node.Body = null;
+        if (node.IsLeaf)
+        {
+            // This leaf already has a body — subdivide
+            Vertex existing = node.Body!;
+            node.Body = null;
 
-			// Re-insert the existing body into a child
-			int existingOctant = node.GetOctant(existing.Position);
-			node.EnsureChild(existingOctant);
-			Insert(node.Children[existingOctant]!, existing);
+            // Re-insert the existing body into a child
+            int existingOctant = node.GetOctant(existing.Position);
+            node.EnsureChild(existingOctant);
+            Insert(node.Children[existingOctant]!, existing);
 
-			// Insert the new body into a child
-			int newOctant = node.GetOctant(vertex.Position);
-			node.EnsureChild(newOctant);
-			Insert(node.Children[newOctant]!, vertex);
+            // Insert the new body into a child
+            int newOctant = node.GetOctant(vertex.Position);
+            node.EnsureChild(newOctant);
+            Insert(node.Children[newOctant]!, vertex);
 
-			// Update this node's aggregate data
+            // Update this node's aggregate data
 			node.CenterOfMass = (existing.Position + vertex.Position) / 2f;
 			node.Count = 2;
 			return;
@@ -203,9 +203,9 @@ public static class OctTree
 		Vector3 direction = distanceVector / dist;
 
 		// F = -repulsionForce * direction / distance² * mass
-		// Negative because it's repulsion (away from source)
-		return direction / distSq * (-Vertex.repulsionForce * mass);
-	}
+        // Negative because it's repulsion (away from source)
+        return direction / distSq * (-Vertex.repulsionForce * mass);
+    }
 }
 
 /// <summary>
@@ -213,42 +213,42 @@ public static class OctTree
 /// </summary>
 public class OctTreeNode
 {
-	/// <summary>Minimum corner of the axis-aligned bounding box.</summary>
-	public Vector3 BoundsMin;
+    /// <summary>Minimum corner of the axis-aligned bounding box.</summary>
+    public Vector3 BoundsMin;
 
-	/// <summary>Maximum corner of the axis-aligned bounding box.</summary>
-	public Vector3 BoundsMax;
+    /// <summary>Maximum corner of the axis-aligned bounding box.</summary>
+    public Vector3 BoundsMax;
 
-	/// <summary>
-	/// 8 children, one per octant. Null if the octant is empty or this is a leaf.
-	/// Octant indexing: bit 0 = X axis, bit 1 = Y axis, bit 2 = Z axis.
-	/// 0 = below midpoint, 1 = above midpoint for each axis.
-	/// </summary>
-	public OctTreeNode?[] Children = new OctTreeNode?[8];
+    /// <summary>
+    /// 8 children, one per octant. Null if the octant is empty or this is a leaf.
+    /// Octant indexing: bit 0 = X axis, bit 1 = Y axis, bit 2 = Z axis.
+    /// 0 = below midpoint, 1 = above midpoint for each axis.
+    /// </summary>
+    public OctTreeNode?[] Children = new OctTreeNode?[8];
 
-	/// <summary>Weighted center of mass of all bodies in this subtree.</summary>
-	public Vector3 CenterOfMass;
+    /// <summary>Weighted center of mass of all bodies in this subtree.</summary>
+    public Vector3 CenterOfMass;
 
-	/// <summary>Number of bodies contained in this subtree.</summary>
-	public int Count;
+    /// <summary>Number of bodies contained in this subtree.</summary>
+    public int Count;
 
-	/// <summary>The single vertex stored here, if this is a leaf node. Null for internal nodes.</summary>
-	public Vertex? Body;
+    /// <summary>The single vertex stored here, if this is a leaf node. Null for internal nodes.</summary>
+    public Vertex? Body;
 
-	/// <summary>True if this node is a leaf (has a body and no children).</summary>
-	public bool IsLeaf => Body != null;
+    /// <summary>True if this node is a leaf (has a body and no children).</summary>
+    public bool IsLeaf => Body != null;
 
-	public OctTreeNode(Vector3 boundsMin, Vector3 boundsMax)
-	{
-		BoundsMin = boundsMin;
-		BoundsMax = boundsMax;
-		CenterOfMass = Vector3.Zero;
-		Count = 0;
-		Body = null;
-	}
+    public OctTreeNode(Vector3 boundsMin, Vector3 boundsMax)
+    {
+        BoundsMin = boundsMin;
+        BoundsMax = boundsMax;
+        CenterOfMass = Vector3.Zero;
+        Count = 0;
+        Body = null;
+    }
 
-	/// <summary>
-	/// Determines which octant (0-7) a position falls into relative to this node's center.
+    /// <summary>
+    /// Determines which octant (0-7) a position falls into relative to this node's center.
 	/// </summary>
 	public int GetOctant(Vector3 position)
 	{
@@ -261,20 +261,20 @@ public class OctTreeNode
 	}
 
 	/// <summary>
-	/// Creates the child node for the given octant if it doesn't exist yet.
-	/// </summary>
-	public void EnsureChild(int octant)
-	{
-		if (Children[octant] != null) return;
+    /// Creates the child node for the given octant if it doesn't exist yet.
+    /// </summary>
+    public void EnsureChild(int octant)
+    {
+        if (Children[octant] != null) return;
 
-		Vector3 center = (BoundsMin + BoundsMax) / 2f;
-		Vector3 childMin = BoundsMin;
-		Vector3 childMax = center;
+        Vector3 center = (BoundsMin + BoundsMax) / 2f;
+        Vector3 childMin = BoundsMin;
+        Vector3 childMax = center;
 
-		if ((octant & 1) != 0) { childMin.X = center.X; childMax.X = BoundsMax.X; }
-		if ((octant & 2) != 0) { childMin.Y = center.Y; childMax.Y = BoundsMax.Y; }
-		if ((octant & 4) != 0) { childMin.Z = center.Z; childMax.Z = BoundsMax.Z; }
+        if ((octant & 1) != 0) { childMin.X = center.X; childMax.X = BoundsMax.X; }
+        if ((octant & 2) != 0) { childMin.Y = center.Y; childMax.Y = BoundsMax.Y; }
+        if ((octant & 4) != 0) { childMin.Z = center.Z; childMax.Z = BoundsMax.Z; }
 
-		Children[octant] = new OctTreeNode(childMin, childMax);
-	}
+        Children[octant] = new OctTreeNode(childMin, childMax);
+    }
 }

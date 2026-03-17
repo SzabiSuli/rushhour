@@ -6,66 +6,66 @@ using System.Collections.Generic;
 using Godot;
 
 public partial class MainScene : Control {
-	[Export] public GameBoard gameBoard = null!;
-	[Export] public Node3D GraphScene = null!;
+    [Export] public GameBoard gameBoard = null!;
+    [Export] public Node3D GraphScene = null!;
 
-	public static MainScene Instance {get; private set;} = null!;
+    public static MainScene Instance {get; private set;} = null!;
 
-	Random random = new Random();
+    Random random = new Random();
 
-	double time = 0;
+    double time = 0;
 
-	Solver solver = null!;
-	public override void _Ready(){
-		Instance = this;
+    Solver solver = null!;
+    public override void _Ready(){
+        Instance = this;
 
-		string version = System.Environment.Version.ToString();
-		GD.Print("🚀 C# is working!");
-		GD.Print($"System .NET Version: {version}");
-		
-		// Let's also change the background color to prove it's running
-		RenderingServer.SetDefaultClearColor(Colors.Black);
+        string version = System.Environment.Version.ToString();
+        GD.Print("🚀 C# is working!");
+        GD.Print($"System .NET Version: {version}");
+        
+        // Let's also change the background color to prove it's running
+        RenderingServer.SetDefaultClearColor(Colors.Black);
 
-		var (title, lvl) = Levels.LoadLevel(5);
+        var (title, lvl) = Levels.LoadLevel(5);
 
-		GD.Print(title);
-		lvl.PrintState();
+        GD.Print(title);
+        lvl.PrintState();
 
-		// solver = new BacktrackingSolver(new DistanceHeuristic());
-		// solver = new BacktrackingSolver(new FreeSpacesHeuristic());
-		// solver = new BacktrackingSolver(new MoverHeuristic());
-		solver = new AcGraphSolver(new MoverHeuristic());
+        // solver = new BacktrackingSolver(new DistanceHeuristic());
+        // solver = new BacktrackingSolver(new FreeSpacesHeuristic());
+        // solver = new BacktrackingSolver(new MoverHeuristic());
+        solver = new AcGraphSolver(new MoverHeuristic());
 
-		solver.PathChange += Edge.OnPathChange;
-		solver.DiscoveredEdges += Edge.OnDiscoveredEdges;
-		solver.NewCurrent += Vertex.OnNewCurrent;
-		solver.NewCurrent += gameBoard.DisplayState;
+        solver.PathChange += Edge.OnPathChange;
+        solver.DiscoveredEdges += Edge.OnDiscoveredEdges;
+        solver.NewCurrent += Vertex.OnNewCurrent;
+        solver.NewCurrent += gameBoard.DisplayState;
 
-		// We have to create the first vertex
-		Vertex.GetOrCreate(lvl, null);
+        // We have to create the first vertex
+        Vertex.GetOrCreate(lvl, null);
 
-		solver.Start(lvl);
-	}
+        solver.Start(lvl);
+    }
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public async override void _Process(double delta) {
-		time += delta;
-		if (time < 1) {	
-			return;
-		} else {
-			time = 0;
-		}
-		if (solver.Status == SolverStatus.Running){
-			// solver.Current?.PrintState();
-			solver.Step();
-		}
-	}
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public async override void _Process(double delta) {
+        time += delta;
+        if (time < 1) {	
+            return;
+        } else {
+            time = 0;
+        }
+        if (solver.Status == SolverStatus.Running){
+            // solver.Current?.PrintState();
+            solver.Step();
+        }
+    }
 
-	public async override void _PhysicsProcess(double delta) {
-		// Rebuild the Barnes-Hut OctTree once per physics update for repulsion forces
-		var vertexNodes = GetTree().GetNodesInGroup("Vertices");
-		var vertexList = new List<Vertex>();
-		foreach (var v in vertexNodes) vertexList.Add((Vertex)v);
-		OctTree.BuildAndSetCurrent(vertexList);
-	}
+    public async override void _PhysicsProcess(double delta) {
+        // Rebuild the Barnes-Hut OctTree once per physics update for repulsion forces
+        var vertexNodes = GetTree().GetNodesInGroup("Vertices");
+        var vertexList = new List<Vertex>();
+        foreach (var v in vertexNodes) vertexList.Add((Vertex)v);
+        OctTree.BuildAndSetCurrent(vertexList);
+    }
 }

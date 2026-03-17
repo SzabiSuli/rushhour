@@ -6,7 +6,7 @@ using System;
 
 public partial class CarNode : VehicleNode
 {
-	public override void SetSprite(int index) {
+    public override void SetSprite(int index) {
         if (index < 0 || index > 18) {
             throw new ArgumentException("Sprite index for car must be between 0 and 11.");
         }

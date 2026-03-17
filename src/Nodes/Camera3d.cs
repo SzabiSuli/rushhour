@@ -3,68 +3,68 @@ using System;
 
 public partial class Camera3d : Camera3D
 {
-	// =========================
-	// Camera movement settings
-	// =========================
-	[ExportCategory("Camera movement")]
-	[Export] public float CameraSpeed { get; set; } = 20.0f;
-	[Export] public float CameraZoomSpeed { get; set; } = 20.0f;
-	[Export] public float CameraZoomMin { get; set; } = 10.0f;
-	[Export] public float CameraZoomMax { get; set; } = 50.0f;
+    // =========================
+    // Camera movement settings
+    // =========================
+    [ExportCategory("Camera movement")]
+    [Export] public float CameraSpeed { get; set; } = 20.0f;
+    [Export] public float CameraZoomSpeed { get; set; } = 20.0f;
+    [Export] public float CameraZoomMin { get; set; } = 10.0f;
+    [Export] public float CameraZoomMax { get; set; } = 50.0f;
 
-	// =========================
-	// Edge scrolling settings
-	// =========================
-	[ExportCategory("Edge scrolling")]
-	[Export] public float EdgeScrollMargin { get; set; } = 20.0f;
-	[Export] public float EdgeScrollSpeed { get; set; } = 15.0f;
+    // =========================
+    // Edge scrolling settings
+    // =========================
+    [ExportCategory("Edge scrolling")]
+    [Export] public float EdgeScrollMargin { get; set; } = 20.0f;
+    [Export] public float EdgeScrollSpeed { get; set; } = 15.0f;
 
-	// =========================
-	// Rotation (MMB) settings
-	// =========================
-	[ExportCategory("Rotation")]
-	[Export] public float YawSensitivity { get; set; } = 0.50f;
-	[Export] public float PitchSensitivity { get; set; } = 0.18f;
-	[Export] public float MaxStepDeg { get; set; } = 3.0f;
-	[Export] public float PitchMinDeg { get; set; } = 10.0f;
-	[Export] public float PitchMaxDeg { get; set; } = 80.0f;
-	[Export] public bool CaptureMouseOnMmb { get; set; } = false;
+    // =========================
+    // Rotation (MMB) settings
+    // =========================
+    [ExportCategory("Rotation")]
+    [Export] public float YawSensitivity { get; set; } = 0.50f;
+    [Export] public float PitchSensitivity { get; set; } = 0.18f;
+    [Export] public float MaxStepDeg { get; set; } = 3.0f;
+    [Export] public float PitchMinDeg { get; set; } = 10.0f;
+    [Export] public float PitchMaxDeg { get; set; } = 80.0f;
+    [Export] public bool CaptureMouseOnMmb { get; set; } = false;
 
-	// =========================
-	// Runtime state
-	// =========================
-	public Vector3 OrbitCenter { get; set; } = Vector3.Zero;
-	public float OrbitDistance { get; set; } = 25.0f;
-	public float CurrentHeight { get; set; } = 20.0f;
-	public float OrbitRadius { get; set; } = 20.0f;
+    // =========================
+    // Runtime state
+    // =========================
+    public Vector3 OrbitCenter { get; set; } = Vector3.Zero;
+    public float OrbitDistance { get; set; } = 25.0f;
+    public float CurrentHeight { get; set; } = 20.0f;
+    public float OrbitRadius { get; set; } = 20.0f;
 
-	private bool _isMmbRotating = false;
-	private float _yaw = 0.0f;
-	private float _pitch = Mathf.Pi / 2;
+    private bool _isMmbRotating = false;
+    private float _yaw = 0.0f;
+    private float _pitch = Mathf.Pi / 2;
 
-	public const float farDistance = 2000.0f;
+    public const float farDistance = 2000.0f;
 
-	public override void _Ready() {
-		UpdateCameraPosition();
-	}
+    public override void _Ready() {
+        UpdateCameraPosition();
+    }
 
-	public override void _Process(double delta) {
-		var movement = Vector3.Zero;
+    public override void _Process(double delta) {
+        var movement = Vector3.Zero;
 
-		// Keyboard movement (uses default ui_* actions)
-		if (Input.IsActionPressed("ui_right"))
-			movement.X += 1;
-		if (Input.IsActionPressed("ui_left"))
-			movement.X -= 1;
-		if (Input.IsActionPressed("ui_up"))
-			movement.Z -= 1;
-		if (Input.IsActionPressed("ui_down"))
-			movement.Z += 1;
-		
-		// Shift boost
-		float speedMultiplier = Input.IsActionPressed("ui_shift") ? 2.0f : 1.0f;
+        // Keyboard movement (uses default ui_* actions)
+        if (Input.IsActionPressed("ui_right"))
+            movement.X += 1;
+        if (Input.IsActionPressed("ui_left"))
+            movement.X -= 1;
+        if (Input.IsActionPressed("ui_up"))
+            movement.Z -= 1;
+        if (Input.IsActionPressed("ui_down"))
+            movement.Z += 1;
+        
+        // Shift boost
+        float speedMultiplier = Input.IsActionPressed("ui_shift") ? 2.0f : 1.0f;
 
-		// Move orbit center in camera's yaw frame
+        // Move orbit center in camera's yaw frame
 		if (movement.Length() > 0.0f) {
 			movement = movement.Normalized().Rotated(Vector3.Up, _yaw);
 			OrbitCenter += movement * CameraSpeed * speedMultiplier * (float)delta;
