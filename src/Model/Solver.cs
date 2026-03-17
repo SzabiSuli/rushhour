@@ -16,7 +16,7 @@ public abstract class Solver {
 	protected void OnPathChange(PathChangeArgs args) => PathChange?.Invoke(this, args);
 	protected void OnDiscoveredEdges(IEnumerable<StateMove> edges) => DiscoveredEdges?.Invoke(this, edges);
 	
-	public Heuristic Heuristic { get; protected set; }
+	public Heuristic Heuristic { get; protected init; }
 
 	public Solver(Heuristic heuristic) {
 		Heuristic = heuristic;
@@ -24,15 +24,19 @@ public abstract class Solver {
 
 	
 
-	public virtual void Start(RHGameState initialState) {
+	public virtual void Start(RHGameState initial) {
 		Status = SolverStatus.Running;
-		Extend(initialState);
+		Extend(initial);
 	}
 
+	// TODO might not need to return anything
 	public bool Extend(RHGameState state) {
 		OnNewCurrent(state);
 
 		if (state.IsSolved()) {
+			GD.Print("Found Solution!");
+			state.PrintState();
+			Status = SolverStatus.Solved;
 			return true;
 		}
 
@@ -66,7 +70,7 @@ public abstract class Solver {
 	// TimeSpan StepDelay { get; set; }
 }
 
-public class HillClimberSolver(Heuristic h) : Solver(h) {
+public class TabuSolver : Solver {
 	// TODO make this tabu search
 	// public bool IsRunning { get; private set; }
 	// public bool FoundSolution { get; private set; }
@@ -74,78 +78,99 @@ public class HillClimberSolver(Heuristic h) : Solver(h) {
 	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
 	// public TimeSpan StepDelay { get; set; }
 
+
+
 	Random rand = new Random();
 
 	public List<RHGameState> Route { get; set; } = new();
-	public int TabuSize { get; set; }
+	public int TabuSize { get; init; }
+	public StateMove? nextMove;
 
-	public RHGameState? Parent { get; set; }
+	// public RHGameState? Parent { get; set; }
 
-	public RHGameState Current { get; set; }
+	// public RHGameState Current { get; set; }
 
 	// public Heuristic Heuristic { get; set; }
 	
-	public bool FoundSolution { get; set; }
-	public bool Terminated { get; set; }
-	// public HillClimberSolver(Heuristic heuristic, RHGameState initialState){
+	// public bool FoundSolution { get; set; }
+	// public bool Terminated { get; set; }
+	public TabuSolver(Heuristic h, int tabuSize) : base(h) {
+		TabuSize = tabuSize;
+	}
 
-	// 	Heuristic = heuristic;
-	// 	Current = initialState;
-	// 	Parent = null;
-	// 	FoundSolution = false;
-	// }
+	public override void Start(RHGameState initial) {
+		Route.Add(initial);
+		base.Start(initial);
+	}
 
 	public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
-		return new List<StateMove>();
+		IEnumerable<StateMove> validMoves = stateMoves.Where(
+			stateMove => !Route[(Route.Count - TabuSize)..].Contains(stateMove.To)
+		);
+
+		if (!validMoves.Any()) return validMoves;
+
+		nextMove = validMoves.MaxBy(stateMove => Heuristic.Evaluate(stateMove.To) + rand.NextDouble());
+
+		// we filter out edges that go to the tabu
+		// but some edges are already discovered,
+		// those will be handled by the edge creator.
+		OnDiscoveredEdges(validMoves);
+		
+		return validMoves;
 	}
 
 	public override void Step() {
 
-		if (Route.Last().IsSolved()) {
-			Status = SolverStatus.Solved;
-			return;
+		if (nextMove == null) {
+			// Status = SolverStatus.
 		}
 
-
-		if (Current.IsSolved()){
-			FoundSolution = true;
-			Terminated = true;
-			return;
-		}
-
-		var possibleMoves = Current.GetPossibleMoves();
-		if (!possibleMoves.Any()){
-			Terminated = true;
-			return; 
-		}
-
-		if (possibleMoves.Count() == 1){
-			// the only neighbour is the parent
-			// TODO it can also be the initial state with one option
-			RHGameState temp = Current;
-			Current = Parent!;
-			Parent = temp;
-			return;
-		}
-
-		var possibleStates = possibleMoves.Select(
-			Current.WithMove 
-		).ToList();
+		// if (Route.Last().IsSolved()) {
+		// 	Status = SolverStatus.Solved;
+		// 	return;
+		// }
 
 
-		var orderedStates = possibleStates.OrderBy(
-			state => Heuristic.Evaluate(state) + rand.NextDouble()
-		);
+		// if (Current.IsSolved()){
+		// 	FoundSolution = true;
+		// 	Terminated = true;
+		// 	return;
+		// }
 
-		RHGameState bestMove;
-		if (orderedStates.First() == Parent!){
-			bestMove = orderedStates.Skip(1).First();
-		} else {
-			bestMove = orderedStates.First();
-		}
+		// var possibleMoves = Current.GetPossibleMoves();
+		// if (!possibleMoves.Any()){
+		// 	Terminated = true;
+		// 	return; 
+		// }
 
-		Parent = Current;
-		Current = bestMove;
+		// if (possibleMoves.Count() == 1){
+		// 	// the only neighbour is the parent
+		// 	// TODO it can also be the initial state with one option
+		// 	RHGameState temp = Current;
+		// 	Current = Parent!;
+		// 	Parent = temp;
+		// 	return;
+		// }
+
+		// var possibleStates = possibleMoves.Select(
+		// 	Current.WithMove 
+		// ).ToList();
+
+
+		// var orderedStates = possibleStates.OrderBy(
+		// 	state => Heuristic.Evaluate(state) + rand.NextDouble()
+		// );
+
+		// RHGameState bestMove;
+		// if (orderedStates.First() == Parent!){
+		// 	bestMove = orderedStates.Skip(1).First();
+		// } else {
+		// 	bestMove = orderedStates.First();
+		// }
+
+		// Parent = Current;
+		// Current = bestMove;
 	}
 	
 	public List<GameState>? GetSolutionPath() { 
@@ -205,11 +230,7 @@ public class BacktrackingSolver(Heuristic h) : Solver(h) {
 			move = bestMove
 		});
 
-		if (Extend(bestMove.To)) {
-			GD.Print("Found Solution!");
-			bestMove.To.PrintState();
-			Status = SolverStatus.Solved;
-		}
+		Extend(bestMove.To);
 	}
 
 	public IEnumerable<StateMove>? GetSolutionPath() { 
@@ -222,13 +243,7 @@ public class BacktrackingSolver(Heuristic h) : Solver(h) {
 
 // TODO make A and A* searches?
 public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
-	// public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
-	// public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
-	// public TimeSpan StepDelay { get; set; }
-
 	public PriorityQueue<StateMove, int> OpenStates { get; } = new ();
-	// public RHGameState Current { get; set; }
-
 
 	struct DiscoveredState {
 		public int depth;
@@ -237,26 +252,26 @@ public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
 
 	Dictionary<RHGameState, DiscoveredState> DiscoveredStates = new();
 
-	public override void Start(RHGameState initialState) {
-		DiscoveredStates.Add(initialState, new DiscoveredState{depth = 0, parent = null});
-		GD.Print(DiscoveredStates.Keys);
-		GD.Print(DiscoveredStates.Values);
-		// Status = SolverStatus.Running;
-		// Extend(initialState);
-		base.Start(initialState);
+	public override void Start(RHGameState initial) {
+		DiscoveredStates.Add(initial, new DiscoveredState{depth = 0, parent = null});
+		base.Start(initial);
 	}
 
 	public override void Step() { 
-		var move = OpenStates.Dequeue();
-		OnPathChange(new PathChangeArgs{ onPath = true, move = move});
-		if (Extend(move.To)) {
-			GD.Print("Found Solution!");
-			move.To.PrintState();
-			Status = SolverStatus.Solved;
+		if(OpenStates.TryDequeue(out var move, out int p)) {
+			OnPathChange(new PathChangeArgs{ onPath = true, move = move});
+			Extend(move.To);
+		} else {
+			Status = SolverStatus.NoSolution;
 		}
 	}
 
 	public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
+		// We are calling stateMoves that are already drawn on the graph,
+		// bit its more efficitent, that filtering based on open states,
+		// which would have to traverse the whole priority queue.
+		OnDiscoveredEdges(stateMoves);
+
 		var validMoves = stateMoves.Where(
 			stateMove => !DiscoveredStates.Keys.Contains(stateMove.To)
 		);
@@ -267,8 +282,6 @@ public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
 		RHGameState parent = validMoves.First().From;
 		int depth = DiscoveredStates[parent].depth + 1;
 		
-		OnDiscoveredEdges(validMoves);
-
 		foreach (var move in validMoves) {
 			DiscoveredStates.Add(move.To, new DiscoveredState{depth = depth, parent = parent});
 			OpenStates.Enqueue(move, EvalPriority(depth, move.To));

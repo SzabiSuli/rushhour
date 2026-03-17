@@ -4,5 +4,6 @@ public enum SolverStatus {
     NotStarted,
     Running,
     Solved,
-    NoSolution
+    NoSolution,
+    Terminated
 }
