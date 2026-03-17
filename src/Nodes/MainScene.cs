@@ -1,22 +1,19 @@
 namespace rushhour.src.Nodes;
 
-using Godot;
 using rushhour.src.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Godot;
 
 public partial class MainScene : Control {
 	[Export] public GameBoard gameBoard = null!;
+	[Export] public Node3D GraphScene = null!;
 
 	public static MainScene Instance {get; private set;} = null!;
 
 	Random random = new Random();
 
 	double time = 0;
-
-	private RHGameState? _current;
-
 
 	Solver solver = null!;
 	public override void _Ready(){
@@ -39,13 +36,13 @@ public partial class MainScene : Control {
 		// solver = new BacktrackingSolver(new MoverHeuristic());
 		solver = new AcGraphSolver(new MoverHeuristic());
 
-		solver.PathChange += OnPathChange;
-		solver.NewCurrent += OnNewCurrent;
+		solver.PathChange += Edge.OnPathChange;
+		solver.DiscoveredEdges += Edge.OnDiscoveredEdges;
+		solver.NewCurrent += Vertex.OnNewCurrent;
 		solver.NewCurrent += gameBoard.DisplayState;
-		solver.DiscoveredEdges += OnDiscoveredEdges;
 
 		// We have to create the first vertex
-		GetOrCreateVertex(lvl, null);
+		Vertex.GetOrCreate(lvl, null);
 
 		solver.Start(lvl);
 	}
@@ -70,87 +67,5 @@ public partial class MainScene : Control {
 		var vertexList = new List<Vertex>();
 		foreach (var v in vertexNodes) vertexList.Add((Vertex)v);
 		OctTree.BuildAndSetCurrent(vertexList);
-	}
-
-	public Vertex GetOrCreateVertex(RHGameState state, Vertex? parent) {
-		if (Vertex.Dict.TryGetValue(state, out Vertex? vertex)) {
-			// GD.Print("Vertex already exists");
-			return vertex;
-		}
-
-		// GD.Print("Creating vertex");
-
-		vertex = Vertex.Creator.Instantiate<Vertex>();
-		vertex.Init(state);
-
-		if (parent == null) {
-			vertex.Position = Vector3.Zero;
-		} else {
-			var outwardUnit = parent.Position.Normalized();
-
-			// Place the vertex outwards
-			// TODO tweak this
-			Vector3 randUnitVector = new Vector3(
-				GD.Randf() - 0.5f,
-				GD.Randf() - 0.5f,
-				GD.Randf() - 0.5f
-			).Normalized();
-
-			if (randUnitVector.Dot(outwardUnit) < 0) {
-				randUnitVector = -randUnitVector;
-			}
-			vertex.Position = parent.Position + randUnitVector * Edge.springLength;
-		}
-
-		// TODO add label with state info
-		// vertex.GetNode<Label>("Label").Text = state.ToString();
-		AddChild(vertex);
-		vertex.AddToGroup("Vertices");
-		Vertex.Dict[state] = vertex;
-		return vertex;
-	}
-
-	public Edge GetOrCreateEdge(StateMove move) {
-		if (Edge.Dict.TryGetValue(move, out Edge? edge)) {
-			return edge;
-		}
-
-		edge = Edge.Creator.Instantiate<Edge>();
-		edge.Init(
-			Vertex.Dict[move.From], 
-			Vertex.Dict[move.To], 
-			move
-		);
-		AddChild(edge);
-		edge.AddToGroup("Edges");
-		Edge.Dict[move] = edge;
-
-		return edge;
-	}	
-
-	public void OnPathChange(object? sender, PathChangeArgs args) {
-		Edge.Dict[args.move].UpdateColor(args.onPath); 
-	}
-
-	public void OnNewCurrent(object? sender, RHGameState newCurrent) {
-		if (_current == newCurrent) return;
-		if (_current is not null) {
-			Vertex.Dict[_current].UpdateColor(false);
-		}
-
-		Vertex.Dict[newCurrent].UpdateColor(true);
-		_current = newCurrent;
-	}
-
-	public void OnDiscoveredEdges(object? sender, IEnumerable<StateMove> edges) {
-		// Assume list is not empty
-
-		// assume the vertex extended already exists, find it
-		Vertex from = Vertex.Dict[edges.First().From];
-
-		foreach (var edge in edges) {
-			GetOrCreateVertex(edge.To, from);
-			GetOrCreateEdge(edge);
-		}
 	}
 }

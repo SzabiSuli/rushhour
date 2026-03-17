@@ -1,13 +1,12 @@
 namespace rushhour.src.Nodes;
 
-using Godot;
 using rushhour.src.Model;
 using System;
 using System.Collections.Generic;
+using Godot;
 
 public partial class Vertex : RigidBody3D
 {
-
 	public const int repulsionForce = 1000;
 	public const int influenceRadius = 1000;
 	public readonly Vector3 maxVelocity = Vector3.One * 100;
@@ -16,7 +15,57 @@ public partial class Vertex : RigidBody3D
 	public const String scenePath = "res://scenes/vertex.tscn";
 	public static PackedScene Creator {get;} = ResourceLoader.Load<PackedScene>(scenePath);
 	public static Dictionary<RHGameState, Vertex> Dict { get; } = new();
-	
+	private static RHGameState? _current;
+
+
+
+	public static Vertex GetOrCreate(RHGameState state, Vertex? parent) {
+		if (Dict.TryGetValue(state, out Vertex? vertex)) {
+			// GD.Print("Vertex already exists");
+			return vertex;
+		}
+
+		// GD.Print("Creating vertex");
+
+		vertex = Creator.Instantiate<Vertex>();
+		vertex.Init(state);
+
+		if (parent == null) {
+			vertex.Position = Vector3.Zero;
+		} else {
+			var outwardUnit = parent.Position.Normalized();
+
+			// Place the vertex outwards
+			// TODO tweak this
+			Vector3 randUnitVector = new Vector3(
+				GD.Randf() - 0.5f,
+				GD.Randf() - 0.5f,
+				GD.Randf() - 0.5f
+			).Normalized();
+
+			if (randUnitVector.Dot(outwardUnit) < 0) {
+				randUnitVector = -randUnitVector;
+			}
+			vertex.Position = parent.Position + randUnitVector * Edge.springLength;
+		}
+
+		// TODO add label with state info
+		// vertex.GetNode<Label>("Label").Text = state.ToString();
+		MainScene.Instance.GraphScene.AddChild(vertex);
+		vertex.AddToGroup("Vertices");
+		Dict[state] = vertex;
+		return vertex;
+	}
+
+	public static void OnNewCurrent(object? sender, RHGameState newCurrent) {
+		if (_current == newCurrent) return;
+		if (_current is not null) {
+			Dict[_current].UpdateColor(false);
+		}
+
+		Dict[newCurrent].UpdateColor(true);
+		_current = newCurrent;
+	}
 
 	public void Init(RHGameState gameState) {
 		GameState = gameState;

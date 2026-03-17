@@ -1,9 +1,10 @@
 namespace rushhour.src.Nodes;
 
-using Godot;
-using System;
 using rushhour.src.Model;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Godot;
 
 
 public partial class Edge : MeshInstance3D
@@ -25,6 +26,43 @@ public partial class Edge : MeshInstance3D
 	public static Dictionary<StateMove, Edge> Dict { get; } = new();
 
 	private ImmediateMesh _mesh = new ImmediateMesh(); 
+
+	public static Edge GetOrCreate(StateMove move) {
+		if (Dict.TryGetValue(move, out Edge? edge)) {
+			// GD.Print("returning already existing edge");
+			return edge;
+		}
+
+		// GD.Print("createing edge");
+
+		edge = Creator.Instantiate<Edge>();
+		edge.Init(
+			Vertex.Dict[move.From], 
+			Vertex.Dict[move.To], 
+			move
+		);
+		MainScene.Instance.GraphScene.AddChild(edge);
+		edge.AddToGroup("Edges");
+		Dict[move] = edge;
+
+		return edge;
+	}
+
+	public static void OnDiscoveredEdges(object? sender, IEnumerable<StateMove> edges) {
+		// Assume list is not empty
+
+		// assume the vertex extended already exists, find it
+		Vertex from = Vertex.Dict[edges.First().From];
+
+		foreach (var edge in edges) {
+			Vertex.GetOrCreate(edge.To, from);
+			Edge.GetOrCreate(edge);
+		}
+	}
+
+	public static void OnPathChange(object? sender, PathChangeArgs args) {
+		Dict[args.move].UpdateColor(args.onPath); 
+	}
 
 	public void Init(Vertex form, Vertex to, StateMove moveUsed){
 		From = form;

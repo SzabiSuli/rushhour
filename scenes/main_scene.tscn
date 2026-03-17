@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bkqpls8s2agia" path="res://src/Nodes/Camera3d.cs" id="2_pw63i"]
 [ext_resource type="PackedScene" uid="uid://rjwtn202o4sa" path="res://scenes/game_board.tscn" id="3_7ykc4"]
 
-[node name="MainScene" type="Control" unique_id=203170334 node_paths=PackedStringArray("gameBoard")]
+[node name="MainScene" type="Control" unique_id=203170334 node_paths=PackedStringArray("gameBoard", "GraphScene")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,6 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_w2twt")
 gameBoard = NodePath("HSplitContainer/MenuPanelContainer/VBoxContainer/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport/GameBoard")
+GraphScene = NodePath("HSplitContainer/3DSubViewContainer/3DSubViewport/GraphScene")
 metadata/_edit_horizontal_guides_ = [-275.0]
 
 [node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=887258662]
