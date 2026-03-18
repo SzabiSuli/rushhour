@@ -48,15 +48,23 @@ public partial class Edge : MeshInstance3D
         return edge;
     }
 
-    public static void OnDiscoveredEdges(object? sender, IEnumerable<StateMove> edges) {
-        // Assume list is not empty
-
+    public static void OnNewEdge(object? sender, StateMove edge) {
         // assume the vertex extended already exists, find it
-        Vertex from = Vertex.Dict[edges.First().From];
+        Vertex from = Vertex.Dict[edge.From];
+        Vertex.GetOrCreate(edge.To, from);
+        
+        GetOrCreate(edge);
+    }
+    
+    public static void OnDiscoveredEdges(object? sender, IEnumerable<StateMove> edges) {
+        if (!edges.Any()) {
+            return;
+        }
 
         foreach (var edge in edges) {
-            Vertex.GetOrCreate(edge.To, from);
-            Edge.GetOrCreate(edge);
+            if (Vertex.Dict.TryGetValue(edge.To, out Vertex? v)) {
+                Edge.GetOrCreate(edge);
+            }
         }
     }
 

@@ -33,9 +33,10 @@ public partial class MainScene : Control {
 
         // solver = new BacktrackingSolver(new DistanceHeuristic());
         // solver = new BacktrackingSolver(new FreeSpacesHeuristic());
-        // solver = new BacktrackingSolver(new MoverHeuristic());
-        solver = new AcGraphSolver(new MoverHeuristic());
+        // solver = new BacktrackingSolver(new MoverHeuristic(), 10);
+        solver = new AcGraphSolver(new MoverHeuristic(), 1);
 
+        solver.NewEdge += Edge.OnNewEdge;
         solver.PathChange += Edge.OnPathChange;
         solver.DiscoveredEdges += Edge.OnDiscoveredEdges;
         solver.NewCurrent += Vertex.OnNewCurrent;

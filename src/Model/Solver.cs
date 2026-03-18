@@ -7,21 +7,35 @@ using Godot;
 
 public abstract class Solver {
     public SolverStatus Status { get; set; } = SolverStatus.NotStarted;
+    protected Random rand = new Random();
+    protected float randomFactor;
 
     public event EventHandler<RHGameState>? NewCurrent;
     public event EventHandler<PathChangeArgs>? PathChange;
     public event EventHandler<IEnumerable<StateMove>>? DiscoveredEdges;
+    public event EventHandler<StateMove>? NewEdge;
 
     protected void OnNewCurrent(RHGameState state) => NewCurrent?.Invoke(this, state);
     protected void OnPathChange(PathChangeArgs args) => PathChange?.Invoke(this, args);
     protected void OnDiscoveredEdges(IEnumerable<StateMove> edges) => DiscoveredEdges?.Invoke(this, edges);
+    protected void OnNewEdge(StateMove edge) => NewEdge?.Invoke(this, edge);
     
     public Heuristic Heuristic { get; protected init; }
 
-    public Solver(Heuristic heuristic) {
+    public Solver(Heuristic heuristic, float randomFactor = 0) {
         Heuristic = heuristic;
+        this.randomFactor = randomFactor;
     }
 
+    public float Evaluate(StateMove move) => Evaluate(move.To);
+
+    public float Evaluate(RHGameState state){
+        if (randomFactor > 0) {
+            return Heuristic.Evaluate(state) + rand.NextSingle() * randomFactor;
+        }
+        return Heuristic.Evaluate(state);
+    }
+    
     
 
     public virtual void Start(RHGameState initial) {
@@ -48,14 +62,12 @@ public abstract class Solver {
             move => new StateMove(state, state.WithMove(move), move)
         );
 
+        OnDiscoveredEdges(stateMoves);
+
         // We expect ProcessMoves to have side effects
         // such as putting the filteredMoves in a structure
         // where in the next step the best move is selected
         IEnumerable<StateMove> filteredMoves = ProcessMoves(stateMoves);
-        
-        if (filteredMoves.Any()) {
-            OnDiscoveredEdges(filteredMoves);
-        }
 
         return false;
     }
@@ -79,9 +91,6 @@ public class TabuSolver : Solver {
     // public TimeSpan StepDelay { get; set; }
 
 
-
-    Random rand = new Random();
-
     public List<RHGameState> Route { get; set; } = new();
     public int TabuSize { get; init; }
     public StateMove? nextMove;
@@ -94,7 +103,7 @@ public class TabuSolver : Solver {
     
     // public bool FoundSolution { get; set; }
     // public bool Terminated { get; set; }
-    public TabuSolver(Heuristic h, int tabuSize) : base(h) {
+    public TabuSolver(Heuristic h, int tabuSize, float rf = 0) : base(h, rf) {
         TabuSize = tabuSize;
     }
 
@@ -104,27 +113,33 @@ public class TabuSolver : Solver {
     }
 
     public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
+        int startIndex = Math.Max(0, Route.Count - TabuSize);
+
         IEnumerable<StateMove> validMoves = stateMoves.Where(
-            stateMove => !Route[(Route.Count - TabuSize)..].Contains(stateMove.To)
+            stateMove => !Route[startIndex..].Contains(stateMove.To)
         );
 
         if (!validMoves.Any()) return validMoves;
 
-        nextMove = validMoves.MaxBy(stateMove => Heuristic.Evaluate(stateMove.To) + rand.NextDouble());
+        nextMove = validMoves.MaxBy(Evaluate);
 
-        // we filter out edges that go to the tabu
-        // but some edges are already discovered,
-        // those will be handled by the edge creator.
-        OnDiscoveredEdges(validMoves);
-        
         return validMoves;
     }
 
     public override void Step() {
-
         if (nextMove == null) {
-            // Status = SolverStatus.
+            Status = SolverStatus.Terminated;
+            return;
         }
+        Route.Add(nextMove.To);
+        OnNewEdge(nextMove);
+        OnPathChange(new PathChangeArgs{ onPath = true, move = nextMove});
+
+        int startIndex = Math.Max(0, Route.Count - TabuSize);
+
+        // if ()
+
+        Extend(nextMove.To);
 
         // if (Route.Last().IsSolved()) {
         // 	Status = SolverStatus.Solved;
@@ -179,9 +194,7 @@ public class TabuSolver : Solver {
     }
 }
 
-public class BacktrackingSolver(Heuristic h) : Solver(h) {
-
-    Random rand = new Random();
+public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
     public List<List<StateMove>> CurrentRoute { get; } = new ();
 
     public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
@@ -192,7 +205,7 @@ public class BacktrackingSolver(Heuristic h) : Solver(h) {
                 ).Contains(stateMove.To)
         ) // filter out states already in the current route
         // TODO random thing
-        .OrderBy(stateMove => Heuristic.Evaluate(stateMove.To) + rand.NextDouble())
+        .OrderBy(Evaluate)
         .ToList();
 
         CurrentRoute.Add(validMoves);
@@ -225,6 +238,7 @@ public class BacktrackingSolver(Heuristic h) : Solver(h) {
         // add the state to the route, and discover it's neighbours
 		var bestMove = CurrentRoute.Last().First();
 		
+        OnNewEdge(bestMove);
 		OnPathChange(new PathChangeArgs {	
 			onPath = true,
 			move = bestMove
@@ -242,8 +256,8 @@ public class BacktrackingSolver(Heuristic h) : Solver(h) {
 }
 
 // TODO make A and A* searches?
-public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
-	public PriorityQueue<StateMove, int> OpenStates { get; } = new ();
+public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
+	public PriorityQueue<StateMove, float> OpenStates { get; } = new ();
 
 	struct DiscoveredState {
 		public int depth;
@@ -258,7 +272,8 @@ public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
 	}
 
 	public override void Step() { 
-		if(OpenStates.TryDequeue(out var move, out int p)) {
+		if(OpenStates.TryDequeue(out var move, out float p)) {
+            OnNewEdge(move);
 			OnPathChange(new PathChangeArgs{ onPath = true, move = move});
 			Extend(move.To);
 		} else {
@@ -267,11 +282,6 @@ public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
 	}
 
 	public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
-		// We are calling stateMoves that are already drawn on the graph,
-		// bit its more efficitent, that filtering based on open states,
-		// which would have to traverse the whole priority queue.
-		OnDiscoveredEdges(stateMoves);
-
 		var validMoves = stateMoves.Where(
 			stateMove => !DiscoveredStates.Keys.Contains(stateMove.To)
 		);
@@ -284,16 +294,16 @@ public class AcGraphSolver(MonotoneHeuristic h) : Solver(h) {
 		
 		foreach (var move in validMoves) {
 			DiscoveredStates.Add(move.To, new DiscoveredState{depth = depth, parent = parent});
-			OpenStates.Enqueue(move, EvalPriority(depth, move.To));
+			OpenStates.Enqueue(move, EvalWithDepth(depth, move.To));
 		}
 
 		return validMoves;
 	}
 
-	public int EvalPriority(int depth, RHGameState state) {
+	public float EvalWithDepth(int depth, RHGameState state) {
 		// balanced search:
 		// f = g + h
-		return depth + Heuristic.Evaluate(state);
+		return depth + Evaluate(state);
 	}
 
 
