@@ -29,3 +29,15 @@ Heurisztikák:
 
 uml:
 puml-gen ./main.cs
+
+felhasználói doks
+fejleszői doks
+    elemzés
+        use case
+        egyéb diagramok
+    tervezés
+        osztálydiagram
+    megval
+    tesztelés
+        unit test
+        user story
