@@ -36,8 +36,6 @@ public abstract class Solver {
         return Heuristic.Evaluate(state);
     }
     
-    
-
     public virtual void Start(RHGameState initial) {
         Status = SolverStatus.Running;
         Extend(initial);
@@ -76,7 +74,7 @@ public abstract class Solver {
 
 
     public abstract void Step();
-    // List<GameState> GetSolutionPath();
+    public abstract IEnumerable<StateMove> GetSolutionPath();
 
 
     // TimeSpan StepDelay { get; set; }
@@ -188,9 +186,9 @@ public class TabuSolver : Solver {
         // Current = bestMove;
     }
     
-    public List<GameState>? GetSolutionPath() { 
+    public override List<StateMove> GetSolutionPath() { 
         // Implementation hidden
-        return null; 
+        return new List<StateMove>(); 
     }
 }
 
@@ -247,9 +245,9 @@ public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
 		Extend(bestMove.To);
 	}
 
-	public IEnumerable<StateMove>? GetSolutionPath() { 
+	public override IEnumerable<StateMove> GetSolutionPath() { 
 		if (Status != SolverStatus.Solved) {
-			return null;
+			throw new Exception("Puzzle is not solved!");
 		} 
 		return CurrentRoute.Select(options => options.First());
 	}
@@ -307,10 +305,12 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
 	}
 
 
-	// public IEnumerable<RHGameState> GetSolutionPath() { 
-	//     if (!FoundSolution) {
-	//         return null;
-	//     } 
-	//     return CurrentRoute.Select(tuple => tuple.Item1);
-	// }
+	public override IEnumerable<StateMove> GetSolutionPath() { 
+	    if (Status != SolverStatus.Solved) {
+			throw new Exception("Puzzle is not solved!");
+	    } 
+
+        return new List<StateMove>();
+	    // return CurrentRoute.Select(tuple => tuple.Item1);
+	}
 }
