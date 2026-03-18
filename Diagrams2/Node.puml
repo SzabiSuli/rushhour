@@ -1,0 +1,93 @@
+@startuml
+class BusNode {
+    + <<override>> SetSprite(index:int) : void
+}
+class CarNode {
+    + <<override>> SetSprite(index:int) : void
+}
+class Edge {
+    + <<const>> springLength : int = 5
+    + <<const>> optimalIntervalLowerBound : double
+    + <<const>> optimalIntervalUpperBound : double
+    + <<const>> springForce : float = 10
+    + {static} Dict : Dictionary<StateMove,Edge>
+    + {static} GetOrCreate(move:StateMove) : Edge
+    + {static} OnNewEdge(sender:object?, edge:StateMove) : void
+    + {static} OnDiscoveredEdges(sender:object?, edges:IEnumerable<StateMove>) : void
+    + {static} OnPathChange(sender:object?, args:PathChangeArgs) : void
+    + Init(form:Vertex, to:Vertex, moveUsed:StateMove) : void
+    + <<override>> _Ready() : void
+    + <<override>> _PhysicsProcess(delta:double) : void
+    + UpdateLine(from:Vector3, to:Vector3) : void
+    + UpdateColor(onPath:bool) : void
+    + ApplySpringForce() : void
+}
+class GameBoard {
+    + <<const>> carScenePath : string = "res://scenes/car.tscn"
+    + <<const>> busScenePath : string = "res://scenes/bus.tscn"
+    + <<override>> _Ready() : void
+    + <<override>> _Process(delta:double) : void
+    + DisplayState(sender:object?, state:RHGameState) : void
+    + RemovePieces() : void
+    + BuildBoard(state:RHGameState) : void
+    - PutOnBoard(placedPiece:PlacedRHPiece) : VehicleNode
+    + RescaleToParent() : void
+}
+abstract class VehicleNode <<partial>> {
+    + {abstract} SetSprite(index:int) : void
+}
+class MainScene <<singleton>> {
+    - time : double = 0
+    + {static} Instance : MainScene
+    + <<override>> _Ready() : void
+    + <<async>> <<override>> _Process(delta:double) : void
+    + <<async>> <<override>> _PhysicsProcess(delta:double) : void
+}
+class OctTree <<static>> {
+    + <<const>> Theta : float = 1f
+    - {static} _current : OctTreeNode?
+    + {static} GetCurrent() : OctTreeNode?
+    + {static} BuildAndSetCurrent(vertices:List<Vertex>) : void
+    + {static} Build(vertices:List<Vertex>) : OctTreeNode
+    - {static} Insert(node:OctTreeNode, vertex:Vertex) : void
+    + {static} ComputeForce(node:OctTreeNode, target:Vertex, theta:float) : Vector3
+    - {static} RecurseChildren(node:OctTreeNode, target:Vertex, theta:float) : Vector3
+    - {static} ComputeDirectForce(targetPos:Vector3, sourcePos:Vector3, mass:int) : Vector3
+}
+class OctTreeNode {
+    + Count : int
+    + Body : Vertex?
+    + IsLeaf : bool <<get>>
+    + OctTreeNode(boundsMin:Vector3, boundsMax:Vector3)
+    + GetOctant(position:Vector3) : int
+    + EnsureChild(octant:int) : void
+}
+class Vertex <<partial>> {
+    + {static} Dict : Dictionary<RHGameState,Vertex>
+    + <<const>> repulsionForce : int = 1000
+    + <<const>> influenceRadius : int = 1000
+    - {static} _current : RHGameState?
+    + {static} GetOrCreate(state:RHGameState, parent:Vertex?) : Vertex
+    + {static} OnNewCurrent(sender:object?, newCurrent:RHGameState) : void
+    + Init(gameState:RHGameState) : void
+    + <<override>> _Ready() : void
+    - OnInputEvent(camera:Node, @event:InputEvent, eventPosition:Vector3, normal:Vector3, shapeIdx:long) : void
+    - HandleClick() : void
+    + <<override>> _IntegrateForces(state:PhysicsDirectBodyState3D) : void
+    + <<override>> _PhysicsProcess(delta:double) : void
+    + UpdateColor(isCurrent:bool) : void
+}
+VehicleNode <|-- BusNode
+VehicleNode <|-- CarNode
+MeshInstance3D <|-- Edge
+Edge o-right-> "+ From" Vertex
+Edge o-right-> "+ To" Vertex
+Edge o-> "+ MoveUsed" StateMove
+Sprite2D <|-- GameBoard
+Sprite2D <|-- VehicleNode
+Control <|-- MainScene
+MainScene o-> "+ gameBoard" GameBoard
+MainScene o-> "+ solver" Solver
+RigidBody3D <|-- Vertex
+Vertex o-> "GameState" RHGameState
+@enduml

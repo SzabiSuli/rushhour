@@ -141,27 +141,27 @@ struct DiscoveredState {
     + parent : RHGameState?
 }
 GameState <|-- RHGameState
-RHGameState --> "ExitPosition" Vector2I
+RHGameState --> "+ ExitPosition" Vector2I
 Heuristic <|-left- NonNegiativeHeuristic
 NonNegiativeHeuristic <|-down- AdmissibleHeuristic
 AdmissibleHeuristic <|-- MonotoneHeuristic
 MonotoneHeuristic <|-- DistanceHeuristic
 MonotoneHeuristic <|-- FreeSpacesHeuristic
 MonotoneHeuristic <|-- MoverHeuristic
-Move --> "Dir" Direction
-StateMove --> "From" RHGameState
-StateMove --> "To" RHGameState
-StateMove --> "Move" Move
+Move --> "+ Dir" Direction
+StateMove --> "+ From" RHGameState
+StateMove --> "+ To" RHGameState
+StateMove --> "+ Move" Move
 PathChangeArgs --> "move" StateMove
-PlacedRHPiece --> "Piece" RushHourPiece
-PlacedRHPiece --> "Position" Vector2I
-PlacedRHPiece --> "FacingDirection" Direction
+PlacedRHPiece --> "+ Piece" RushHourPiece
+PlacedRHPiece --> "+ Position" Vector2I
+PlacedRHPiece --> "+ FacingDirection" Direction
 Piece <|-- RushHourPiece
 RushHourPiece <|-- Car
 Car <|-- MainCar
 RushHourPiece <|-- Bus
-Solver "Status" o-> SolverStatus
-Solver "Heuristic" o-left-> Heuristic
+Solver o-> "+ Status" SolverStatus
+Solver o-left-> "+ Heuristic" Heuristic
 Solver <|-down- TabuSolver
 Solver <|-down- BacktrackingSolver
 Solver <|-down- AcGraphSolver
