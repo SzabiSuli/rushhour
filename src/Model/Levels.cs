@@ -145,6 +145,16 @@ static class Levels {
         bbB.FG
         CDJ.hH
         cdj.iI
+        """,
+        // index 7
+        """
+        Very easy
+        ...b..
+        ...b..
+        aA.B..
+        ..D...
+        E.dCcc
+        e...fF
         """
     ];
 }

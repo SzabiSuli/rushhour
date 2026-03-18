@@ -8,6 +8,8 @@ using Godot;
 public partial class MainScene : Control {
     [Export] public GameBoard gameBoard = null!;
     [Export] public Node3D GraphScene = null!;
+    [Export] public float algoStepDelay = 1;
+    [Export] public int selectedLevel = 1;
 
     public static MainScene Instance {get; private set;} = null!;
 
@@ -26,15 +28,16 @@ public partial class MainScene : Control {
         // Let's also change the background color to prove it's running
         RenderingServer.SetDefaultClearColor(Colors.Black);
 
-        var (title, lvl) = Levels.LoadLevel(5);
+        var (title, lvl) = Levels.LoadLevel(selectedLevel);
 
         GD.Print(title);
         lvl.PrintState();
 
         // solver = new BacktrackingSolver(new DistanceHeuristic());
         // solver = new BacktrackingSolver(new FreeSpacesHeuristic());
-        // solver = new BacktrackingSolver(new MoverHeuristic(), 10);
-        solver = new AcGraphSolver(new MoverHeuristic(), 1);
+        solver = new BacktrackingSolver(new MoverHeuristic());
+        // solver = new AcGraphSolver(new MoverHeuristic());
+        // solver = new AcGraphSolver(new DistanceHeuristic());
 
         solver.NewEdge += Edge.OnNewEdge;
         solver.PathChange += Edge.OnPathChange;
@@ -51,7 +54,7 @@ public partial class MainScene : Control {
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public async override void _Process(double delta) {
         time += delta;
-        if (time < 1) {	
+        if (time < algoStepDelay) {	
             return;
         } else {
             time = 0;
