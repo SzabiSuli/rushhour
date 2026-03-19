@@ -17,6 +17,8 @@ public partial class Vertex : RigidBody3D
     public static Dictionary<RHGameState, Vertex> Dict { get; } = new();
     private static RHGameState? _current;
 
+    public static EventHandler<RHGameState>? VertexClicked; 
+
 
 
     public static Vertex GetOrCreate(RHGameState state, Vertex? parent) {
@@ -81,13 +83,14 @@ public partial class Vertex : RigidBody3D
         if (@event is InputEventMouseButton mouseEvent) {
             // Specifically look for the Left Mouse Button being pressed
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed) {
-                GD.Print("Object clicked at: " + eventPosition);
+                // GD.Print("Object clicked at: " + eventPosition);
                 HandleClick();
             }
         }
     }
 
     private void HandleClick() {
+        VertexClicked?.Invoke(this, GameState);
         GameState.PrintState();
     }
 

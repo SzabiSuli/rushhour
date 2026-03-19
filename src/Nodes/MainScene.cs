@@ -8,8 +8,8 @@ using Godot;
 public partial class MainScene : Control {
     [Export] public GameBoard gameBoard = null!;
     [Export] public Node3D GraphScene = null!;
-    [Export] public float algoStepDelay = 1;
-    [Export] public int selectedLevel = 1;
+    public float algoStepDelay = 1;
+    public int selectedLevel = 3;
 
     public static MainScene Instance {get; private set;} = null!;
 
@@ -43,8 +43,9 @@ public partial class MainScene : Control {
         solver.PathChange += Edge.OnPathChange;
         solver.DiscoveredEdges += Edge.OnDiscoveredEdges;
         solver.NewCurrent += Vertex.OnNewCurrent;
-        solver.NewCurrent += gameBoard.DisplayState;
+        solver.NewCurrent += gameBoard.OnNewAlgoCurrent;
 
+        gameBoard.Setup(lvl);
         // We have to create the first vertex
         Vertex.GetOrCreate(lvl, null);
 
