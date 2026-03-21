@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace rushhour.src.Nodes;
 
 using Godot;
@@ -9,6 +11,7 @@ public partial class GameBoard : Sprite2D
     public static readonly Vector2 tileSize = new Vector2(24,24);
     public static readonly Vector2 spriteSize = tileSize * 8;
 
+    // TODO make these exported?
     public const string carScenePath = "res://scenes/car.tscn";
     public const string busScenePath = "res://scenes/bus.tscn";
 
@@ -17,38 +20,34 @@ public partial class GameBoard : Sprite2D
     public static PackedScene BusCreator { get; } = 
         ResourceLoader.Load<PackedScene>(busScenePath);
 
-	public BoardMode mode = BoardMode.ALGO;
+    public BoardMode mode = BoardMode.ALGO;
 
-	// TODO change this if we want to run multiple algorithms at once
-	// which might be a bit out of scope for this project
-	public static RHGameState? algoCurrent;
-	public RHGameState? manualCurrent;
+    // TODO change this if we want to run multiple algorithms at once
+    // which might be a bit out of scope for this project
+    public static RHGameState? algoCurrent;
+    public RHGameState? manualCurrent;
 
-	public RHGameState Current {get {
-			if (mode == BoardMode.MANUAL) {
-				if (manualCurrent == null) {
-					throw new Exception();
-				}
-				return manualCurrent;
-			} else {
-				if (algoCurrent == null) {
-					throw new Exception();
-				}
-				return algoCurrent;
-			}
-		}
-	}  
+    public RHGameState Current {get {
+            if (mode == BoardMode.MANUAL) {
+                if (manualCurrent == null) {
+                    throw new Exception("No manual state set");
+                }
+                return manualCurrent;
+            } else {
+                if (algoCurrent == null) {
+                    throw new Exception("No algo state set");
+                }
+                return algoCurrent;
+            }
+        }
+    }  
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
-		Vertex.VertexClicked += OnVertexClicked;
-	}
+        Vertex.VertexClicked += OnVertexClicked;
+    }
 
-	public void DiscoverMoves() {
-		foreach (VehicleNode v in GetChildren()) {
-			v.AddArrows(Current);
-		}
-	}
+
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
@@ -56,8 +55,12 @@ public partial class GameBoard : Sprite2D
 		RescaleToParent();
 	}
 
-	public void OnVertexClicked(object? sender, RHGameState state) {
+	public void OnVertexClicked(object? sender, RHGameState state) => OnManualMove(state);
+	public void MakeManualMove(Move move) => OnManualMove(Current.WithMove(move));
+	
+	public void OnManualMove(RHGameState state) {
 		mode = BoardMode.MANUAL;
+		// TODO add arrows
 		UpdateBoard(state);
 	}
 
@@ -68,15 +71,20 @@ public partial class GameBoard : Sprite2D
 		}
 	}
 
-	public void Setup(RHGameState state) {
+	public void Setup(RHGameState initial) {
+		mode = BoardMode.ALGO;
+		algoCurrent = initial;
 		RemovePieces();
-		BuildBoard(state);
+		BuildBoard(initial);
+		OnNewAlgoCurrent(this, initial);
 	}
 
+	// TODO use Current?
 	public void UpdateBoard(RHGameState state) {
 		for (int i = 0; i < state.PlacedPieces.Length; i++) {
 			VehicleNode v = GetChild<VehicleNode>(i);
 			v.PlaceTo(state.PlacedPieces[i].Position);
+			v.UpdateArrows(state);
 		}
 	}
 
@@ -89,8 +97,9 @@ public partial class GameBoard : Sprite2D
 		int carCount = 0;
 		int busCount = 0;
 
-		foreach (var placedPiece in state.PlacedPieces) {
-			VehicleNode v = PutOnBoard(placedPiece);
+		for (int i = 0; i < state.PlacedPieces.Length; i++) {
+			PlacedRHPiece placedPiece = state.PlacedPieces[i];
+			VehicleNode v = PutOnBoard(placedPiece, i);
 			
 			if (v is CarNode) {
 				v.SetSprite(carCount);
@@ -103,10 +112,10 @@ public partial class GameBoard : Sprite2D
 	}
 
 
-	private VehicleNode PutOnBoard(PlacedRHPiece placedPiece) {
+	private VehicleNode PutOnBoard(PlacedRHPiece placedPiece, int pieceIndex) {
 		VehicleNode pieceNode = (placedPiece.Piece is Car ? CarCreator : BusCreator).Instantiate<VehicleNode>();
-		pieceNode.placement  = placedPiece;
-			
+		pieceNode.Init(placedPiece, pieceIndex, Current);
+		
 		// pieceNode.Position = tileSize * 1.5f + placedPiece.Position * tileSize;
 		pieceNode.PlaceTo(placedPiece.Position);
 
@@ -141,18 +150,60 @@ public partial class GameBoard : Sprite2D
 
 public abstract partial class VehicleNode : Sprite2D {
 
-	public PlacedRHPiece placement = null!;
+    public const string arrowScenePath = "res://scenes/arrow.tscn";
+
+    public static PackedScene ArrowCreator { get; } = 
+        ResourceLoader.Load<PackedScene>(arrowScenePath);
+
+	public PlacedRHPiece pp = null!;
+
+	public int pieceIndex;
+
+	public void Init(PlacedRHPiece pp, int pieceIndex, RHGameState state) {
+		this.pp = pp;
+		this.pieceIndex = pieceIndex;
+		CreateArrows();
+		UpdateArrows(state);
+	}
 
 	public void PlaceTo(Vector2I pos) {
 		Position = GameBoard.tileSize * 1.5f + pos * GameBoard.tileSize;
 	}
-	public Sprite2D? forwardArrow;
-	public Sprite2D? backwardArrow;
+	public Arrow forwardArrow = null!;
+	public Arrow backwardArrow = null!;
 
-	public void AddArrows(RHGameState state){}
+	public void CreateArrows() {
+		forwardArrow = ArrowCreator.Instantiate<Arrow>();
+		forwardArrow.Init(Direction.Up, pp.Piece.Length);
+		backwardArrow = ArrowCreator.Instantiate<Arrow>();
+		backwardArrow.Init(Direction.Down, pp.Piece.Length);
+	}
 
+	public void UpdateArrows(RHGameState state) {
+		var fwArrowPos = pp.Position + pp.FacingDirection.GetVector();
+		fwArrowPos.Deconstruct(out int fwX, out int fwY);
+		var bwArrowPos = pp.Position - pp.FacingDirection.GetVector() * pp.Piece.Length;
+		bwArrowPos.Deconstruct(out int bwX, out int bwY);
+		
+		backwardArrow.IsActive = 
+			0 <= bwX && bwX < 6 && 0 <= bwY && bwY < 6 
+			&& (state.BoardGrid[bwX, bwY] == -1);
+		
+        GD.Print("BackArrow update: ", backwardArrow.IsActive);
 
+		forwardArrow.IsActive = 
+			0 <= fwX && fwX < 6 && 0 <= fwY && fwY < 6 
+			&& (state.BoardGrid[fwX, fwY] == -1);
+        GD.Print("ForwardArrow update: ", forwardArrow.IsActive);
+	}
 
+	public void Move(Direction relative) {
+		Direction abs = pp.FacingDirection;
+		if (relative == Direction.Down) {
+			abs = abs.GetOpposite();
+		}
+		GetParent<GameBoard>().MakeManualMove(new Move{PieceIndex = pieceIndex, Dir = abs});
+	}
 
 	public abstract void SetSprite(int index);
 }

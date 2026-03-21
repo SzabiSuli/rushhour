@@ -1,6 +1,7 @@
 namespace rushhour.src.Model;
 
 using System;
+using Godot;
 
 public struct Move {
     public int PieceIndex { get; init; }
@@ -24,6 +25,17 @@ public static class DirectionMethods{
             _ => throw new ArgumentOutOfRangeException(nameof(d), $"Invalid direction: {d}")
         };
     }
+
+    public static Vector2I GetVector(this Direction d) {
+        return d switch {
+            Direction.Right => new Vector2I(1, 0),
+            Direction.Down => new Vector2I(0, 1),
+            Direction.Left => new Vector2I(-1, 0),
+            Direction.Up => new Vector2I(0, -1),
+            _ => throw new ArgumentOutOfRangeException(nameof(d), $"Invalid direction: {d}")
+        };
+    }
+
 }
 
 public class StateMove {

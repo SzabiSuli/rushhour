@@ -1,6 +1,15 @@
 [gd_scene format=3 uid="uid://db62p1incwyc4"]
 
+[ext_resource type="Script" uid="uid://cjii05bytaojy" path="res://src/Nodes/Arrow.cs" id="1_umosx"]
+[ext_resource type="Texture2D" uid="uid://dhd0gbve6qxj4" path="res://assets/arrow.png" id="2_23jat"]
+
 [node name="Arrow" type="Area2D" unique_id=1275726142]
+script = ExtResource("1_umosx")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=998945197]
 polygon = PackedVector2Array(-12, 12, 12, 12, 0, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=690288690]
+texture = ExtResource("2_23jat")
+centered = false
+offset = Vector2(-12, 0)
