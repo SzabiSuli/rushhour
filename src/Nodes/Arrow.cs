@@ -36,7 +36,7 @@ public partial class Arrow : Area2D
                 break;
             case Direction.Down:
                 Position = new Vector2(0, GameBoard.tileSize.Y * vehicleLength);
-                Sprite.FlipV = true;
+                Rotation = (float)Math.PI;
                 break;
             default:
                 throw new ArgumentException("Arrow direction can only be up or down");
@@ -62,5 +62,4 @@ public partial class Arrow : Area2D
     public void HandleClick() {
         GetParent<VehicleNode>().Move(direction);
     }
-
 }

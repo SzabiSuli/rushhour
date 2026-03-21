@@ -60,7 +60,7 @@ public partial class GameBoard : Sprite2D
 	
 	public void OnManualMove(RHGameState state) {
 		mode = BoardMode.MANUAL;
-		// TODO add arrows
+		manualCurrent = state;
 		UpdateBoard(state);
 	}
 
@@ -83,7 +83,7 @@ public partial class GameBoard : Sprite2D
 	public void UpdateBoard(RHGameState state) {
 		for (int i = 0; i < state.PlacedPieces.Length; i++) {
 			VehicleNode v = GetChild<VehicleNode>(i);
-			v.PlaceTo(state.PlacedPieces[i].Position);
+			v.Placement = state.PlacedPieces[i];
 			v.UpdateArrows(state);
 		}
 	}
@@ -114,10 +114,9 @@ public partial class GameBoard : Sprite2D
 
 	private VehicleNode PutOnBoard(PlacedRHPiece placedPiece, int pieceIndex) {
 		VehicleNode pieceNode = (placedPiece.Piece is Car ? CarCreator : BusCreator).Instantiate<VehicleNode>();
+		AddChild(pieceNode);
 		pieceNode.Init(placedPiece, pieceIndex, Current);
 		
-		// pieceNode.Position = tileSize * 1.5f + placedPiece.Position * tileSize;
-		pieceNode.PlaceTo(placedPiece.Position);
 
 		switch (placedPiece.FacingDirection) {
 			case Direction.Up:
@@ -133,7 +132,6 @@ public partial class GameBoard : Sprite2D
 				pieceNode.RotationDegrees = 90;
 				break;
 		}
-		AddChild(pieceNode);
 		return pieceNode;
 	}
 
@@ -155,50 +153,55 @@ public abstract partial class VehicleNode : Sprite2D {
     public static PackedScene ArrowCreator { get; } = 
         ResourceLoader.Load<PackedScene>(arrowScenePath);
 
-	public PlacedRHPiece pp = null!;
+
+	protected PlacedRHPiece _placement = null!;
+	public PlacedRHPiece Placement { 
+		get => _placement; 
+		set {
+			if (value == _placement) return;
+			Position = GameBoard.tileSize * 1.5f + value.Position * GameBoard.tileSize;
+			_placement = value;
+		} 
+	}
 
 	public int pieceIndex;
 
 	public void Init(PlacedRHPiece pp, int pieceIndex, RHGameState state) {
-		this.pp = pp;
+		this.Placement = pp;
 		this.pieceIndex = pieceIndex;
 		CreateArrows();
 		UpdateArrows(state);
 	}
 
-	public void PlaceTo(Vector2I pos) {
-		Position = GameBoard.tileSize * 1.5f + pos * GameBoard.tileSize;
-	}
 	public Arrow forwardArrow = null!;
 	public Arrow backwardArrow = null!;
 
 	public void CreateArrows() {
 		forwardArrow = ArrowCreator.Instantiate<Arrow>();
-		forwardArrow.Init(Direction.Up, pp.Piece.Length);
+		forwardArrow.Init(Direction.Up, Placement.Piece.Length);
+		AddChild(forwardArrow);
 		backwardArrow = ArrowCreator.Instantiate<Arrow>();
-		backwardArrow.Init(Direction.Down, pp.Piece.Length);
+		backwardArrow.Init(Direction.Down, Placement.Piece.Length);
+		AddChild(backwardArrow);
 	}
 
 	public void UpdateArrows(RHGameState state) {
-		var fwArrowPos = pp.Position + pp.FacingDirection.GetVector();
+		var fwArrowPos = Placement.Position + Placement.FacingDirection.GetVector();
 		fwArrowPos.Deconstruct(out int fwX, out int fwY);
-		var bwArrowPos = pp.Position - pp.FacingDirection.GetVector() * pp.Piece.Length;
+		var bwArrowPos = Placement.Position - Placement.FacingDirection.GetVector() * Placement.Piece.Length;
 		bwArrowPos.Deconstruct(out int bwX, out int bwY);
 		
 		backwardArrow.IsActive = 
 			0 <= bwX && bwX < 6 && 0 <= bwY && bwY < 6 
 			&& (state.BoardGrid[bwX, bwY] == -1);
 		
-        GD.Print("BackArrow update: ", backwardArrow.IsActive);
-
 		forwardArrow.IsActive = 
 			0 <= fwX && fwX < 6 && 0 <= fwY && fwY < 6 
 			&& (state.BoardGrid[fwX, fwY] == -1);
-        GD.Print("ForwardArrow update: ", forwardArrow.IsActive);
 	}
 
 	public void Move(Direction relative) {
-		Direction abs = pp.FacingDirection;
+		Direction abs = Placement.FacingDirection;
 		if (relative == Direction.Down) {
 			abs = abs.GetOpposite();
 		}
