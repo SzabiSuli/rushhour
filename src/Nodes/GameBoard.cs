@@ -73,7 +73,11 @@ public partial class GameBoard : Sprite2D
 	}
 
 	public void OnVertexClicked(object? sender, RHGameState state) => OnManualMove(state);
-	public void MakeManualMove(Move move) => OnManualMove(Current.WithMove(move));
+	public void MakeManualMove(Move move) {
+		StateMove stateMove = new StateMove(Current, Current.WithMove(move), move);
+		OnManualMove(stateMove.To);
+		Edge.OnNewEdge(this, stateMove);
+	}
 	
 	public void OnManualMove(RHGameState state) {
 		mode = BoardMode.MANUAL;

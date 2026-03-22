@@ -41,7 +41,6 @@ public partial class MainScene : Control {
 
         solver.NewEdge += Edge.OnNewEdge;
         solver.PathChange += Edge.OnPathChange;
-        solver.DiscoveredEdges += Edge.OnDiscoveredEdges;
         solver.NewCurrent += Vertex.OnNewCurrent;
         solver.NewCurrent += gameBoard.OnNewAlgoCurrent;
 

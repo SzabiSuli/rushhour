@@ -49,21 +49,29 @@ public partial class Edge : MeshInstance3D
     }
 
     public static void OnNewEdge(object? sender, StateMove edge) {
-        // assume the vertex extended already exists, find it
+        // assume the vertex where we moved from already exists, 
+        // find it
         Vertex from = Vertex.Dict[edge.From];
-        Vertex.GetOrCreate(edge.To, from);
-        
-        GetOrCreate(edge);
-    }
-    
-    public static void OnDiscoveredEdges(object? sender, IEnumerable<StateMove> edges) {
-        if (!edges.Any()) {
+
+        // if the edge we want to visit 
+        // is already created and connected with its neighbours, skip it.
+        if (Vertex.Dict.TryGetValue(edge.To, out Vertex? to)) {
             return;
         }
 
-        foreach (var edge in edges) {
-            if (Vertex.Dict.TryGetValue(edge.To, out Vertex? v)) {
-                Edge.GetOrCreate(edge);
+        Vertex.GetOrCreate(edge.To, from);
+        
+        GetOrCreate(edge);
+
+        // Connect the rest
+
+        IEnumerable<StateMove> stateMoves = edge.To.GetPossibleMoves().Select(
+            move => new StateMove(edge.To, edge.To.WithMove(move), move)
+        );
+
+        foreach (StateMove stateMove in stateMoves) {
+            if (Vertex.Dict.TryGetValue(stateMove.To, out Vertex? v)) {
+                Edge.GetOrCreate(stateMove);
             }
         }
     }

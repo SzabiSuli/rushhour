@@ -12,12 +12,10 @@ public abstract class Solver {
 
     public event EventHandler<RHGameState>? NewCurrent;
     public event EventHandler<PathChangeArgs>? PathChange;
-    public event EventHandler<IEnumerable<StateMove>>? DiscoveredEdges;
     public event EventHandler<StateMove>? NewEdge;
 
     protected void OnNewCurrent(RHGameState state) => NewCurrent?.Invoke(this, state);
     protected void OnPathChange(PathChangeArgs args) => PathChange?.Invoke(this, args);
-    protected void OnDiscoveredEdges(IEnumerable<StateMove> edges) => DiscoveredEdges?.Invoke(this, edges);
     protected void OnNewEdge(StateMove edge) => NewEdge?.Invoke(this, edge);
     
     public Heuristic Heuristic { get; protected init; }
@@ -60,11 +58,10 @@ public abstract class Solver {
             move => new StateMove(state, state.WithMove(move), move)
         );
 
-        OnDiscoveredEdges(stateMoves);
-
         // We expect ProcessMoves to have side effects
         // such as putting the filteredMoves in a structure
         // where in the next step the best move is selected
+        // TODO we don't need this logic here now
         IEnumerable<StateMove> filteredMoves = ProcessMoves(stateMoves);
 
         return false;
