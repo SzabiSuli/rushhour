@@ -11,6 +11,9 @@ public partial class GameBoard : Sprite2D
     public static readonly Vector2 tileSize = new Vector2(24,24);
     public static readonly Vector2 spriteSize = tileSize * 8;
 
+	[Export] public Button manualButton = null!;
+	[Export] public Button algoButton = null!;
+
     // TODO make these exported?
     public const string carScenePath = "res://scenes/car.tscn";
     public const string busScenePath = "res://scenes/bus.tscn";
@@ -45,8 +48,22 @@ public partial class GameBoard : Sprite2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
         Vertex.VertexClicked += OnVertexClicked;
+		manualButton.ButtonGroup.Pressed += OnModeButtonPressed;
     }
 
+	public void OnModeButtonPressed(BaseButton button) {
+		if (button == manualButton) {
+			if (mode == BoardMode.MANUAL) return;
+			manualCurrent = algoCurrent;
+			mode = BoardMode.MANUAL;
+		} else if (button == algoButton) {
+			if (mode == BoardMode.ALGO) return;
+			mode = BoardMode.ALGO;
+		} else {
+			throw new Exception("Unkown button pressed");
+		}
+		UpdateBoard(Current);
+	}
 
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -61,6 +78,7 @@ public partial class GameBoard : Sprite2D
 	public void OnManualMove(RHGameState state) {
 		mode = BoardMode.MANUAL;
 		manualCurrent = state;
+		manualButton.ButtonPressed = true;
 		UpdateBoard(state);
 	}
 
