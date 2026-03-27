@@ -2,6 +2,7 @@ namespace rushhour.src.Model;
 
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Godot;
 
 public abstract class GameState {
@@ -160,6 +161,10 @@ public class RHGameState : GameState {
         }
         yield break;
     }
+
+    public IEnumerable<StateMove> GetPossibleStateMoves() => GetPossibleMoves().Select(
+        move => new StateMove(this, this.WithMove(move), move)
+    );
 
     public RHGameState WithMove(Move move){
         // create a shallow copy of the placed pieces array

@@ -33,9 +33,12 @@ public partial class MainScene : Control {
         GD.Print(title);
         lvl.PrintState();
 
+
+        // TODO Tabu solver seems stupid
+        solver = new TabuSolver(new MoverHeuristic(), 2, 1);
         // solver = new BacktrackingSolver(new DistanceHeuristic());
         // solver = new BacktrackingSolver(new FreeSpacesHeuristic());
-        solver = new BacktrackingSolver(new MoverHeuristic());
+        // solver = new BacktrackingSolver(new MoverHeuristic());
         // solver = new AcGraphSolver(new MoverHeuristic());
         // solver = new AcGraphSolver(new DistanceHeuristic());
 

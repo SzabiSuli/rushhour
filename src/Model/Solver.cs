@@ -49,26 +49,8 @@ public abstract class Solver {
             Status = SolverStatus.Solved;
             return true;
         }
-
-        var moves = state.GetPossibleMoves();
-        
-        if (!moves.Any()) return false;
-
-        IEnumerable<StateMove> stateMoves = moves.Select(
-            move => new StateMove(state, state.WithMove(move), move)
-        );
-
-        // We expect ProcessMoves to have side effects
-        // such as putting the filteredMoves in a structure
-        // where in the next step the best move is selected
-        // TODO we don't need this logic here now
-        IEnumerable<StateMove> filteredMoves = ProcessMoves(stateMoves);
-
         return false;
     }
-
-    public abstract IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves);
-
 
     public abstract void Step();
     public abstract IEnumerable<StateMove> GetSolutionPath();
@@ -86,7 +68,7 @@ public class TabuSolver : Solver {
     // public TimeSpan StepDelay { get; set; }
 
 
-    public List<RHGameState> Route { get; set; } = new();
+    public List<StateMove> Route { get; set; } = new();
     public int TabuSize { get; init; }
     public StateMove? nextMove;
 
@@ -103,22 +85,8 @@ public class TabuSolver : Solver {
     }
 
     public override void Start(RHGameState initial) {
-        Route.Add(initial);
         base.Start(initial);
-    }
-
-    public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
-        int startIndex = Math.Max(0, Route.Count - TabuSize);
-
-        IEnumerable<StateMove> validMoves = stateMoves.Where(
-            stateMove => !Route[startIndex..].Contains(stateMove.To)
-        );
-
-        if (!validMoves.Any()) return validMoves;
-
-        nextMove = validMoves.MaxBy(Evaluate);
-
-        return validMoves;
+        ChooseNext(initial);
     }
 
     public override void Step() {
@@ -126,86 +94,58 @@ public class TabuSolver : Solver {
             Status = SolverStatus.Terminated;
             return;
         }
-        Route.Add(nextMove.To);
+        Route.Add(nextMove);
         OnNewEdge(nextMove);
         OnPathChange(new PathChangeArgs{ onPath = true, move = nextMove});
 
+        if (TabuSize > 0 && Route.Count > TabuSize) {
+            OnPathChange(new PathChangeArgs{
+                onPath = false, 
+                move = Route[^(TabuSize + 1)]
+            });
+        }
+
+        // return early if the state is solved.
+		if (Extend(nextMove.To)) {
+            return;
+        }
+
+        ChooseNext(nextMove.To);
+    }
+
+    protected void ChooseNext(RHGameState state) {
+        var stateMoves = state.GetPossibleStateMoves();
+
         int startIndex = Math.Max(0, Route.Count - TabuSize);
 
-        // if ()
+        IEnumerable<StateMove> validMoves = stateMoves.Where(
+            // We don't check for loop edges, as those do not exist in our game.
+            stateMove => 
+                !Route[startIndex..].Select(
+                    tabuMove => tabuMove.From
+                ).Contains(stateMove.To)
+        );
 
-        Extend(nextMove.To);
+        if (!validMoves.Any()) {
+            nextMove = null;
+            return;
+        }
 
-        // if (Route.Last().IsSolved()) {
-        // 	Status = SolverStatus.Solved;
-        // 	return;
-        // }
-
-
-        // if (Current.IsSolved()){
-        // 	FoundSolution = true;
-        // 	Terminated = true;
-        // 	return;
-        // }
-
-        // var possibleMoves = Current.GetPossibleMoves();
-        // if (!possibleMoves.Any()){
-        // 	Terminated = true;
-        // 	return; 
-        // }
-
-        // if (possibleMoves.Count() == 1){
-        // 	// the only neighbour is the parent
-        // 	// TODO it can also be the initial state with one option
-        // 	RHGameState temp = Current;
-        // 	Current = Parent!;
-        // 	Parent = temp;
-        // 	return;
-        // }
-
-        // var possibleStates = possibleMoves.Select(
-        // 	Current.WithMove 
-        // ).ToList();
-
-
-        // var orderedStates = possibleStates.OrderBy(
-        // 	state => Heuristic.Evaluate(state) + rand.NextDouble()
-        // );
-
-        // RHGameState bestMove;
-        // if (orderedStates.First() == Parent!){
-        // 	bestMove = orderedStates.Skip(1).First();
-        // } else {
-        // 	bestMove = orderedStates.First();
-        // }
-
-        // Parent = Current;
-        // Current = bestMove;
+        nextMove = validMoves.MaxBy(Evaluate);
     }
     
     public override List<StateMove> GetSolutionPath() { 
         // Implementation hidden
-        return new List<StateMove>(); 
+        return Route;
     }
 }
 
 public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
     public List<List<StateMove>> CurrentRoute { get; } = new ();
 
-    public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
-        var validMoves = stateMoves.Where(
-            stateMove => 
-                !CurrentRoute.Select(
-                    pathOptions => pathOptions.First().From
-                ).Contains(stateMove.To)
-        ) // filter out states already in the current route
-        // TODO random thing
-        .OrderBy(Evaluate)
-        .ToList();
-
-        CurrentRoute.Add(validMoves);
-        
-        return validMoves;
+    public override void Start(RHGameState initial) {
+        base.Start(initial);
+        AddOptions(initial);
     }
 
     public override void Step() { 
@@ -239,8 +179,28 @@ public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
 			move = bestMove
 		});
 
-		Extend(bestMove.To);
+        // return early if the state is solved.
+		if (Extend(bestMove.To)) {
+            return;
+        }
+
+        AddOptions(bestMove.To);
 	}
+
+    protected void AddOptions(RHGameState state) {
+        var stateMoves = state.GetPossibleStateMoves();
+
+        var validMoves = stateMoves.Where(
+            stateMove => 
+                !CurrentRoute.Select(
+                    pathOptions => pathOptions.First().From
+                ).Contains(stateMove.To)
+        ) // filter out states already in the current route
+        .OrderBy(Evaluate)
+        .ToList();
+
+        CurrentRoute.Add(validMoves);
+    }
 
 	public override IEnumerable<StateMove> GetSolutionPath() { 
 		if (Status != SolverStatus.Solved) {
@@ -262,40 +222,37 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
 	Dictionary<RHGameState, DiscoveredState> DiscoveredStates = new();
 
 	public override void Start(RHGameState initial) {
-		DiscoveredStates.Add(initial, new DiscoveredState{depth = 0, parent = null});
 		base.Start(initial);
+		DiscoveredStates.Add(initial, new DiscoveredState{depth = 0, parent = null});
 	}
 
 	public override void Step() { 
-		if(OpenStates.TryDequeue(out var move, out float p)) {
-            OnNewEdge(move);
-			OnPathChange(new PathChangeArgs{ onPath = true, move = move});
-			Extend(move.To);
-		} else {
+		if(!OpenStates.TryDequeue(out StateMove? bestMove, out float p)) {
 			Status = SolverStatus.NoSolution;
-		}
+            return;
+        }
+
+        OnNewEdge(bestMove);
+        OnPathChange(new PathChangeArgs{ onPath = true, move = bestMove});
+
+        RHGameState extended = bestMove.To;
+
+        // return early if the state is solved.
+		if (Extend(extended)) {
+            return;
+        }
+
+        IEnumerable<StateMove> stateMoves = extended.GetPossibleStateMoves();
+
+        int depth = DiscoveredStates[extended].depth + 1;
+        
+        foreach (StateMove move in stateMoves) {
+            DiscoveredStates.Add(move.To, new DiscoveredState{depth = depth, parent = extended});
+            OpenStates.Enqueue(move, EvalWithDepth(move.To, depth));
+        }
 	}
 
-	public override IEnumerable<StateMove> ProcessMoves(IEnumerable<StateMove> stateMoves) {
-		var validMoves = stateMoves.Where(
-			stateMove => !DiscoveredStates.Keys.Contains(stateMove.To)
-		);
-
-		if (!validMoves.Any()) return validMoves;
-
-
-		RHGameState parent = validMoves.First().From;
-		int depth = DiscoveredStates[parent].depth + 1;
-		
-		foreach (var move in validMoves) {
-			DiscoveredStates.Add(move.To, new DiscoveredState{depth = depth, parent = parent});
-			OpenStates.Enqueue(move, EvalWithDepth(depth, move.To));
-		}
-
-		return validMoves;
-	}
-
-	public float EvalWithDepth(int depth, RHGameState state) {
+	public float EvalWithDepth(RHGameState state, int depth) {
 		// balanced search:
 		// f = g + h
 		return depth + Evaluate(state);
