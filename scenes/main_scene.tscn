@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" uid="uid://x4magystxd2i" path="res://src/Nodes/MainScene.cs" id="1_w2twt"]
 [ext_resource type="Script" uid="uid://bkqpls8s2agia" path="res://src/Nodes/Nodes3D/Camera3d.cs" id="2_pw63i"]
-[ext_resource type="PackedScene" uid="uid://rjwtn202o4sa" path="res://scenes/main_game_board.tscn" id="3_7ykc4"]
 [ext_resource type="StyleBox" uid="uid://5jsi7mxxo17c" path="res://scenes/selected_button.tres" id="3_gubc5"]
 [ext_resource type="ButtonGroup" uid="uid://hw2xrwwg5ixa" path="res://scenes/board_mode_button_group.tres" id="3_pu3yx"]
+[ext_resource type="Script" uid="uid://bccrutn7gpw3f" path="res://src/Nodes/Board/MainGameBoard.cs" id="5_gubc5"]
+[ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="5_rt2n2"]
 
 [node name="MainScene" type="Control" unique_id=203170334 node_paths=PackedStringArray("gameBoard", "GraphScene")]
 layout_mode = 3
@@ -14,7 +15,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_w2twt")
-gameBoard = NodePath("HSplitContainer/MenuPanelContainer/TabContainer/Game board/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport/GameBoard")
+gameBoard = NodePath("HSplitContainer/MenuPanelContainer/TabContainer/Game board/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport/MainGameBoard")
 GraphScene = NodePath("HSplitContainer/3DSubViewContainer/3DSubViewport/GraphScene")
 metadata/_edit_horizontal_guides_ = [-275.0]
 
@@ -121,7 +122,11 @@ physics_object_picking = true
 size = Vector2i(392, 392)
 render_target_update_mode = 4
 
-[node name="GameBoard" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport" unique_id=1514233621 node_paths=PackedStringArray("manualButton", "algoButton") instance=ExtResource("3_7ykc4")]
+[node name="MainGameBoard" type="Sprite2D" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport" unique_id=851370481 node_paths=PackedStringArray("manualButton", "algoButton")]
+texture = ExtResource("5_rt2n2")
 centered = false
+region_enabled = true
+region_rect = Rect2(48, 0, 192, 192)
+script = ExtResource("5_gubc5")
 manualButton = NodePath("../../../../VBoxContainer/MarginContainer/ButtonContainer/ManualButton")
 algoButton = NodePath("../../../../VBoxContainer/MarginContainer/ButtonContainer/AlgoButton")
