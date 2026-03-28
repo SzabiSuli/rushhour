@@ -6,6 +6,7 @@
 [ext_resource type="ButtonGroup" uid="uid://hw2xrwwg5ixa" path="res://scenes/board_mode_button_group.tres" id="3_pu3yx"]
 [ext_resource type="Script" uid="uid://bccrutn7gpw3f" path="res://src/Nodes/Board/MainGameBoard.cs" id="5_gubc5"]
 [ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="5_rt2n2"]
+[ext_resource type="Script" uid="uid://b8vvp53qo65cv" path="res://src/Nodes/LevelsGrid.cs" id="7_c16ls"]
 
 [node name="MainScene" type="Control" unique_id=203170334 node_paths=PackedStringArray("gameBoard", "GraphScene")]
 layout_mode = 3
@@ -130,3 +131,15 @@ region_rect = Rect2(48, 0, 192, 192)
 script = ExtResource("5_gubc5")
 manualButton = NodePath("../../../../VBoxContainer/MarginContainer/ButtonContainer/ManualButton")
 algoButton = NodePath("../../../../VBoxContainer/MarginContainer/ButtonContainer/AlgoButton")
+
+[node name="Levels" type="ScrollContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer" unique_id=1204269940]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="LevelsGrid" type="GridContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer/Levels" unique_id=520347428]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+script = ExtResource("7_c16ls")

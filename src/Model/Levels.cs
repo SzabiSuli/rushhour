@@ -38,6 +38,12 @@ static class Levels {
 
         return (title, new RHGameState(vehicles.ToArray()));
     }
+    public static int LevelCount => levelStrings.Length;
+    public static IEnumerable<(string, RHGameState)> LoadLevels() {
+        for(int i = 0; i < LevelCount; i++) {
+            yield return LoadLevel(i);
+        }
+    }
 
     public static PlacedRHPiece GetPiece(string[] lvlS, char c, int i, int j) {
         if (lvlS[i][j] != c) {

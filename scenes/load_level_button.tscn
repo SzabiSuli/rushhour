@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://qa0rwlpsm13u"]
+
+[ext_resource type="Script" uid="uid://dubajcrucl7v1" path="res://src/Nodes/LoadLevelButton.cs" id="1_kn3cl"]
+[ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="1_qgtpk"]
+[ext_resource type="Script" uid="uid://cexthht87gg41" path="res://src/Nodes/Board/GameBoard.cs" id="1_xvbj6"]
+
+[node name="LoadLevelContainer" type="PanelContainer" unique_id=542511165 node_paths=PackedStringArray("button", "gameBoard", "label")]
+offset_right = 196.0
+offset_bottom = 223.0
+script = ExtResource("1_kn3cl")
+button = NodePath("Button")
+gameBoard = NodePath("VBoxContainer/SubViewportContainer/SubViewport/GameBoard")
+label = NodePath("VBoxContainer/LevelString")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1013455195]
+layout_mode = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer" unique_id=1890863293]
+custom_minimum_size = Vector2(196, 196)
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/SubViewportContainer" unique_id=901953179]
+handle_input_locally = false
+size = Vector2i(196, 196)
+render_target_update_mode = 4
+
+[node name="GameBoard" type="Sprite2D" parent="VBoxContainer/SubViewportContainer/SubViewport" unique_id=165836224]
+texture = ExtResource("1_qgtpk")
+centered = false
+region_enabled = true
+region_rect = Rect2(48, 0, 192, 192)
+script = ExtResource("1_xvbj6")
+
+[node name="LevelString" type="Label" parent="VBoxContainer" unique_id=1609862946]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="." unique_id=1322925036]
+layout_mode = 2
+flat = true
