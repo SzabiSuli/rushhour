@@ -8,7 +8,7 @@ using rushhour.src.Nodes.Board;
 using rushhour.src.Nodes.Nodes3D;
 
 public partial class MainScene : Control {
-    [Export] public GameBoard gameBoard = null!;
+    [Export] public MainGameBoard gameBoard = null!;
     [Export] public Node3D GraphScene = null!;
     public float algoStepDelay = 0.1f;
     public int selectedLevel = 3;

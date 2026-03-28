@@ -26,8 +26,6 @@ public abstract partial class VehicleNode : Sprite2D {
 	public void Init(PlacedRHPiece pp, int pieceIndex, RHGameState state) {
 		this.Placement = pp;
 		this.pieceIndex = pieceIndex;
-		CreateArrows();
-		UpdateArrows(state);
 	}
 
 	public Arrow forwardArrow = null!;
@@ -62,7 +60,7 @@ public abstract partial class VehicleNode : Sprite2D {
 		if (relative == Direction.Down) {
 			abs = abs.GetOpposite();
 		}
-		GetParent<GameBoard>().MakeManualMove(new Move{PieceIndex = pieceIndex, Dir = abs});
+		GetParent<MainGameBoard>().MakeManualMove(new Move{PieceIndex = pieceIndex, Dir = abs});
 	}
 
 	public abstract void SetSprite(int index);
