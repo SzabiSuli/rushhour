@@ -8,7 +8,7 @@ using Godot;
 public partial class MainScene : Control {
     [Export] public GameBoard gameBoard = null!;
     [Export] public Node3D GraphScene = null!;
-    public float algoStepDelay = 1;
+    public float algoStepDelay = 0.1f;
     public int selectedLevel = 3;
 
     public static MainScene Instance {get; private set;} = null!;
@@ -21,11 +21,6 @@ public partial class MainScene : Control {
     public override void _Ready(){
         Instance = this;
 
-        string version = System.Environment.Version.ToString();
-        GD.Print("🚀 C# is working!");
-        GD.Print($"System .NET Version: {version}");
-        
-        // Let's also change the background color to prove it's running
         RenderingServer.SetDefaultClearColor(Colors.Black);
 
         var (title, lvl) = Levels.LoadLevel(selectedLevel);
@@ -34,8 +29,7 @@ public partial class MainScene : Control {
         lvl.PrintState();
 
 
-        // TODO Tabu solver seems stupid
-        solver = new TabuSolver(new MoverHeuristic(), 2, 1);
+        solver = new TabuSolver(new MoverHeuristic(), 10, 1);
         // solver = new BacktrackingSolver(new DistanceHeuristic());
         // solver = new BacktrackingSolver(new FreeSpacesHeuristic());
         // solver = new BacktrackingSolver(new MoverHeuristic());

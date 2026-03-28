@@ -28,10 +28,11 @@ public abstract class Solver {
     public float Evaluate(StateMove move) => Evaluate(move.To);
 
     public float Evaluate(RHGameState state){
+        float result = Heuristic.Evaluate(state);
         if (randomFactor > 0) {
-            return Heuristic.Evaluate(state) + rand.NextSingle() * randomFactor;
+            result += rand.NextSingle() * randomFactor;
         }
-        return Heuristic.Evaluate(state);
+        return result;
     }
     
     public virtual void Start(RHGameState initial) {
@@ -131,7 +132,7 @@ public class TabuSolver : Solver {
             return;
         }
 
-        nextMove = validMoves.MaxBy(Evaluate);
+        nextMove = validMoves.MinBy(Evaluate);
     }
     
     public override List<StateMove> GetSolutionPath() { 
