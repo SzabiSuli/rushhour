@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://db62p1incwyc4"]
 
-[ext_resource type="Script" uid="uid://cjii05bytaojy" path="res://src/Nodes/Arrow.cs" id="1_umosx"]
+[ext_resource type="Script" uid="uid://cjii05bytaojy" path="res://src/Nodes/Board/Arrow.cs" id="1_umosx"]
 [ext_resource type="Texture2D" uid="uid://dhd0gbve6qxj4" path="res://assets/arrow.png" id="2_23jat"]
 
 [node name="Arrow" type="Area2D" unique_id=1275726142]

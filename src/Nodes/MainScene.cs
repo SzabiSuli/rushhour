@@ -1,9 +1,11 @@
 namespace rushhour.src.Nodes;
 
-using rushhour.src.Model;
 using System;
 using System.Collections.Generic;
 using Godot;
+using rushhour.src.Model;
+using rushhour.src.Nodes.Board;
+using rushhour.src.Nodes.Nodes3D;
 
 public partial class MainScene : Control {
     [Export] public GameBoard gameBoard = null!;

@@ -1,8 +1,7 @@
-namespace rushhour.src.Nodes;
+namespace rushhour.src.Nodes.Nodes3D;
 
-using Godot;
-using System;
 using System.Collections.Generic;
+using Godot;
 
 /// <summary>
 /// Barnes-Hut OctTree for O(n log n) repulsion force approximation in 3D.

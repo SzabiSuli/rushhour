@@ -1,4 +1,4 @@
-namespace rushhour.src.Nodes;
+namespace rushhour.src.Nodes.Board;
 
 using Godot;
 using rushhour.src.Model;

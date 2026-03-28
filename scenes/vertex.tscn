@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://f0dbi6jfu58w"]
 
-[ext_resource type="Script" uid="uid://cebh8ke6llo1k" path="res://src/Nodes/Vertex.cs" id="1_qio6b"]
+[ext_resource type="Script" uid="uid://cebh8ke6llo1k" path="res://src/Nodes/Nodes3D/Vertex.cs" id="1_qio6b"]
 [ext_resource type="Texture2D" uid="uid://dj70iw8g1q63o" path="res://assets/circle.png" id="2_h42fs"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_h42fs"]

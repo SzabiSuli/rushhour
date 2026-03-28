@@ -1,8 +1,7 @@
-namespace rushhour.src.Nodes;
+namespace rushhour.src.Nodes.Board;
 
-using Godot;
-using rushhour.src.Model;
 using System;
+using Godot;
 
 public partial class BusNode : VehicleNode
 {

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://w8twnyue4pcw"]
 
-[ext_resource type="Script" uid="uid://bulg66bu6u0g8" path="res://src/Nodes/Edge.cs" id="1_73j6r"]
+[ext_resource type="Script" uid="uid://bulg66bu6u0g8" path="res://src/Nodes/Nodes3D/Edge.cs" id="1_73j6r"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_73j6r"]
 

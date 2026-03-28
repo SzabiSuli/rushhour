@@ -1,8 +1,8 @@
-namespace  rushhour.src.Nodes;
+namespace  rushhour.src.Nodes.Board;
 
-using src.Model;
-using Godot;
 using System;
+using Godot;
+using rushhour.src.Model;
 
 public partial class Arrow : Area2D
 {

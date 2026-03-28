@@ -1,10 +1,10 @@
-namespace rushhour.src.Nodes;
+namespace rushhour.src.Nodes.Nodes3D;
 
-using rushhour.src.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using rushhour.src.Model;
 
 
 public partial class Edge : MeshInstance3D

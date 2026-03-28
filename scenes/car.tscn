@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://mtdqm1srfx50"]
 
 [ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="1_c35m8"]
-[ext_resource type="Script" uid="uid://bwvysc8ytbjhp" path="res://src/Nodes/CarNode.cs" id="2_qt2eu"]
+[ext_resource type="Script" uid="uid://bwvysc8ytbjhp" path="res://src/Nodes/Board/CarNode.cs" id="2_qt2eu"]
 
 [node name="Car" type="Sprite2D" unique_id=610309531]
 texture = ExtResource("1_c35m8")

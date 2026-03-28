@@ -1,5 +1,7 @@
-using Godot;
+namespace rushhour.src.Nodes.Nodes3D;
+
 using System;
+using Godot;
 
 public partial class Camera3d : Camera3D
 {
