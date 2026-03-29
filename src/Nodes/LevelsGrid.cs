@@ -16,15 +16,12 @@ public partial class LevelsGrid : GridContainer
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
-        foreach (var (levelString, level) in Levels.LoadLevels()) {
+        for (int i = 0; i < Levels.LevelCount; i++) {
+            var (levelString, level) = Levels.LoadLevel(i);
             LoadLevelButton llb = LevelButtonCreator.Instantiate<LoadLevelButton>();
             llb.Init(levelString, level);
             AddChild(llb);
+            llb.button.Pressed += () => MainScene.Instance.LoadLevel(levelString, level);
         }
-    }
-
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-    {
     }
 }

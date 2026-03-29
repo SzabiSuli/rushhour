@@ -15,7 +15,7 @@ public partial class Vertex : RigidBody3D
     public const String scenePath = "res://scenes/vertex.tscn";
     public static PackedScene Creator {get;} = ResourceLoader.Load<PackedScene>(scenePath);
     public static Dictionary<RHGameState, Vertex> Dict { get; } = new();
-    private static RHGameState? _current;
+    public static RHGameState? current;
 
     public static EventHandler<RHGameState>? VertexClicked; 
 
@@ -53,20 +53,20 @@ public partial class Vertex : RigidBody3D
 
         // TODO add label with state info
         // vertex.GetNode<Label>("Label").Text = state.ToString();
-        MainScene.Instance.GraphScene.AddChild(vertex);
+        MainScene.Instance.graphScene.AddChild(vertex);
         vertex.AddToGroup("Vertices");
         Dict[state] = vertex;
         return vertex;
     }
 
     public static void OnNewCurrent(object? sender, RHGameState newCurrent) {
-        if (_current == newCurrent) return;
-        if (_current is not null) {
-            Dict[_current].UpdateColor(false);
+        if (current == newCurrent) return;
+        if (current is not null) {
+            Dict[current].UpdateColor(false);
         }
 
         Dict[newCurrent].UpdateColor(true);
-        _current = newCurrent;
+        current = newCurrent;
     }
 
     public void Init(RHGameState gameState) {

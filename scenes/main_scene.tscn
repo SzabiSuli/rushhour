@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cdjjjlp5rpgc3"]
 
 [ext_resource type="Script" uid="uid://x4magystxd2i" path="res://src/Nodes/MainScene.cs" id="1_w2twt"]
+[ext_resource type="Script" uid="uid://bvew5r8aeo2te" path="res://src/Nodes/Nodes3D/GraphScene.cs" id="2_18nlu"]
 [ext_resource type="Script" uid="uid://bkqpls8s2agia" path="res://src/Nodes/Nodes3D/Camera3d.cs" id="2_pw63i"]
 [ext_resource type="StyleBox" uid="uid://5jsi7mxxo17c" path="res://scenes/selected_button.tres" id="3_gubc5"]
 [ext_resource type="ButtonGroup" uid="uid://hw2xrwwg5ixa" path="res://scenes/board_mode_button_group.tres" id="3_pu3yx"]
@@ -8,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="5_rt2n2"]
 [ext_resource type="Script" uid="uid://b8vvp53qo65cv" path="res://src/Nodes/LevelsGrid.cs" id="7_c16ls"]
 
-[node name="MainScene" type="Control" unique_id=203170334 node_paths=PackedStringArray("gameBoard", "GraphScene")]
+[node name="MainScene" type="Control" unique_id=203170334 node_paths=PackedStringArray("gameBoard", "graphScene", "tabContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,7 +18,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_w2twt")
 gameBoard = NodePath("HSplitContainer/MenuPanelContainer/TabContainer/Game board/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport/MainGameBoard")
-GraphScene = NodePath("HSplitContainer/3DSubViewContainer/3DSubViewport/GraphScene")
+graphScene = NodePath("HSplitContainer/3DSubViewContainer/3DSubViewport/GraphScene")
+tabContainer = NodePath("HSplitContainer/MenuPanelContainer/TabContainer")
 metadata/_edit_horizontal_guides_ = [-275.0]
 
 [node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=887258662]
@@ -43,6 +45,7 @@ size = Vector2i(1516, 1080)
 render_target_update_mode = 4
 
 [node name="GraphScene" type="Node3D" parent="HSplitContainer/3DSubViewContainer/3DSubViewport" unique_id=869173185]
+script = ExtResource("2_18nlu")
 
 [node name="Camera3D" type="Camera3D" parent="HSplitContainer/3DSubViewContainer/3DSubViewport/GraphScene" unique_id=1698493355]
 projection = 1
@@ -56,15 +59,16 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="ColorRect" type="ColorRect" parent="HSplitContainer/MenuPanelContainer" unique_id=1496019322]
+[node name="Background" type="ColorRect" parent="HSplitContainer/MenuPanelContainer" unique_id=1496019322]
 layout_mode = 2
 color = Color(0.50928617, 0.50928617, 0.50928617, 1)
 
 [node name="TabContainer" type="TabContainer" parent="HSplitContainer/MenuPanelContainer" unique_id=2141901880]
 layout_mode = 2
-current_tab = 0
+current_tab = 1
 
 [node name="Game board" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer" unique_id=1575641859]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -121,7 +125,7 @@ stretch = true
 handle_input_locally = false
 physics_object_picking = true
 size = Vector2i(392, 392)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="MainGameBoard" type="Sprite2D" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport" unique_id=851370481 node_paths=PackedStringArray("manualButton", "algoButton")]
 texture = ExtResource("5_rt2n2")
@@ -133,8 +137,8 @@ manualButton = NodePath("../../../../VBoxContainer/MarginContainer/ButtonContain
 algoButton = NodePath("../../../../VBoxContainer/MarginContainer/ButtonContainer/AlgoButton")
 
 [node name="Levels" type="ScrollContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer" unique_id=1204269940]
-visible = false
 layout_mode = 2
+horizontal_scroll_mode = 0
 metadata/_tab_index = 1
 
 [node name="LevelsGrid" type="GridContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer/Levels" unique_id=520347428]
