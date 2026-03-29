@@ -225,6 +225,7 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
 	public override void Start(RHGameState initial) {
 		base.Start(initial);
 		DiscoveredStates.Add(initial, new DiscoveredState{depth = 0, parent = null});
+        AddOpenStates(initial);
 	}
 
 	public override void Step() { 
@@ -243,15 +244,21 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
             return;
         }
 
-        IEnumerable<StateMove> stateMoves = extended.GetPossibleStateMoves();
+        AddOpenStates(extended);
+	}
+
+    public void AddOpenStates(RHGameState extended) {
+        IEnumerable<StateMove> filteredMoves = extended.GetPossibleStateMoves().Where(
+            stateMove => !DiscoveredStates.Keys.Contains(stateMove.To)
+        );
 
         int depth = DiscoveredStates[extended].depth + 1;
         
-        foreach (StateMove move in stateMoves) {
+        foreach (StateMove move in filteredMoves) {
             DiscoveredStates.Add(move.To, new DiscoveredState{depth = depth, parent = extended});
             OpenStates.Enqueue(move, EvalWithDepth(move.To, depth));
         }
-	}
+    }
 
 	public float EvalWithDepth(RHGameState state, int depth) {
 		// balanced search:
