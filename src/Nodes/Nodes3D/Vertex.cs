@@ -53,7 +53,7 @@ public partial class Vertex : RigidBody3D
 
         // TODO add label with state info
         // vertex.GetNode<Label>("Label").Text = state.ToString();
-        MainScene.Instance.graphScene.AddChild(vertex);
+        GraphScene.Instance.AddChild(vertex);
         vertex.AddToGroup("Vertices");
         Dict[state] = vertex;
         return vertex;

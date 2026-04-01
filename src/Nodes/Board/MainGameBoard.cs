@@ -17,6 +17,16 @@ public partial class MainGameBoard : GameBoard
     public static RHGameState? algoCurrent;
     public RHGameState? manualCurrent;
 
+	public static MainGameBoard Instance {get; private set;} = null!;
+
+    public MainGameBoard() {
+        if (Instance is null) {
+            Instance = this;
+        } else {
+            throw new Exception("Should only create one instance of MainGameBoard!");
+        }
+    }
+
     public override RHGameState Current {get {
             if (mode == BoardMode.MANUAL) {
                 if (manualCurrent == null) {

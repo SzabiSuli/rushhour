@@ -5,11 +5,13 @@
 [ext_resource type="Script" uid="uid://bkqpls8s2agia" path="res://src/Nodes/Nodes3D/Camera3d.cs" id="2_pw63i"]
 [ext_resource type="StyleBox" uid="uid://5jsi7mxxo17c" path="res://scenes/selected_button.tres" id="3_gubc5"]
 [ext_resource type="ButtonGroup" uid="uid://hw2xrwwg5ixa" path="res://scenes/board_mode_button_group.tres" id="3_pu3yx"]
+[ext_resource type="Script" uid="uid://34xeanpy8klb" path="res://src/Nodes/AlgoPlayer.cs" id="4_c1pb6"]
 [ext_resource type="Script" uid="uid://bccrutn7gpw3f" path="res://src/Nodes/Board/MainGameBoard.cs" id="5_gubc5"]
 [ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="5_rt2n2"]
 [ext_resource type="Script" uid="uid://b8vvp53qo65cv" path="res://src/Nodes/LevelsGrid.cs" id="7_c16ls"]
+[ext_resource type="Script" uid="uid://bfpbdcwwoasu2" path="res://src/Nodes/SolverSettingsTab.cs" id="10_6wevv"]
 
-[node name="MainScene" type="Control" unique_id=203170334 node_paths=PackedStringArray("gameBoard", "graphScene", "tabContainer")]
+[node name="MainScene" type="Control" unique_id=203170334 node_paths=PackedStringArray("tabContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,8 +19,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_w2twt")
-gameBoard = NodePath("HSplitContainer/MenuPanelContainer/TabContainer/Game board/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport/MainGameBoard")
-graphScene = NodePath("HSplitContainer/3DSubViewContainer/3DSubViewport/GraphScene")
 tabContainer = NodePath("HSplitContainer/MenuPanelContainer/TabContainer")
 metadata/_edit_horizontal_guides_ = [-275.0]
 
@@ -41,7 +41,7 @@ mouse_target = true
 [node name="3DSubViewport" type="SubViewport" parent="HSplitContainer/3DSubViewContainer" unique_id=1927452465]
 handle_input_locally = false
 physics_object_picking = true
-size = Vector2i(1516, 1080)
+size = Vector2i(1492, 1080)
 render_target_update_mode = 4
 
 [node name="GraphScene" type="Node3D" parent="HSplitContainer/3DSubViewContainer/3DSubViewport" unique_id=869173185]
@@ -53,6 +53,7 @@ size = 100.0
 script = ExtResource("2_pw63i")
 
 [node name="MenuPanelContainer" type="PanelContainer" parent="HSplitContainer" unique_id=716870133]
+custom_minimum_size = Vector2(416, 0)
 layout_mode = 2
 
 [node name="HSeparator" type="VSeparator" parent="HSplitContainer/MenuPanelContainer" unique_id=418677575]
@@ -65,33 +66,94 @@ color = Color(0.50928617, 0.50928617, 0.50928617, 1)
 
 [node name="TabContainer" type="TabContainer" parent="HSplitContainer/MenuPanelContainer" unique_id=2141901880]
 layout_mode = 2
-current_tab = 1
+current_tab = 0
+tab_2/title = "Solver algorithm settings"
 
 [node name="Game board" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer" unique_id=1575641859]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board" unique_id=2085082616]
+[node name="AlgoPlayer" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board" unique_id=47271723 node_paths=PackedStringArray("slider")]
 layout_mode = 2
+script = ExtResource("4_c1pb6")
+slider = NodePath("AlgoSpeed")
 
-[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/VBoxContainer" unique_id=780199178]
+[node name="StepSpeed" type="Label" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AlgoPlayer" unique_id=589612816]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Step Speed:"
+horizontal_alignment = 1
+
+[node name="AlgoSpeed" type="HSlider" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AlgoPlayer" unique_id=452749383]
+layout_mode = 2
+min_value = -2.0
+max_value = 4.0
+step = 0.25
+value = 1.0
+tick_count = 7
+ticks_on_borders = true
+
+[node name="SpeedLabels" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AlgoPlayer" unique_id=1186308]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AlgoPlayer/SpeedLabels" unique_id=943957991]
+layout_mode = 2
+text = "0.1x"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AlgoPlayer/SpeedLabels" unique_id=951472960]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.25x"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AlgoPlayer/SpeedLabels" unique_id=1256280639]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.5x"
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AlgoPlayer/SpeedLabels" unique_id=707640975]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1x"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AlgoPlayer/SpeedLabels" unique_id=1242521540]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "2x"
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AlgoPlayer/SpeedLabels" unique_id=1487358366]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "4x"
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AlgoPlayer/SpeedLabels" unique_id=401364812]
+layout_mode = 2
+text = "MAX"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board" unique_id=780199178]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Display mode:"
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/VBoxContainer" unique_id=2002915317]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board" unique_id=2002915317]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 
-[node name="ButtonContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/VBoxContainer/MarginContainer" unique_id=1895014618]
+[node name="ButtonContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/MarginContainer" unique_id=1895014618]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 alignment = 1
 
-[node name="ManualButton" type="Button" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/VBoxContainer/MarginContainer/ButtonContainer" unique_id=1926166480]
+[node name="ManualButton" type="Button" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/MarginContainer/ButtonContainer" unique_id=1926166480]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 26
@@ -100,7 +162,7 @@ toggle_mode = true
 button_group = ExtResource("3_pu3yx")
 text = "Manual"
 
-[node name="AlgoButton" type="Button" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/VBoxContainer/MarginContainer/ButtonContainer" unique_id=419938152]
+[node name="AlgoButton" type="Button" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/MarginContainer/ButtonContainer" unique_id=419938152]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 26
@@ -124,8 +186,8 @@ stretch = true
 [node name="BoardSubViewport" type="SubViewport" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AspectRatioContainer/BoardSubViewContainer" unique_id=536987835]
 handle_input_locally = false
 physics_object_picking = true
-size = Vector2i(392, 392)
-render_target_update_mode = 0
+size = Vector2i(416, 416)
+render_target_update_mode = 4
 
 [node name="MainGameBoard" type="Sprite2D" parent="HSplitContainer/MenuPanelContainer/TabContainer/Game board/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport" unique_id=851370481 node_paths=PackedStringArray("manualButton", "algoButton")]
 texture = ExtResource("5_rt2n2")
@@ -133,10 +195,11 @@ centered = false
 region_enabled = true
 region_rect = Rect2(48, 0, 192, 192)
 script = ExtResource("5_gubc5")
-manualButton = NodePath("../../../../VBoxContainer/MarginContainer/ButtonContainer/ManualButton")
-algoButton = NodePath("../../../../VBoxContainer/MarginContainer/ButtonContainer/AlgoButton")
+manualButton = NodePath("../../../../MarginContainer/ButtonContainer/ManualButton")
+algoButton = NodePath("../../../../MarginContainer/ButtonContainer/AlgoButton")
 
 [node name="Levels" type="ScrollContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer" unique_id=1204269940]
+visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 metadata/_tab_index = 1
@@ -147,3 +210,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 2
 script = ExtResource("7_c16ls")
+
+[node name="SolverSettingsTab" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabContainer" unique_id=1118978242]
+visible = false
+layout_mode = 2
+script = ExtResource("10_6wevv")
+metadata/_tab_index = 2
+metadata/_tab_name = "Solver algorithm settings"

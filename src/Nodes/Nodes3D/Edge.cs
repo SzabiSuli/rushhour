@@ -41,7 +41,7 @@ public partial class Edge : MeshInstance3D
             Vertex.Dict[move.To], 
             move
         );
-        MainScene.Instance.graphScene.AddChild(edge);
+        GraphScene.Instance.AddChild(edge);
         edge.AddToGroup("Edges");
         Dict[move] = edge;
 
