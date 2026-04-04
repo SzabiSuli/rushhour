@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   fill="none"
+   viewBox="0 0 24 24"
+   id="Play-Pause--Streamline-Sharp-Material"
+   height="24"
+   width="24"
+   version="1.1"
+   sodipodi:docname="play-pause.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="29"
+     inkscape:cx="7.6206897"
+     inkscape:cy="13.206897"
+     inkscape:window-width="1920"
+     inkscape:window-height="1003"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Play-Pause--Streamline-Sharp-Material" />
+  <desc
+     id="desc1">
+    Play Pause Streamline Icon: https://streamlinehq.com
+  </desc>
+  <path
+     style="fill:#ffffff;stroke-width:0.0536646"
+     d="M 6.0813305,11.869284 V 5.9178635 H 7.282968 8.4846032 v 5.9514205 5.951417 H 7.282968 6.0813305 Z"
+     id="path2" />
+  <path
+     style="fill:#ffffff;stroke-width:0.0558901"
+     d="M 9.8883715,11.935053 V 5.9785976 l 0.3213665,0.2163638 c 0.176753,0.1189999 2.163644,1.454557 4.415314,2.9679056 2.251671,1.513347 4.093947,2.76083 4.093947,2.772186 0,0.01134 -1.842276,1.258838 -4.093947,2.772186 -2.25167,1.513348 -4.238561,2.848905 -4.415314,2.967905 l -0.3213665,0.216363 z"
+     id="path4" />
+</svg>

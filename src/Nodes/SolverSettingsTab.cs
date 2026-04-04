@@ -29,4 +29,14 @@ public partial class SolverSettingsTab : VBoxContainer {
         // s = new AcGraphSolver(new DistanceHeuristic());
         return s;
     }
+    public Solver GetSolver() {
+        Solver s;
+        // s = new TabuSolver(new MoverHeuristic(), 10, 1);
+        // s = new BacktrackingSolver(new DistanceHeuristic());
+        // s = new BacktrackingSolver(new FreeSpacesHeuristic());
+        // s = new BacktrackingSolver(new MoverHeuristic());
+        s = new AcGraphSolver(new MoverHeuristic());
+        // s = new AcGraphSolver(new DistanceHeuristic());
+        return s;
+    }
 }

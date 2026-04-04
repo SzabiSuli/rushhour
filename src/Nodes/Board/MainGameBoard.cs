@@ -84,6 +84,9 @@ public partial class MainGameBoard : GameBoard
 	}
 
 	public override void Setup(RHGameState initial) {
+		manualButton.Disabled = false;
+		algoButton.Disabled = false;
+
 		mode = BoardMode.ALGO;
 		algoCurrent = initial;
 		base.Setup(initial);

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   fill="none"
+   viewBox="0 0 24 24"
+   id="Play-Pause--Streamline-Sharp-Material"
+   height="24"
+   width="24"
+   version="1.1"
+   sodipodi:docname="play-pause.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="29"
+     inkscape:cx="12"
+     inkscape:cy="12"
+     inkscape:window-width="1920"
+     inkscape:window-height="1003"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Play-Pause--Streamline-Sharp-Material" />
+  <desc
+     id="desc1">
+    Play Pause Streamline Icon: https://streamlinehq.com
+  </desc>
+  <path
+     fill="#000000"
+     d="M5 15.7V8.3L10.5 12l-5.5 3.7Zm8.5 0.3V8h1.5v8h-1.5Zm4 0V8h1.5v8h-1.5Z"
+     stroke-width="0.5"
+     id="path1" />
+  <path
+     style="fill:#ffffff;stroke-width:0.0344828"
+     d="M 13.517241,12 V 8.0172414 H 14.258621 15 V 12 15.982759 h -0.741379 -0.74138 z"
+     id="path2" />
+  <path
+     style="fill:#ffffff;stroke-width:0.0344828"
+     d="M 17.517241,12 V 8.0172414 H 18.258621 19 V 12 15.982759 h -0.741379 -0.74138 z"
+     id="path3" />
+  <path
+     style="fill:#ffffff;stroke-width:0.0344828"
+     d="M 5,12 V 8.3250165 l 0.1982759,0.1334914 c 0.1090517,0.07342 1.3349138,0.8974255 2.7241379,1.8311231 1.3892241,0.933697 2.5258622,1.703363 2.5258622,1.710369 0,0.007 -1.1366381,0.776672 -2.5258622,1.710369 -1.3892241,0.933698 -2.6150862,1.757703 -2.7241379,1.831123 L 5,15.674983 Z"
+     id="path4" />
+</svg>

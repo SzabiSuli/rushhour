@@ -9,10 +9,20 @@ using rushhour.src.Nodes.Nodes3D;
 
 public partial class AlgoPlayer : VBoxContainer {
     [Export] public HSlider slider = null!;
+    [Export] public Button playPauseButton = null!;
+    [Export] public Label playPauseLabel = null!;
+    [Export] public Button stepButton = null!;
+    [Export] public Button restartButton = null!;
+
+
     public double algoStepDelay = 0.5;
     public double timeSinceLastStep = 0;
+    public bool running = false;
 
     public Solver solver = null!;
+
+    public RHGameState? initialState;
+
 
     public TabContainer TabCont => GetParent<VBoxContainer>().GetParent<TabContainer>();
 
@@ -29,6 +39,11 @@ public partial class AlgoPlayer : VBoxContainer {
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
         slider.ValueChanged += OnSliderValueChanged;
+
+        playPauseButton.Pressed += OnPlayPauseButtonPressed;
+        stepButton.Pressed += OnStepButtonPressed;
+        restartButton.Pressed += OnRestartButtonPressed;
+
     }
 
 
@@ -48,6 +63,10 @@ public partial class AlgoPlayer : VBoxContainer {
     }
 
     public void LoadLevel(RHGameState level) {
+        initialState = level;
+
+        SetupControlButtons();
+
         UnSubFromSolver();
         
         solver = SolverSettingsTab.Instance.GetNewSolver();
@@ -59,8 +78,21 @@ public partial class AlgoPlayer : VBoxContainer {
 
         solver.Start(level);
 
+        // start paused
+        running = false;
+
         // Switch to game board tab
         TabCont.CurrentTab = 0;
+    }
+
+    
+
+    public void SetupControlButtons() {
+        playPauseButton.Disabled = false;
+        stepButton.Disabled = false;
+        restartButton.Disabled = false;
+   
+        playPauseLabel.Text = "Start";
     }
 
     public void SubToSolver() {
@@ -83,5 +115,38 @@ public partial class AlgoPlayer : VBoxContainer {
         } else {
             algoStepDelay = Math.Pow(2, -value);  
         }
+    }
+
+    public void OnPlayPauseButtonPressed() {
+        // TODO set algo mode
+
+        running = !running;
+        playPauseLabel.Text = running ? "Pause" : "Play";
+    }
+
+    public void OnStepButtonPressed() {
+        if (solver.Status != SolverStatus.Running) {
+            return;
+        }
+        solver.Step();
+    }
+
+    public void OnRestartButtonPressed() {
+        if (initialState is null) {
+            throw new Exception("Can't restart with no level loaded");
+        }
+
+        // TODO update path highligh
+
+        UnSubFromSolver();
+
+        solver = SolverSettingsTab.Instance.GetSolver();
+        SubToSolver();
+
+        // TODO refine this
+        MainGameBoard.Instance.mode = BoardMode.ALGO;
+        MainGameBoard.Instance.OnNewAlgoCurrent(this, initialState);
+
+        solver.Start(initialState);
     }
 }
