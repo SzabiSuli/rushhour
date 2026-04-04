@@ -46,7 +46,7 @@ public partial class GameBoard : Sprite2D
 
 		for (int i = 0; i < state.PlacedPieces.Length; i++) {
 			PlacedRHPiece placedPiece = state.PlacedPieces[i];
-			VehicleNode v = PutOnBoard(placedPiece, i);
+			VehicleNode v = PutOnBoard(placedPiece, i, state);
 			
 			if (v is CarNode) {
 				v.SetSprite(carCount);
@@ -59,10 +59,10 @@ public partial class GameBoard : Sprite2D
 	}
 
 
-	protected VehicleNode PutOnBoard(PlacedRHPiece placedPiece, int pieceIndex) {
+	protected VehicleNode PutOnBoard(PlacedRHPiece placedPiece, int pieceIndex, RHGameState state) {
 		VehicleNode pieceNode = (placedPiece.Piece is Car ? CarCreator : BusCreator).Instantiate<VehicleNode>();
 		AddChild(pieceNode);
-		pieceNode.Init(placedPiece, pieceIndex, Current);
+		pieceNode.Init(placedPiece, pieceIndex, state);
 		
 
 		switch (placedPiece.FacingDirection) {

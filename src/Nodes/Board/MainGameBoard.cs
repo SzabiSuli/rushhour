@@ -1,6 +1,8 @@
 namespace rushhour.src.Nodes.Board;
 
 using System;
+using System.Data.Common;
+using System.Linq;
 using Godot;
 using rushhour.src.Model;
 using rushhour.src.Nodes.Nodes3D;
@@ -10,12 +12,39 @@ public partial class MainGameBoard : GameBoard
 	[Export] public Button manualButton = null!;
 	[Export] public Button algoButton = null!;
 
-    public BoardMode mode = BoardMode.ALGO;
+	private BoardMode _mode = BoardMode.ALGO;
+
+    public BoardMode Mode {
+		get => _mode;
+		set {
+			_mode = value;
+			// we always update the board (if we can), the performance loss is negalble
+			UpdateBoard(); 
+		}
+	}
 
     // TODO change this if we want to run multiple algorithms at once
     // which might be a bit out of scope for this project
-    public static RHGameState? algoCurrent;
-    public RHGameState? manualCurrent;
+    private RHGameState? _algoCurrent;
+    public RHGameState? AlgoCurrent {
+		get => _algoCurrent;
+		set {
+			_algoCurrent = value;
+			if (Mode == BoardMode.ALGO) {
+				UpdateBoard();
+			}
+		}	
+	}
+    
+	private RHGameState? _manualCurrent;
+    public RHGameState? ManualCurrent {
+		get => _manualCurrent;
+		set {
+			_manualCurrent = value;
+			manualButton.ButtonPressed = true;
+			Mode = BoardMode.MANUAL;
+		}
+	}
 
 	public static MainGameBoard Instance {get; private set;} = null!;
 
@@ -28,16 +57,16 @@ public partial class MainGameBoard : GameBoard
     }
 
     public override RHGameState Current {get {
-            if (mode == BoardMode.MANUAL) {
-                if (manualCurrent == null) {
+            if (Mode == BoardMode.MANUAL) {
+                if (ManualCurrent == null) {
                     throw new Exception("No manual state set");
                 }
-                return manualCurrent;
+                return ManualCurrent;
             } else {
-                if (algoCurrent == null) {
+                if (AlgoCurrent == null) {
                     throw new Exception("No algo state set");
                 }
-                return algoCurrent;
+                return AlgoCurrent;
             }
         }
     }  
@@ -50,52 +79,35 @@ public partial class MainGameBoard : GameBoard
 
 	public void OnModeButtonPressed(BaseButton button) {
 		if (button == manualButton) {
-			if (mode == BoardMode.MANUAL) return;
-			manualCurrent = algoCurrent;
-			mode = BoardMode.MANUAL;
+			ManualCurrent = AlgoCurrent;
 		} else if (button == algoButton) {
-			if (mode == BoardMode.ALGO) return;
-			mode = BoardMode.ALGO;
+			Mode = BoardMode.ALGO;
 		} else {
 			throw new Exception("Unkown button pressed");
 		}
-		UpdateBoard();
 	}
 
-	public void OnVertexClicked(object? sender, RHGameState state) => OnManualMove(state);
+	public void OnVertexClicked(object? sender, RHGameState state) => ManualCurrent = state;
+	public void OnNewAlgoCurrent(object? sender, RHGameState state) => AlgoCurrent = state;
+	
+	// TODO manual move from algo mode does not work
 	public void MakeManualMove(Move move) {
 		StateMove stateMove = new StateMove(Current, Current.WithMove(move), move);
-		OnManualMove(stateMove.To);
+		ManualCurrent = stateMove.To;
 		Edge.OnNewEdge(this, stateMove);
-	}
-	
-	public void OnManualMove(RHGameState state) {
-		mode = BoardMode.MANUAL;
-		manualCurrent = state;
-		manualButton.ButtonPressed = true;
-		UpdateBoard();
-	}
-
-	public void OnNewAlgoCurrent(object? sender, RHGameState state) {
-		algoCurrent = state;
-		if (mode == BoardMode.ALGO) {
-			UpdateBoard();
-		}
 	}
 
 	public override void Setup(RHGameState initial) {
 		manualButton.Disabled = false;
 		algoButton.Disabled = false;
 
-		mode = BoardMode.ALGO;
-		algoCurrent = initial;
 		base.Setup(initial);
 
-		foreach (VehicleNode child in GetChildren()) {
+		foreach (VehicleNode child in GetChildren().Cast<VehicleNode>()) {
 			child.CreateArrows();
 			child.UpdateArrows(initial);
 		}
-		OnNewAlgoCurrent(this, initial);
+		AlgoCurrent = initial;
 	}
 
 	public void UpdateBoard() {

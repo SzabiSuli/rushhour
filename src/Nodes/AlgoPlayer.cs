@@ -144,8 +144,9 @@ public partial class AlgoPlayer : VBoxContainer {
         SubToSolver();
 
         // TODO refine this
-        MainGameBoard.Instance.mode = BoardMode.ALGO;
-        MainGameBoard.Instance.OnNewAlgoCurrent(this, initialState);
+
+        MainGameBoard.Instance.AlgoCurrent = initialState;
+        MainGameBoard.Instance.Mode = BoardMode.ALGO;
 
         solver.Start(initialState);
     }
