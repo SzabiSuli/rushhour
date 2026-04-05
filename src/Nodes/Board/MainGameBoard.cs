@@ -41,7 +41,8 @@ public partial class MainGameBoard : GameBoard
 		get => _manualCurrent;
 		set {
 			_manualCurrent = value;
-			manualButton.ButtonPressed = true;
+			manualButton.SetPressedNoSignal(true);
+			algoButton.SetPressedNoSignal(false);
 			Mode = BoardMode.MANUAL;
 		}
 	}
