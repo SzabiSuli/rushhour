@@ -6,17 +6,32 @@ using System.Linq;
 using Godot;
 
 public abstract class Solver {
-    public SolverStatus Status { get; set; } = SolverStatus.NotStarted;
+    private SolverStatus _status = SolverStatus.NotStarted;
+    public SolverStatus Status { 
+        get => _status;
+        set {
+            _status = value;
+            if (   _status == SolverStatus.Solved 
+                || _status == SolverStatus.NoSolution 
+                || _status == SolverStatus.Terminated) {
+                OnTerminated();
+            }
+        } 
+    }
     protected Random rand = new Random();
     protected float randomFactor;
 
+    // TODO these shouldn't create vertices directly, 
+    // but enqueue them for creation so, it does not slow down the algorithm.
     public event EventHandler<RHGameState>? NewCurrent;
     public event EventHandler<PathChangeArgs>? PathChange;
     public event EventHandler<StateMove>? NewEdge;
+    public event EventHandler<SolverStatus>? Terminated;
 
     protected void OnNewCurrent(RHGameState state) => NewCurrent?.Invoke(this, state);
     protected void OnPathChange(PathChangeArgs args) => PathChange?.Invoke(this, args);
     protected void OnNewEdge(StateMove edge) => NewEdge?.Invoke(this, edge);
+    protected void OnTerminated() => Terminated?.Invoke(this, Status);
     
     public Heuristic Heuristic { get; protected init; }
 

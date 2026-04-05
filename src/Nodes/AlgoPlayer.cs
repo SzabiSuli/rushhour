@@ -40,7 +40,7 @@ public partial class AlgoPlayer : VBoxContainer {
     public override void _Ready() {
         slider.ValueChanged += OnSliderValueChanged;
 
-        playPauseButton.Pressed += OnPlayPauseButtonPressed;
+        playPauseButton.Toggled += OnPlayPauseButtonToggled;
         stepButton.Pressed += OnStepButtonPressed;
         restartButton.Pressed += OnRestartButtonPressed;
 
@@ -49,14 +49,11 @@ public partial class AlgoPlayer : VBoxContainer {
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
-        if (solver.Status != SolverStatus.Running) {
-            return;
-        }
+        if (solver.Status != SolverStatus.Running) return;
+        if (!running) return;
         timeSinceLastStep += delta;
         
-        if (timeSinceLastStep < algoStepDelay) {	
-            return;
-        } 
+        if (timeSinceLastStep < algoStepDelay) return;
         timeSinceLastStep = 0;
         
         solver.Step();
@@ -85,14 +82,13 @@ public partial class AlgoPlayer : VBoxContainer {
         TabCont.CurrentTab = 0;
     }
 
-    
-
     public void SetupControlButtons() {
         playPauseButton.Disabled = false;
+        // set button to paused
+        playPauseButton.ButtonPressed = false;
+        playPauseLabel.Text = "Start";
         stepButton.Disabled = false;
         restartButton.Disabled = false;
-   
-        playPauseLabel.Text = "Start";
     }
 
     public void SubToSolver() {
@@ -100,6 +96,7 @@ public partial class AlgoPlayer : VBoxContainer {
         solver.PathChange += Edge.OnPathChange;
         solver.NewCurrent += Vertex.OnNewCurrent;
         solver.NewCurrent += MainGameBoard.Instance.OnNewAlgoCurrent;
+        solver.Terminated += OnSolverTerminated;
     }
 
     public void UnSubFromSolver() {
@@ -117,18 +114,17 @@ public partial class AlgoPlayer : VBoxContainer {
         }
     }
 
-    public void OnPlayPauseButtonPressed() {
-        // TODO set algo mode
-
-        running = !running;
-        playPauseLabel.Text = running ? "Pause" : "Play";
+    public void OnPlayPauseButtonToggled(bool playing) {
+        running = playing;
+        if (playing) {
+            MainGameBoard.Instance.Mode = BoardMode.ALGO;
+        }
     }
 
     public void OnStepButtonPressed() {
-        if (solver.Status != SolverStatus.Running) {
-            return;
-        }
+        // set algo mode to paused
         solver.Step();
+        playPauseButton.ButtonPressed = false;
     }
 
     public void OnRestartButtonPressed() {
@@ -149,5 +145,12 @@ public partial class AlgoPlayer : VBoxContainer {
         MainGameBoard.Instance.Mode = BoardMode.ALGO;
 
         solver.Start(initialState);
+
+        SetupControlButtons();
+    }
+
+    public void OnSolverTerminated(object? sender, SolverStatus status) {
+        playPauseButton.Disabled = true;
+        stepButton.Disabled = true;
     }
 }
