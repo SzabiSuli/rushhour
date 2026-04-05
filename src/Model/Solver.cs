@@ -107,7 +107,7 @@ public class TabuSolver : Solver {
         }
 
         // return early if the state is solved.
-		if (Extend(nextMove.To)) {
+        if (Extend(nextMove.To)) {
             return;
         }
 
@@ -172,21 +172,21 @@ public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
         }
 
         // add the state to the route, and discover it's neighbours
-		var bestMove = CurrentRoute.Last().First();
-		
+        var bestMove = CurrentRoute.Last().First();
+        
         OnNewEdge(bestMove);
-		OnPathChange(new PathChangeArgs {	
-			onPath = true,
-			move = bestMove
-		});
+        OnPathChange(new PathChangeArgs {	
+            onPath = true,
+            move = bestMove
+        });
 
         // return early if the state is solved.
-		if (Extend(bestMove.To)) {
+        if (Extend(bestMove.To)) {
             return;
         }
 
         AddOptions(bestMove.To);
-	}
+    }
 
     protected void AddOptions(RHGameState state) {
         var stateMoves = state.GetPossibleStateMoves();
@@ -203,34 +203,34 @@ public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
         CurrentRoute.Add(validMoves);
     }
 
-	public override IEnumerable<StateMove> GetSolutionPath() { 
-		if (Status != SolverStatus.Solved) {
-			throw new Exception("Puzzle is not solved!");
-		} 
-		return CurrentRoute.Select(options => options.First());
-	}
+    public override IEnumerable<StateMove> GetSolutionPath() { 
+        if (Status != SolverStatus.Solved) {
+            throw new Exception("Puzzle is not solved!");
+        } 
+        return CurrentRoute.Select(options => options.First());
+    }
 }
 
 // TODO make A and A* searches?
 public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
-	public PriorityQueue<StateMove, float> OpenStates { get; } = new ();
+    public PriorityQueue<StateMove, float> OpenStates { get; } = new ();
 
-	struct DiscoveredState {
-		public int depth;
-		public RHGameState? parent;
-	}
+    struct DiscoveredState {
+        public int depth;
+        public RHGameState? parent;
+    }
 
-	Dictionary<RHGameState, DiscoveredState> DiscoveredStates = new();
+    Dictionary<RHGameState, DiscoveredState> DiscoveredStates = new();
 
-	public override void Start(RHGameState initial) {
-		base.Start(initial);
-		DiscoveredStates.Add(initial, new DiscoveredState{depth = 0, parent = null});
+    public override void Start(RHGameState initial) {
+        base.Start(initial);
+        DiscoveredStates.Add(initial, new DiscoveredState{depth = 0, parent = null});
         AddOpenStates(initial);
-	}
+    }
 
-	public override void Step() { 
-		if(!OpenStates.TryDequeue(out StateMove? bestMove, out float p)) {
-			Status = SolverStatus.NoSolution;
+    public override void Step() { 
+        if(!OpenStates.TryDequeue(out StateMove? bestMove, out float p)) {
+            Status = SolverStatus.NoSolution;
             return;
         }
 
@@ -240,12 +240,12 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
         RHGameState extended = bestMove.To;
 
         // return early if the state is solved.
-		if (Extend(extended)) {
+        if (Extend(extended)) {
             return;
         }
 
         AddOpenStates(extended);
-	}
+    }
 
     public void AddOpenStates(RHGameState extended) {
         IEnumerable<StateMove> filteredMoves = extended.GetPossibleStateMoves().Where(
@@ -260,19 +260,19 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
         }
     }
 
-	public float EvalWithDepth(RHGameState state, int depth) {
-		// balanced search:
-		// f = g + h
-		return depth + Evaluate(state);
-	}
+    public float EvalWithDepth(RHGameState state, int depth) {
+        // balanced search:
+        // f = g + h
+        return depth + Evaluate(state);
+    }
 
 
-	public override IEnumerable<StateMove> GetSolutionPath() { 
-	    if (Status != SolverStatus.Solved) {
-			throw new Exception("Puzzle is not solved!");
-	    } 
+    public override IEnumerable<StateMove> GetSolutionPath() { 
+        if (Status != SolverStatus.Solved) {
+            throw new Exception("Puzzle is not solved!");
+        } 
 
         return new List<StateMove>();
-	    // return CurrentRoute.Select(tuple => tuple.Item1);
-	}
+        // return CurrentRoute.Select(tuple => tuple.Item1);
+    }
 }
