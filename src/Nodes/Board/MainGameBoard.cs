@@ -18,6 +18,10 @@ public partial class MainGameBoard : GameBoard
 		get => _mode;
 		set {
 			_mode = value;
+
+			manualButton.SetPressedNoSignal(_mode == BoardMode.MANUAL);
+			algoButton.SetPressedNoSignal(_mode == BoardMode.ALGO);
+
 			// we always update the board (if we can), the performance loss is negalble
 			UpdateBoard(); 
 		}
@@ -41,8 +45,6 @@ public partial class MainGameBoard : GameBoard
 		get => _manualCurrent;
 		set {
 			_manualCurrent = value;
-			manualButton.SetPressedNoSignal(true);
-			algoButton.SetPressedNoSignal(false);
 			Mode = BoardMode.MANUAL;
 		}
 	}

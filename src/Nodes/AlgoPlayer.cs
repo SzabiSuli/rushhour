@@ -46,7 +46,6 @@ public partial class AlgoPlayer : VBoxContainer {
 
     }
 
-
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
         if (solver.Status != SolverStatus.Running) return;
@@ -122,8 +121,10 @@ public partial class AlgoPlayer : VBoxContainer {
     }
 
     public void OnStepButtonPressed() {
-        // set algo mode to paused
         solver.Step();
+        MainGameBoard.Instance.Mode = BoardMode.ALGO;
+
+        // set algo mode to paused
         playPauseButton.ButtonPressed = false;
     }
 
