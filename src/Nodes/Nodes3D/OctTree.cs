@@ -1,14 +1,14 @@
 namespace rushhour.src.Nodes.Nodes3D;
 
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
 /// Barnes-Hut OctTree for O(n log n) repulsion force approximation in 3D.
 /// Rebuilt every frame from the current vertex positions.
 /// </summary>
-public static class OctTree
-{
+public static class OctTree {
     /// <summary>
     /// Barnes-Hut approximation parameter. Higher values = faster but less accurate.
     /// Typical range: 0.5 (accurate) to 1.5 (fast). 0.8 is a good default.
@@ -26,9 +26,9 @@ public static class OctTree
     /// Builds the OctTree from the given vertices and stores it as the current tree.
     /// Should be called once per frame in MainScene._Process(), before vertices process.
     /// </summary>
-    public static void BuildAndSetCurrent(List<Vertex> vertices)
+    public static void BuildAndSetCurrent(IEnumerable<Vertex> vertices)
     {
-        if (vertices.Count == 0)
+        if (!vertices.Any())
         {
             _current = null;
             return;
@@ -40,15 +40,14 @@ public static class OctTree
     /// <summary>
     /// Builds an OctTree from a list of vertices.
     /// </summary>
-    public static OctTreeNode Build(List<Vertex> vertices)
-    {
+    public static OctTreeNode Build(IEnumerable<Vertex> vertices) {
         // Compute bounding box enclosing all vertices with padding
-        Vector3 min = vertices[0].Position;
-        Vector3 max = vertices[0].Position;
+        Vector3 min = Vector3.Inf;
+        Vector3 max = -Vector3.Inf;
 
-        for (int i = 1; i < vertices.Count; i++)
+        foreach (Vertex vertex in vertices)
         {
-            Vector3 pos = vertices[i].Position;
+            Vector3 pos = vertex.Position;
             min = min.Min(pos);
             max = max.Max(pos);
         }

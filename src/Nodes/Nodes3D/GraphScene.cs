@@ -1,7 +1,7 @@
 using rushhour.src.Nodes.Nodes3D;
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using rushhour.src.Model;
 
@@ -19,10 +19,8 @@ public partial class GraphScene : Node3D
 
     public async override void _PhysicsProcess(double delta) {
         // Rebuild the Barnes-Hut OctTree once per physics update for repulsion forces
-        var vertexNodes = GetTree().GetNodesInGroup("Vertices");
-        var vertexList = new List<Vertex>();
-        foreach (var v in vertexNodes) vertexList.Add((Vertex)v);
-        OctTree.BuildAndSetCurrent(vertexList);
+        var vertices = GetTree().GetNodesInGroup("Vertices").Cast<Vertex>();
+        OctTree.BuildAndSetCurrent(vertices);
     }
 
     public void Setup(RHGameState initial) {
