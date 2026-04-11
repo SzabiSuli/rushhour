@@ -103,6 +103,7 @@ public partial class AlgoPlayer : VBoxContainer {
         solver.PathChange -= Edge.OnPathChange;
         solver.NewCurrent -= Vertex.OnNewCurrent;
         solver.NewCurrent -= MainGameBoard.Instance.OnNewAlgoCurrent;
+        solver.Terminated -= OnSolverTerminated;
     }
 
     public void OnSliderValueChanged(double value) {
