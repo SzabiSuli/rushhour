@@ -99,10 +99,11 @@ public partial class Edge : MeshInstance3D
 
     // Called every physics frame. 'delta' is the elapsed time since the previous frame.
     public override void _PhysicsProcess(double delta) {
-        // TODO don't update this every frame
-		UpdateLine(From.Position, To.Position);
-
 		ApplySpringForce();
+
+        // Skip line update draw if both vertices are sleeping (not moving)
+        if (To.Sleeping && From.Sleeping) return;
+		UpdateLine(From.Position, To.Position);
 	}
 
 	public void UpdateLine(Vector3 from, Vector3 to) {
@@ -132,7 +133,9 @@ public partial class Edge : MeshInstance3D
 		}
 		Vector3 force = distanceVector * ((length - springLength) / length) * springForce;
 
-		From.ApplyCentralForce(force);
-		To.ApplyCentralForce(-force);
+		From.ApplyPendingForce(force);
+		To.ApplyPendingForce(-force);
+
+        // GD.Print($"Applying spring force for {From} and {To}");
 	}
 }

@@ -15,11 +15,28 @@ public partial class Vertex : RigidBody3D
     public const String scenePath = "res://scenes/vertex.tscn";
     public static PackedScene Creator {get;} = ResourceLoader.Load<PackedScene>(scenePath);
     public static Dictionary<RHGameState, Vertex> Dict { get; } = new();
-    public static RHGameState? current;
+    private static Vertex? _current = null;
+    public static Vertex? Current {
+        get => _current;
+        set {
+            if (_current == value) return;
+            Vertex? prevCurrent = _current;
 
-    public static EventHandler<RHGameState>? VertexClicked; 
+            _current = value;
 
+            _current?.OnThisCurrentChanged();
+            prevCurrent?.OnThisCurrentChanged();   
+        }
+    }
+    public bool IsCurrent => this == Current;
 
+    private Vector3 _pendingForces = Vector3.Zero;
+    private object _forcesLock = new object();
+    public const float ignoreForceTresholdBase = 0.01f;
+    public double IgnoreForceTreshold => ignoreForceTresholdBase * _timeAwake * Dict.Count;
+    public static EventHandler<RHGameState>? VertexClicked;
+
+    private double _timeAwake = 0;
 
     public static Vertex GetOrCreate(RHGameState state, Vertex? parent) {
         if (Dict.TryGetValue(state, out Vertex? vertex)) {
@@ -60,15 +77,9 @@ public partial class Vertex : RigidBody3D
     }
 
     public static void OnNewCurrent(object? sender, RHGameState newCurrent) {
-        if (current == newCurrent) return;
-        if (current is not null) {
-            Dict[current].UpdateColor(false);
-        }
-
-        Dict[newCurrent].UpdateColor(true);
-        current = newCurrent;
-    }
-
+        Dict.TryGetValue(newCurrent, out Vertex? v);
+        Current = v;
+    } 
     public void Init(RHGameState gameState) {
         GameState = gameState;
     }
@@ -76,6 +87,8 @@ public partial class Vertex : RigidBody3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
         this.InputEvent += OnInputEvent;
+
+        SleepingStateChanged += UpdateColor;
     }
 
     private void OnInputEvent(Node camera, InputEvent @event, Vector3 eventPosition, Vector3 normal, long shapeIdx) {
@@ -98,26 +111,54 @@ public partial class Vertex : RigidBody3D
     // as this executes in sync with applying momentum.
     public override void _IntegrateForces(PhysicsDirectBodyState3D state) {
         // Clamp velocity to prevent instability
-        state.LinearVelocity = state.LinearVelocity.Clamp(negMaxVelocity, maxVelocity);
+        Vector3 v = state.LinearVelocity;
+        Vector3 clamped = v.Clamp(negMaxVelocity, maxVelocity);
+        
+        if (v != clamped) {
+            state.LinearVelocity = clamped; 
+        }
 
         base._IntegrateForces(state);
     }
 
-    public override void _PhysicsProcess(double delta) {
-        // Barnes-Hut approximation via OctTree (O(n log n) instead of O(n²))
-        var tree = OctTree.GetCurrent();
-        if (tree != null) {
-            var force = OctTree.ComputeForce(tree, this, OctTree.Theta);
-            ApplyCentralForce(force);
+    public void ApplyPendingForce(Vector3 force) {
+        lock (_forcesLock) {
+            _pendingForces += force;
         }
     }
 
-    public void UpdateColor(bool isCurrent) {
-        var sprite = GetChild<Sprite3D>(1);
-        if (isCurrent) {
-            sprite.Modulate = Colors.Green;
+    public void EvalPendingForces() {
+
+        // GD.Print($"{this} force treshold:", IgnoreForceTreshold);
+
+        if (_pendingForces.LengthSquared() > Math.Pow(IgnoreForceTreshold, 1) ) {
+            ApplyCentralForce(_pendingForces);
+            // GD.Print($"{this} Applying force: ", _pendingForces);
         } else {
-            sprite.Modulate = Colors.White;
+            // GD.Print($"{this} Skipping force application: ", _pendingForces);
         }
+        // reset the pending forces in either case after an update
+        _pendingForces = Vector3.Zero;
+    }
+
+
+    // Physics Priority = 1
+    // Meaning this gets called after graphscene _PhysicsProcess
+    public override void _PhysicsProcess(double delta) {
+        _timeAwake += delta;
+        
+        // Barnes-Hut approximation via OctTree (O(n log n) instead of O(n^2))
+        var tree = OctTree.GetCurrent();
+        if (tree != null) {
+            var force = OctTree.ComputeForce(tree, this, OctTree.Theta);
+            ApplyPendingForce(force);
+        }
+    }
+
+    public void OnThisCurrentChanged() => UpdateColor();
+    public void UpdateColor() {
+        var sprite = GetChild<Sprite3D>(1);
+        Color c = IsCurrent ? Colors.Green : Sleeping ? Colors.Red : Colors.White;
+        sprite.Modulate = c;
     }
 }

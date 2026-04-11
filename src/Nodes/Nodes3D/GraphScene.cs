@@ -38,6 +38,6 @@ public partial class GraphScene : Node3D
         }
         Edge.Dict.Clear();
         Vertex.Dict.Clear();
-        Vertex.current = null;
+        Vertex.Current = null;
     }
 }

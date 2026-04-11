@@ -6,6 +6,7 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_h42fs"]
 
 [node name="Vertex" type="RigidBody3D" unique_id=1748077680]
+process_physics_priority = 1
 process_thread_group = 2
 process_thread_group_order = 0
 process_thread_messages = 0
