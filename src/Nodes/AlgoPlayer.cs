@@ -15,6 +15,8 @@ public partial class AlgoPlayer : VBoxContainer {
     [Export] public Button restartButton = null!;
 
 
+    public const double minAlgoStepdelay = 0.001; 
+    public const int maxStepCount = 128; 
     public double algoStepDelay = 0.5;
     public double timeSinceLastStep = 0;
     public bool running = false;
@@ -53,8 +55,22 @@ public partial class AlgoPlayer : VBoxContainer {
         timeSinceLastStep += delta;
         
         if (timeSinceLastStep < algoStepDelay) return;
-        timeSinceLastStep = 0;
         
+        // If time between updates gets too large, execute some extra steps 
+        int stepCount = Math.Clamp((int)(timeSinceLastStep / algoStepDelay), 1, maxStepCount);
+        
+        timeSinceLastStep = 0;
+
+        // for all but the last step, 
+        // don't update the current node highlight
+        // and the game board update
+        solver.skipNewCurrent = true;
+        for (int i = 0; i < stepCount - 1 && solver.Status == SolverStatus.Running; i++) {
+            solver.Step();
+            // quit the function if the solver terminated
+            if (solver.Status != SolverStatus.Running) return;
+        }
+        solver.skipNewCurrent = false;
         solver.Step();
     }
 
@@ -108,7 +124,7 @@ public partial class AlgoPlayer : VBoxContainer {
 
     public void OnSliderValueChanged(double value) {
         if (value == slider.MaxValue) {
-            algoStepDelay = 0;
+            algoStepDelay = minAlgoStepdelay;
         } else {
             algoStepDelay = Math.Pow(2, -value);  
         }

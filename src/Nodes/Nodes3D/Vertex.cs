@@ -110,10 +110,7 @@ public partial class Vertex : RigidBody3D
         }
     }
 
-    private void HandleClick() {
-        VertexClicked?.Invoke(this, GameState);
-        GameState.PrintState();
-    }
+    private void HandleClick() => VertexClicked?.Invoke(this, GameState);
 
     // Put direct manipulation of Velocity here,
     // as this executes in sync with applying momentum.

@@ -20,6 +20,7 @@ public abstract class Solver {
     }
     protected Random rand = new Random();
     protected float randomFactor;
+    private RHGameState? _current;
 
     // TODO these shouldn't create vertices directly, 
     // but enqueue them for creation so, it does not slow down the algorithm.
@@ -28,10 +29,22 @@ public abstract class Solver {
     public event EventHandler<StateMove>? NewEdge;
     public event EventHandler<SolverStatus>? Terminated;
 
-    protected void OnNewCurrent(RHGameState state) => NewCurrent?.Invoke(this, state);
+    public bool skipNewCurrent = false;
+
+    protected void OnNewCurrent(RHGameState state) {
+        _current = state;
+        if (skipNewCurrent) return;
+        NewCurrent?.Invoke(this, state);
+    } 
     protected void OnPathChange(PathChangeArgs args) => PathChange?.Invoke(this, args);
     protected void OnNewEdge(StateMove edge) => NewEdge?.Invoke(this, edge);
-    protected void OnTerminated() => Terminated?.Invoke(this, Status);
+    protected void OnTerminated() {
+        if (_current != null) {
+            NewCurrent?.Invoke(this, _current);
+        }
+
+        Terminated?.Invoke(this, Status);
+    } 
     
     public Heuristic Heuristic { get; protected init; }
 
@@ -290,4 +303,9 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
         return new List<StateMove>();
         // return CurrentRoute.Select(tuple => tuple.Item1);
     }
+}
+
+public struct PathChangeArgs {
+    public bool onPath;
+    public StateMove move;
 }

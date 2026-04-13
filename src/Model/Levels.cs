@@ -161,6 +161,15 @@ static class Levels {
         ..D...
         E.dCcc
         e...fF
+        """,
+        """
+        Level 40
+        Ddd.gH
+        CbbBGh
+        c.FaAi
+        eEfL.I
+        ...lJj
+        kkKl..
         """
     ];
 }

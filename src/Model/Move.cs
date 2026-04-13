@@ -92,8 +92,3 @@ public class StateMove {
         return !(left == right);
     }
 }
-
-public struct PathChangeArgs {
-    public bool onPath;
-    public StateMove move;
-}
