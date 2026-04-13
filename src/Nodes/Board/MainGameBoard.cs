@@ -110,7 +110,13 @@ public partial class MainGameBoard : GameBoard
 			child.CreateArrows();
 			child.UpdateArrows(initial);
 		}
-		AlgoCurrent = initial;
+
+		// Use private fields to avoid triggering manual mode and board update.
+		_algoCurrent = initial;
+		_manualCurrent = initial;
+		
+		// Board gets udpated here, it will also be updated in solver.Start
+		Mode = BoardMode.ALGO;
 	}
 
 	public void UpdateBoard() {

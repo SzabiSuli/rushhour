@@ -37,7 +37,7 @@ public partial class GameBoard : Sprite2D
 
 	public void RemovePieces() {
 		foreach (var child in GetChildren()) {
-			child.QueueFree();
+			child.Free();
 		}
 	}
 	public void BuildBoard(RHGameState state) {

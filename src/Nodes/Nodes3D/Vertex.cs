@@ -91,6 +91,14 @@ public partial class Vertex : RigidBody3D
         SleepingStateChanged += UpdateColor;
     }
 
+    public override void _ExitTree() {
+        if (IsCurrent) {
+            // Don't need to call the property
+            _current = null;
+        } 
+        base._ExitTree();
+    }
+
     private void OnInputEvent(Node camera, InputEvent @event, Vector3 eventPosition, Vector3 normal, long shapeIdx) {
         // Check if the event is a mouse button click
         if (@event is InputEventMouseButton mouseEvent) {

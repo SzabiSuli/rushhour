@@ -2,6 +2,7 @@ using rushhour.src.Nodes.Nodes3D;
 
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using Godot;
 using rushhour.src.Model;
 
@@ -31,13 +32,17 @@ public partial class GraphScene : Node3D
     }
 
     public void Clear() {
-        foreach (Node child in GetChildren()) {
-            if (child is Edge || child is Vertex) {
-                child.QueueFree();
-            }
+        IEnumerable<Edge> edges = GetTree().GetNodesInGroup("Edges").Cast<Edge>();
+        IEnumerable<Vertex> vertices = GetTree().GetNodesInGroup("Vertices").Cast<Vertex>();
+
+        foreach (Edge edge in edges) {
+            edge.Free();
         }
+        foreach (Vertex vertex in vertices) {
+            vertex.Free();
+        }
+        // Vertex.Current gets reset to null by the node, which was Current, when it gets deleted.
         Edge.Dict.Clear();
         Vertex.Dict.Clear();
-        Vertex.Current = null;
     }
 }
