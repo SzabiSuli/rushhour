@@ -125,13 +125,16 @@ public class TabuSolver : Solver {
         }
         Route.Add(nextMove);
         OnNewEdge(nextMove);
-        OnPathChange(new PathChangeArgs{ onPath = true, move = nextMove});
 
-        if (TabuSize > 0 && Route.Count > TabuSize) {
-            OnPathChange(new PathChangeArgs{
-                onPath = false, 
-                move = Route[^(TabuSize + 1)]
-            });
+        if (TabuSize > 0) {
+            OnPathChange(new PathChangeArgs{ onPath = true, move = nextMove});
+            
+            if (Route.Count > TabuSize) {
+                OnPathChange(new PathChangeArgs{
+                    onPath = false, 
+                    move = Route[^(TabuSize + 1)]
+                });
+            }
         }
 
         // return early if the state is solved.

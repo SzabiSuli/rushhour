@@ -45,4 +45,12 @@ public partial class GraphScene : Node3D
         Edge.Dict.Clear();
         Vertex.Dict.Clear();
     }
+
+    public void ClearPathHighligh() {
+        IEnumerable<Edge> edges = GetTree().GetNodesInGroup("Edges").Cast<Edge>();
+        
+        foreach (Edge edge in edges) {
+            edge.UpdateColor(false);
+        }
+    }
 }
