@@ -126,16 +126,19 @@ rounded = true
 [node name="HeuristicOption" type="OptionButton" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1479166621]
 layout_mode = 2
 selected = 0
-item_count = 3
-popup/item_0/text = "Distance heuristic"
+item_count = 4
+popup/item_0/text = "Non-informative heuristic"
 popup/item_0/id = 0
-popup/item_1/text = "Distance + Free spaces heuristic"
+popup/item_1/text = "Distance heuristic"
 popup/item_1/id = 1
-popup/item_2/text = "Least moves to goal way heuristic"
+popup/item_2/text = "Distance + Free spaces heuristic"
 popup/item_2/id = 2
+popup/item_3/text = "Least moves to goal way heuristic"
+popup/item_3/id = 3
 
 [node name="RandomBox" type="CheckBox" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=229588873]
 layout_mode = 2
+button_pressed = true
 text = "Choose randomly between nodes with the same heuristic score"
 autowrap_mode = 3
 

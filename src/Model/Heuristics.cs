@@ -12,6 +12,9 @@ public abstract class AdmissibleHeuristic : NonNegiativeHeuristic {}
 public abstract class MonotoneHeuristic : AdmissibleHeuristic {}
 
 
+public class NullHeuristic : MonotoneHeuristic {
+    public override int Evaluate(RHGameState _) => 0;
+}
 
 public class DistanceHeuristic : MonotoneHeuristic {
     public override int Evaluate(RHGameState state) {

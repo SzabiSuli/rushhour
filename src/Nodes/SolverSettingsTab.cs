@@ -46,8 +46,14 @@ public partial class SolverSettingsTab : VBoxContainer {
 
     public void OnApplyButtonPressed() {
         ApplySettings();
-        AlgoPlayer.Instance.ResetSolver();
-        TabCont.CurrentTab = 2;
+        if (AlgoPlayer.Instance.initialState == null) {
+            // if no level has been selected, 
+            // switch to the levels tab, so the user selects a level
+            TabCont.CurrentTab = 0;
+        } else {
+            AlgoPlayer.Instance.ResetSolver();
+            TabCont.CurrentTab = 2;
+        }
     }
 
     public void OnAlgoOptionChanged(long index) {
@@ -56,9 +62,10 @@ public partial class SolverSettingsTab : VBoxContainer {
 
     public Solver GetSolver() {
         Heuristic h = heuristicOption.Selected switch {
-            0 => new DistanceHeuristic(),
-            1 => new FreeSpacesHeuristic(),
-            2 => new MoverHeuristic(),
+            0 => new NullHeuristic(),
+            1 => new DistanceHeuristic(),
+            2 => new FreeSpacesHeuristic(),
+            3 => new MoverHeuristic(),
             _ => throw new Exception("Invalid heuristic option selected")
         };
         Solver s;
