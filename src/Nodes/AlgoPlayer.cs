@@ -26,7 +26,7 @@ public partial class AlgoPlayer : VBoxContainer {
     public RHGameState? initialState;
 
 
-    public TabContainer TabCont => GetParent<VBoxContainer>().GetParent<TabContainer>();
+    public TabCont TabCont => GetParent<VBoxContainer>().GetParent<TabCont>();
 
     public static AlgoPlayer Instance {get; private set;} = null!;
 
@@ -44,7 +44,7 @@ public partial class AlgoPlayer : VBoxContainer {
 
         playPauseButton.Toggled += OnPlayPauseButtonToggled;
         stepButton.Pressed += OnStepButtonPressed;
-        restartButton.Pressed += OnRestartButtonPressed;
+        restartButton.Pressed += ResetSolver;
 
     }
 
@@ -81,7 +81,7 @@ public partial class AlgoPlayer : VBoxContainer {
 
         UnSubFromSolver();
         
-        solver = SolverSettingsTab.Instance.GetNewSolver();
+        solver = SolverSettingsTab.Instance.GetSolver();
         SubToSolver();
 
         MainGameBoard.Instance.Setup(level);
@@ -94,7 +94,7 @@ public partial class AlgoPlayer : VBoxContainer {
         running = false;
 
         // Switch to game board tab
-        TabCont.CurrentTab = 0;
+        TabCont.CurrentTab = 1;
     }
 
     public void SetupControlButtons() {
@@ -145,7 +145,7 @@ public partial class AlgoPlayer : VBoxContainer {
         playPauseButton.ButtonPressed = false;
     }
 
-    public void OnRestartButtonPressed() {
+    public void ResetSolver() {
         if (initialState is null) {
             throw new Exception("Can't restart with no level loaded");
         }
@@ -158,8 +158,6 @@ public partial class AlgoPlayer : VBoxContainer {
 
         solver = SolverSettingsTab.Instance.GetSolver();
         SubToSolver();
-
-        // TODO refine this
 
         MainGameBoard.Instance.AlgoCurrent = initialState;
         MainGameBoard.Instance.Mode = BoardMode.ALGO;
