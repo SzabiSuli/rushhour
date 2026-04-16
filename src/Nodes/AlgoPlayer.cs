@@ -13,10 +13,12 @@ public partial class AlgoPlayer : VBoxContainer {
     [Export] public Label playPauseLabel = null!;
     [Export] public Button stepButton = null!;
     [Export] public Button restartButton = null!;
+    [Export] public Label stepCountLabel = null!;
+    [Export] public Label solverStatusLabel = null!;
 
 
     public const double minAlgoStepdelay = 0.001; 
-    public const int maxStepCount = 128; 
+    public const int maxStepCount = 1024; 
     public double algoStepDelay = 0.5;
     public double timeSinceLastStep = 0;
     public bool running = false;
@@ -61,17 +63,7 @@ public partial class AlgoPlayer : VBoxContainer {
         
         timeSinceLastStep = 0;
 
-        // for all but the last step, 
-        // don't update the current node highlight
-        // and the game board update
-        solver.skipNewCurrent = true;
-        for (int i = 0; i < stepCount - 1 && solver.Status == SolverStatus.Running; i++) {
-            solver.Step();
-            // quit the function if the solver terminated
-            if (solver.Status != SolverStatus.Running) return;
-        }
-        solver.skipNewCurrent = false;
-        solver.Step();
+        solver.Step(stepCount);
     }
 
     public void LoadLevel(RHGameState level) {
@@ -110,8 +102,10 @@ public partial class AlgoPlayer : VBoxContainer {
         solver.NewEdge += Edge.OnNewEdge;
         solver.PathChange += Edge.OnPathChange;
         solver.NewCurrent += Vertex.OnNewCurrent;
+        // TODO make label step count, status update
         solver.NewCurrent += MainGameBoard.Instance.OnNewAlgoCurrent;
         solver.Terminated += OnSolverTerminated;
+        // TODO show solution, calculate length
     }
 
     public void UnSubFromSolver() {
@@ -170,5 +164,11 @@ public partial class AlgoPlayer : VBoxContainer {
     public void OnSolverTerminated(object? sender, SolverStatus status) {
         playPauseButton.Disabled = true;
         stepButton.Disabled = true;
+        if (status == SolverStatus.Solved) {
+            var solutionPath = solver.GetSolutionPath();
+            foreach (StateMove stateMove in solutionPath) {
+                Edge.Dict[stateMove].AddEffect(EdgeEffect.SolutionEdge);
+            }
+        }
     }
 }

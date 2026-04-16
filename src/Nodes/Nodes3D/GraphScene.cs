@@ -28,7 +28,8 @@ public partial class GraphScene : Node3D
         Clear();
 
         // create the initial state
-        Vertex.GetOrCreate(initial, null);
+        Vertex v = Vertex.GetOrCreate(initial, null);
+        v.AddEffect(VertexEffect.Initial);
     }
 
     public void Clear() {
@@ -50,7 +51,7 @@ public partial class GraphScene : Node3D
         IEnumerable<Edge> edges = GetTree().GetNodesInGroup("Edges").Cast<Edge>();
         
         foreach (Edge edge in edges) {
-            edge.UpdateColor(false);
+            edge.ClearEffects();
         }
     }
 }

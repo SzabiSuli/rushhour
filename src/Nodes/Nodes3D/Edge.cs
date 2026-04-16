@@ -25,6 +25,60 @@ public partial class Edge : MeshInstance3D
 
     public static Dictionary<StateMove, Edge> Dict { get; } = new();
 
+    private HashSet<EdgeEffect> _effects = new();
+
+    public void AddEffect(EdgeEffect e) {
+        _effects.Add(e);
+        UpdateEffect();
+    }
+    public void RemoveEffect(EdgeEffect e) {
+        _effects.Remove(e);
+        UpdateEffect();
+    }
+    public void SetEffect(EdgeEffect e, bool active) {
+        if (active) {
+            AddEffect(e);
+        } else {
+            RemoveEffect(e);
+        }
+    }
+    public void ClearEffects() {
+        _effects.Clear();
+        UpdateEffect();
+    }
+
+    public EdgeEffect? Effect {
+        get {
+            if (!_effects.Any()) {
+                return null;
+            }
+            return _effects.Min();
+        }
+    }
+
+    public void UpdateEffect() {
+        switch (Effect) {
+            case EdgeEffect.SolutionEdge:
+                MaterialOverride.Set("albedo_color", Colors.Green);
+                // set width to twice as thick
+                MaterialOverride.Set("roughness", 0.5f);
+                break;
+            case EdgeEffect.AlgoEdge:
+                MaterialOverride.Set("albedo_color", Colors.Yellow);
+                // set width to 1.5 times as thick
+                MaterialOverride.Set("roughness", 0.25f);
+                break;
+            case EdgeEffect.Transparent:
+                MaterialOverride.Set("albedo_color", new Color(1, 1, 1, 0.1f));
+                MaterialOverride.Set("roughness", 1);
+                break;
+            case null:
+                MaterialOverride.Set("albedo_color", Colors.White);
+                MaterialOverride.Set("roughness", 2);
+                break;
+        }
+    }
+
     private ImmediateMesh _mesh = new ImmediateMesh(); 
 
     public static Edge GetOrCreate(StateMove move) {
@@ -76,9 +130,9 @@ public partial class Edge : MeshInstance3D
         }
     }
 
-    public static void OnPathChange(object? sender, PathChangeArgs args) {
-        Dict[args.move].UpdateColor(args.onPath); 
-    }
+    public static void OnPathChange(object? _, PathChangeArgs args) {
+        Dict[args.move].SetEffect(EdgeEffect.AlgoEdge, args.onPath);
+    } 
 
     public void Init(Vertex form, Vertex to, StateMove moveUsed){
         From = form;
@@ -114,16 +168,6 @@ public partial class Edge : MeshInstance3D
         _mesh.SurfaceEnd();
 	}
 
-	public void UpdateColor(bool onPath) {
-		// change color to yellow
-		// TODO maybe make new material instead?
-		if (onPath) {
-			MaterialOverride.Set("albedo_color", Colors.Yellow);
-		} else {
-			MaterialOverride.Set("albedo_color", Colors.White);
-		}
-	}
-
 	public void ApplySpringForce() {
 		Vector3 distanceVector = To.Position - From.Position;
 		var length = distanceVector.Length();
@@ -138,4 +182,11 @@ public partial class Edge : MeshInstance3D
 
         // GD.Print($"Applying spring force for {From} and {To}");
 	}
+}
+
+public enum EdgeEffect {
+    // listed from highest priority to lowest
+    SolutionEdge = 0,
+    AlgoEdge = 1,
+    Transparent = 2,
 }

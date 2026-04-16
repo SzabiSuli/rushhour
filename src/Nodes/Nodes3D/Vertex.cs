@@ -2,6 +2,7 @@ namespace rushhour.src.Nodes.Nodes3D;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using rushhour.src.Model;
 
@@ -9,26 +10,80 @@ public partial class Vertex : RigidBody3D
 {
     public const int repulsionForce = 1000;
     public const int influenceRadius = 1000;
+    public const float defaultSpriteScale = 0.5f;
+    public const float defaultCollisionScale = 1;
+    public const float epsilon = 0.00001f; // used for float value comparison
     public readonly Vector3 maxVelocity = Vector3.One * 100;
+
     public readonly Vector3 negMaxVelocity = Vector3.One * (-100);
     public RHGameState GameState { get; set; } = null!;
     public const String scenePath = "res://scenes/vertex.tscn";
     public static PackedScene Creator {get;} = ResourceLoader.Load<PackedScene>(scenePath);
     public static Dictionary<RHGameState, Vertex> Dict { get; } = new();
-    private static Vertex? _current = null;
-    public static Vertex? Current {
-        get => _current;
+
+    private float _scaleTarget = 1;
+    public float ScaleTarget {
+        get => _scaleTarget;
         set {
-            if (_current == value) return;
-            Vertex? prevCurrent = _current;
-
-            _current = value;
-
-            _current?.OnThisCurrentChanged();
-            prevCurrent?.OnThisCurrentChanged();   
+            if (Math.Abs(_scaleTarget - value) < epsilon) return;
+            _scaleTarget = value;
+            
+            Sprite.Scale = Vector3.One * defaultSpriteScale * _scaleTarget;
+            CollisionShape.Scale = Vector3.One * defaultCollisionScale * _scaleTarget;
         }
     }
-    public bool IsCurrent => this == Current;
+
+    public Sprite3D Sprite => GetChild<Sprite3D>(1);
+    public CollisionShape3D CollisionShape => GetChild<CollisionShape3D>(0);
+
+    // TODO maybe use the MainGameBoard algoCurrent
+    private static Vertex? _algoCurrent = null;
+    public static Vertex? AlgoCurrent {
+        get => _algoCurrent;
+        private set {
+            if (_algoCurrent == value) return;
+            Vertex? prevCurrent = _algoCurrent;
+
+            _algoCurrent = value;
+
+            _algoCurrent?.OnThisAlgoCurrentChanged();
+            prevCurrent?.OnThisAlgoCurrentChanged();
+        }
+    }
+    public bool IsAlgoCurrent => this == AlgoCurrent;
+
+    private HashSet<VertexEffect> _effects = new();
+
+    public void AddEffect(VertexEffect e) {
+        _effects.Add(e);
+        UpdateEffect();
+    }
+    public void RemoveEffect(VertexEffect e) {
+        _effects.Remove(e);
+        UpdateEffect();
+    }
+    public void SetEffect(VertexEffect e, bool active) {
+        if (active) {
+            AddEffect(e);
+        } else {
+            RemoveEffect(e);
+        }
+    }
+
+    public void ClearEffects() {
+        _effects.RemoveWhere(ve => ve != VertexEffect.Solved);
+        UpdateEffect();
+    }
+
+    public VertexEffect? Effect {
+        get {
+            if (!_effects.Any()) {
+                return null;
+            }
+            return _effects.Min();
+        }
+    }
+
 
     private Vector3 _pendingForces = Vector3.Zero;
     private object _forcesLock = new object();
@@ -78,7 +133,7 @@ public partial class Vertex : RigidBody3D
 
     public static void OnNewCurrent(object? sender, RHGameState newCurrent) {
         Dict.TryGetValue(newCurrent, out Vertex? v);
-        Current = v;
+        AlgoCurrent = v;
     } 
     public void Init(RHGameState gameState) {
         GameState = gameState;
@@ -88,13 +143,20 @@ public partial class Vertex : RigidBody3D
     public override void _Ready() {
         this.InputEvent += OnInputEvent;
 
-        SleepingStateChanged += UpdateColor;
+        if (MainScene.debug) {
+            SleepingStateChanged += OnSleepingStateChanged;
+        }
+
+        // Initialise with the solved effect if it is solved.
+        if (GameState.IsSolved()) {
+            AddEffect(VertexEffect.Solved);
+        }
     }
 
     public override void _ExitTree() {
-        if (IsCurrent) {
+        if (IsAlgoCurrent) {
             // Don't need to call the property
-            _current = null;
+            _algoCurrent = null;
         } 
         base._ExitTree();
     }
@@ -160,10 +222,52 @@ public partial class Vertex : RigidBody3D
         }
     }
 
-    public void OnThisCurrentChanged() => UpdateColor();
-    public void UpdateColor() {
-        var sprite = GetChild<Sprite3D>(1);
-        Color c = IsCurrent ? Colors.Green : Sleeping ? Colors.Red : Colors.White;
-        sprite.Modulate = c;
+    public void OnThisAlgoCurrentChanged() => SetEffect(VertexEffect.AlgoCurrent, IsAlgoCurrent);
+    public void OnSleepingStateChanged() => SetEffect(VertexEffect.Sleeping, Sleeping);
+
+    public void UpdateEffect() {
+        switch (Effect) {
+            case VertexEffect.ManualCurrent:
+                Sprite.Modulate = Colors.Red;
+                ScaleTarget = 2f;
+                break;
+            case VertexEffect.Solved:
+                Sprite.Modulate = Colors.Green;
+                ScaleTarget = 2f;
+                break;
+            case VertexEffect.Initial:
+                Sprite.Modulate = Colors.RoyalBlue;
+                ScaleTarget = 2f;
+                break;
+            case VertexEffect.AlgoCurrent:
+                Sprite.Modulate = Colors.Orange;
+                ScaleTarget = 2f;
+                break;
+            case VertexEffect.Transparent:
+                Sprite.Modulate = new Color(1, 1, 1, 0.1f);
+                CollisionShape.Disabled = true;
+                ScaleTarget = 1f;
+                return; // return so collision shape stays disabled
+            case VertexEffect.Sleeping:
+                Sprite.Modulate = Colors.Purple;
+                ScaleTarget = 1f;
+                break;
+            case null:
+                Sprite.Modulate = Colors.White;
+                ScaleTarget = 1f;
+                break;  
+        }
+        CollisionShape.Disabled = false;
     }
+}
+
+
+public enum VertexEffect {
+    // Listed from hightest priority to lowest
+    ManualCurrent = 0,
+    Solved = 1,
+    Initial = 2,
+    AlgoCurrent = 3,
+    Transparent = 4,
+    Sleeping = 5,
 }

@@ -4,6 +4,8 @@ using System;
 using Godot;
 
 public partial class MainScene : Control {
+    public const bool debug = true;
+    
     public static MainScene Instance {get; private set;} = null!;
     public MainScene() {
         if (Instance is null) {

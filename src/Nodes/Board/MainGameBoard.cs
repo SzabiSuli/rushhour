@@ -17,7 +17,13 @@ public partial class MainGameBoard : GameBoard
     public BoardMode Mode {
 		get => _mode;
 		set {
+			if (_mode == value) return;
+
 			_mode = value;
+
+			if (_mode == BoardMode.ALGO) {
+				ManualCurrent = null;
+			}
 
 			manualButton.SetPressedNoSignal(_mode == BoardMode.MANUAL);
 			algoButton.SetPressedNoSignal(_mode == BoardMode.ALGO);
@@ -44,8 +50,17 @@ public partial class MainGameBoard : GameBoard
     public RHGameState? ManualCurrent {
 		get => _manualCurrent;
 		set {
+			if (_manualCurrent == value) return;
+			if (_manualCurrent != null) {
+				Vertex.Dict[_manualCurrent].RemoveEffect(VertexEffect.ManualCurrent);
+			}
 			_manualCurrent = value;
-			Mode = BoardMode.MANUAL;
+
+			if (_manualCurrent != null) {
+				Vertex.Dict[_manualCurrent].AddEffect(VertexEffect.ManualCurrent);
+				Mode = BoardMode.MANUAL;
+			}
+			UpdateBoard();
 		}
 	}
 
@@ -96,8 +111,10 @@ public partial class MainGameBoard : GameBoard
 	// TODO manual move from algo mode does not work
 	public void MakeManualMove(Move move) {
 		StateMove stateMove = new StateMove(Current, Current.WithMove(move), move);
-		ManualCurrent = stateMove.To;
+		// Create vertex first, 
+		// so ManualCurrent effect can be applied to the vertex
 		Edge.OnNewEdge(this, stateMove);
+		ManualCurrent = stateMove.To;
 	}
 
 	public override void Setup(RHGameState initial) {
@@ -113,7 +130,6 @@ public partial class MainGameBoard : GameBoard
 
 		// Use private fields to avoid triggering manual mode and board update.
 		_algoCurrent = initial;
-		_manualCurrent = initial;
 		
 		// Board gets udpated here, it will also be updated in solver.Start
 		Mode = BoardMode.ALGO;

@@ -9,7 +9,7 @@ public abstract class Solver {
     private SolverStatus _status = SolverStatus.NotStarted;
     public SolverStatus Status { 
         get => _status;
-        set {
+        protected set {
             _status = value;
             if (   _status == SolverStatus.Solved 
                 || _status == SolverStatus.NoSolution 
@@ -21,6 +21,8 @@ public abstract class Solver {
     protected Random rand = new Random();
     protected float randomFactor;
     private RHGameState? _current;
+    public int StepCount {get; private set;} = 0;
+    protected RHGameState? _solvedStateFound;
 
     // TODO these shouldn't create vertices directly, 
     // but enqueue them for creation so, it does not slow down the algorithm.
@@ -29,11 +31,11 @@ public abstract class Solver {
     public event EventHandler<StateMove>? NewEdge;
     public event EventHandler<SolverStatus>? Terminated;
 
-    public bool skipNewCurrent = false;
+    private bool _skipNewCurrent = false;
 
     protected void OnNewCurrent(RHGameState state) {
         _current = state;
-        if (skipNewCurrent) return;
+        if (_skipNewCurrent) return;
         NewCurrent?.Invoke(this, state);
     } 
     protected void OnPathChange(PathChangeArgs args) => PathChange?.Invoke(this, args);
@@ -75,40 +77,43 @@ public abstract class Solver {
         if (state.IsSolved()) {
             GD.Print("Found Solution!");
             state.PrintState();
+            _solvedStateFound = state;
             Status = SolverStatus.Solved;
             return true;
         }
         return false;
     }
 
-    public abstract void Step();
-    public abstract IEnumerable<StateMove> GetSolutionPath();
+    public void Step(int stepCount) {
+        // Skip calling new currents when calling steps in batch
+        _skipNewCurrent = true;
+        for (int i = 0; i < stepCount - 1; i++) {
+            Step();
+            if (Status != SolverStatus.Running) {
+                // quit the function if the solver terminated
+                _skipNewCurrent = false;
+                return;
+            }
+        }
+        _skipNewCurrent = false;
+        Step();
+    }
 
-
-    // TimeSpan StepDelay { get; set; }
+    public virtual void Step() => StepCount++;
+    public IEnumerable<StateMove> GetSolutionPath() {
+        if (Status != SolverStatus.Solved) {
+            throw new Exception("Puzzle is not solved!");
+        }
+        return GetSolutionPathSolved();
+    }
+    protected abstract IEnumerable<StateMove> GetSolutionPathSolved();
 }
 
 public class TabuSolver : Solver {
-    // TODO make this tabu search
-    // public bool IsRunning { get; private set; }
-    // public bool FoundSolution { get; private set; }
-    // public HashSet<GraphNode> WorkingSetNodes { get; } = new HashSet<GraphNode>();
-    // public HashSet<GraphEdge> WorkingSetEdges { get; } = new HashSet<GraphEdge>();
-    // public TimeSpan StepDelay { get; set; }
-
-
     public List<StateMove> Route { get; set; } = new();
     public int TabuSize { get; init; }
     public StateMove? nextMove;
 
-    // public RHGameState? Parent { get; set; }
-
-    // public RHGameState Current { get; set; }
-
-    // public Heuristic Heuristic { get; set; }
-    
-    // public bool FoundSolution { get; set; }
-    // public bool Terminated { get; set; }
     public TabuSolver(Heuristic h, int tabuSize, float rf = 0) : base(h, rf) {
         TabuSize = tabuSize;
     }
@@ -119,6 +124,7 @@ public class TabuSolver : Solver {
     }
 
     public override void Step() {
+        base.Step();
         if (nextMove == null) {
             Status = SolverStatus.Terminated;
             return;
@@ -166,10 +172,7 @@ public class TabuSolver : Solver {
         nextMove = validMoves.MinBy(Evaluate);
     }
     
-    public override List<StateMove> GetSolutionPath() { 
-        // Implementation hidden
-        return Route;
-    }
+    protected override List<StateMove> GetSolutionPathSolved() => Route;
 }
 
 public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
@@ -181,6 +184,7 @@ public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
     }
 
     public override void Step() { 
+        base.Step();
         var options = CurrentRoute.Last();
         if (options.Count == 0){
             CurrentRoute.RemoveAt(CurrentRoute.Count - 1);
@@ -234,32 +238,30 @@ public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
         CurrentRoute.Add(validMoves);
     }
 
-    public override IEnumerable<StateMove> GetSolutionPath() { 
-        if (Status != SolverStatus.Solved) {
-            throw new Exception("Puzzle is not solved!");
-        } 
+    protected override IEnumerable<StateMove> GetSolutionPathSolved() {
         return CurrentRoute.Select(options => options.First());
     }
 }
 
 // TODO make A and A* searches?
 public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
-    public PriorityQueue<StateMove, float> OpenStates { get; } = new ();
+    private PriorityQueue<StateMove, float> OpenStates { get; } = new ();
 
     struct DiscoveredState {
         public int depth;
-        public RHGameState? parent;
+        public StateMove? moveFromParent;
     }
 
-    Dictionary<RHGameState, DiscoveredState> DiscoveredStates = new();
+    private Dictionary<RHGameState, DiscoveredState> DiscoveredStates = new();
 
     public override void Start(RHGameState initial) {
         base.Start(initial);
-        DiscoveredStates.Add(initial, new DiscoveredState{depth = 0, parent = null});
+        DiscoveredStates.Add(initial, new DiscoveredState{depth = 0, moveFromParent = null});
         AddOpenStates(initial);
     }
 
     public override void Step() { 
+        base.Step();
         if(!OpenStates.TryDequeue(out StateMove? bestMove, out float p)) {
             Status = SolverStatus.NoSolution;
             return;
@@ -286,7 +288,7 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
         int depth = DiscoveredStates[extended].depth + 1;
         
         foreach (StateMove move in filteredMoves) {
-            DiscoveredStates.Add(move.To, new DiscoveredState{depth = depth, parent = extended});
+            DiscoveredStates.Add(move.To, new DiscoveredState{depth = depth, moveFromParent = move});
             OpenStates.Enqueue(move, EvalWithDepth(move.To, depth));
         }
     }
@@ -294,17 +296,27 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
     public float EvalWithDepth(RHGameState state, int depth) {
         // balanced search:
         // f = g + h
-        return depth + Evaluate(state);
+        return depth + Evaluate(state) * 1.00000001f;
     }
 
 
-    public override IEnumerable<StateMove> GetSolutionPath() { 
-        if (Status != SolverStatus.Solved) {
+    protected override IEnumerable<StateMove> GetSolutionPathSolved() { 
+        if (_solvedStateFound == null) {
             throw new Exception("Puzzle is not solved!");
-        } 
+        }
 
-        return new List<StateMove>();
-        // return CurrentRoute.Select(tuple => tuple.Item1);
+        List<StateMove> solutionPath = new List<StateMove>();
+        StateMove? stateMove = DiscoveredStates[_solvedStateFound].moveFromParent;
+
+        // Add the moves in reverse order, 
+        // starting form the solution
+        while (stateMove != null) {
+            solutionPath.Add(stateMove);
+            stateMove = DiscoveredStates[stateMove.From].moveFromParent;
+        }
+        solutionPath.Reverse();
+
+        return solutionPath;
     }
 }
 
