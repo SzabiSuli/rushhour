@@ -20,8 +20,7 @@ public partial class GraphScene : Node3D
 
     public async override void _PhysicsProcess(double delta) {
         // Rebuild the Barnes-Hut OctTree once per physics update for repulsion forces
-        var vertices = GetTree().GetNodesInGroup("Vertices").Cast<Vertex>();
-        OctTree.BuildAndSetCurrent(vertices);
+        OctTree.BuildAndSetCurrent(Vertex.Dict.Values);
     }
 
     public void Setup(RHGameState initial) {
@@ -33,13 +32,10 @@ public partial class GraphScene : Node3D
     }
 
     public void Clear() {
-        IEnumerable<Edge> edges = GetTree().GetNodesInGroup("Edges").Cast<Edge>();
-        IEnumerable<Vertex> vertices = GetTree().GetNodesInGroup("Vertices").Cast<Vertex>();
-
-        foreach (Edge edge in edges) {
+        foreach (Edge edge in Edge.Dict.Values) {
             edge.Free();
         }
-        foreach (Vertex vertex in vertices) {
+        foreach (Vertex vertex in Vertex.Dict.Values) {
             vertex.Free();
         }
         // Vertex.Current gets reset to null by the node, which was Current, when it gets deleted.
@@ -48,10 +44,12 @@ public partial class GraphScene : Node3D
     }
 
     public void ClearPathHighligh() {
-        IEnumerable<Edge> edges = GetTree().GetNodesInGroup("Edges").Cast<Edge>();
-        
-        foreach (Edge edge in edges) {
+        foreach (Edge edge in Edge.Dict.Values) {
             edge.ClearEffects();
+        }
+
+        foreach (Vertex vertex in Vertex.Dict.Values) {
+            vertex.ClearEffects();
         }
     }
 }

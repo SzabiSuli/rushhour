@@ -3,6 +3,7 @@ namespace rushhour.src.Nodes.Nodes3D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using Godot;
 using rushhour.src.Model;
 
@@ -43,7 +44,7 @@ public partial class Edge : MeshInstance3D
         }
     }
     public void ClearEffects() {
-        _effects.Clear();
+        _effects.RemoveWhere(ee => ee != EdgeEffect.Transparent);
         UpdateEffect();
     }
 
@@ -57,24 +58,22 @@ public partial class Edge : MeshInstance3D
     }
 
     public void UpdateEffect() {
+        if (MaterialOverride is not StandardMaterial3D mat) {
+            throw new Exception("Incorrect material in edge!");
+        }
+
         switch (Effect) {
             case EdgeEffect.SolutionEdge:
-                MaterialOverride.Set("albedo_color", Colors.Green);
-                // set width to twice as thick
-                MaterialOverride.Set("roughness", 0.5f);
+                mat.AlbedoColor = new Color(0, 1, 0, 1f);
                 break;
             case EdgeEffect.AlgoEdge:
-                MaterialOverride.Set("albedo_color", Colors.Yellow);
-                // set width to 1.5 times as thick
-                MaterialOverride.Set("roughness", 0.25f);
+                mat.AlbedoColor = new Color(1, 1, 0, 0.5f);
                 break;
             case EdgeEffect.Transparent:
-                MaterialOverride.Set("albedo_color", new Color(1, 1, 1, 0.1f));
-                MaterialOverride.Set("roughness", 1);
+                mat.AlbedoColor = new Color(1, 1, 1, 0.01f);
                 break;
             case null:
-                MaterialOverride.Set("albedo_color", Colors.White);
-                MaterialOverride.Set("roughness", 2);
+                mat.AlbedoColor = new Color(1, 1, 1, 0.1f);
                 break;
         }
     }
@@ -96,7 +95,6 @@ public partial class Edge : MeshInstance3D
             move
         );
         GraphScene.Instance.AddChild(edge);
-        edge.AddToGroup("Edges");
         Dict[move] = edge;
 
         return edge;
@@ -134,6 +132,12 @@ public partial class Edge : MeshInstance3D
         Dict[args.move].SetEffect(EdgeEffect.AlgoEdge, args.onPath);
     } 
 
+    public static void OnHideButtonToggled(bool on) {
+        foreach (Edge e in Dict.Values) {
+            e.SetEffect(EdgeEffect.Transparent, on);
+        }
+    }
+
     public void Init(Vertex form, Vertex to, StateMove moveUsed){
         From = form;
         To = to;
@@ -146,9 +150,9 @@ public partial class Edge : MeshInstance3D
         MaterialOverride = new StandardMaterial3D() {
             AlbedoColor = Colors.White,
             ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
-            // Metallic = 0.5f,
-            // Roughness = 0.5f
+            Transparency = BaseMaterial3D.TransparencyEnum.Alpha
         };
+        SetEffect(EdgeEffect.Transparent, HideButton.Instance.ButtonPressed);
     }
 
     // Called every physics frame. 'delta' is the elapsed time since the previous frame.

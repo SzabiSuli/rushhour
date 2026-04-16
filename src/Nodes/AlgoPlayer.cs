@@ -101,6 +101,7 @@ public partial class AlgoPlayer : VBoxContainer {
     public void SubToSolver() {
         solver.NewEdge += Edge.OnNewEdge;
         solver.PathChange += Edge.OnPathChange;
+        solver.PathChange += Vertex.OnPathChange;
         solver.NewCurrent += Vertex.OnNewCurrent;
         // TODO make label step count, status update
         solver.NewCurrent += MainGameBoard.Instance.OnNewAlgoCurrent;

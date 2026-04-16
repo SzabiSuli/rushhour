@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://b8vvp53qo65cv" path="res://src/Nodes/LevelsGrid.cs" id="7_c16ls"]
 [ext_resource type="Texture2D" uid="uid://dqyunwoflvk0x" path="res://assets/pause.svg" id="7_si52b"]
 [ext_resource type="Script" uid="uid://bfpbdcwwoasu2" path="res://src/Nodes/SolverSettingsTab.cs" id="10_6wevv"]
+[ext_resource type="Script" uid="uid://d15tkkh8kmxml" path="res://src/Nodes/HideButton.cs" id="14_7nt27"]
 [ext_resource type="Script" uid="uid://c20g3raawrb7e" path="res://src/Nodes/StatusContainer.cs" id="14_bcnxi"]
 
 [node name="MainScene" type="Control" unique_id=203170334]
@@ -279,6 +280,19 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "MAX"
 horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=661149213]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HideButton" type="CheckButton" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/HBoxContainer" unique_id=1976372017]
+layout_mode = 2
+size_flags_horizontal = 0
+script = ExtResource("14_7nt27")
+
+[node name="HideLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/HBoxContainer" unique_id=1701734812]
+layout_mode = 2
+text = "Hide irrelevant edges and vertices"
 
 [node name="StatusContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=1675483775]
 layout_mode = 2

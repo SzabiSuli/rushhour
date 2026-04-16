@@ -51,6 +51,18 @@ public partial class Vertex : RigidBody3D
         }
     }
     public bool IsAlgoCurrent => this == AlgoCurrent;
+    private int _connectedAlgoEdges = 0;
+    private int ConnectedAlgoEdges {
+        get => _connectedAlgoEdges;
+        set {
+            if (value < 0) {
+                throw new ArgumentException("ConnectedAlgoEdges can't be negative!");
+            }
+
+            _connectedAlgoEdges = value;
+            SetEffect(VertexEffect.OnAlgoPath, value > 0);
+        } 
+    }
 
     private HashSet<VertexEffect> _effects = new();
 
@@ -71,7 +83,8 @@ public partial class Vertex : RigidBody3D
     }
 
     public void ClearEffects() {
-        _effects.RemoveWhere(ve => ve != VertexEffect.Solved);
+        _effects.RemoveWhere(ve => ve == VertexEffect.OnAlgoPath);
+        ConnectedAlgoEdges = 0;
         UpdateEffect();
     }
 
@@ -126,7 +139,6 @@ public partial class Vertex : RigidBody3D
         // TODO add label with state info
         // vertex.GetNode<Label>("Label").Text = state.ToString();
         GraphScene.Instance.AddChild(vertex);
-        vertex.AddToGroup("Vertices");
         Dict[state] = vertex;
         return vertex;
     }
@@ -148,9 +160,8 @@ public partial class Vertex : RigidBody3D
         }
 
         // Initialise with the solved effect if it is solved.
-        if (GameState.IsSolved()) {
-            AddEffect(VertexEffect.Solved);
-        }
+        SetEffect(VertexEffect.Solved, GameState.IsSolved());
+        SetEffect(VertexEffect.Transparent, HideButton.Instance.ButtonPressed);
     }
 
     public override void _ExitTree() {
@@ -208,6 +219,19 @@ public partial class Vertex : RigidBody3D
         _pendingForces = Vector3.Zero;
     }
 
+    public static void OnPathChange(object? _, PathChangeArgs args) {
+        int diff = args.onPath ? 1 : -1;
+        
+        Dict[args.move.To].ConnectedAlgoEdges += diff;
+        Dict[args.move.From].ConnectedAlgoEdges += diff;
+    } 
+
+    public static void OnHideButtonToggled(bool on) {
+        foreach (Vertex v in Dict.Values) {
+            v.SetEffect(VertexEffect.Transparent, on);
+        }
+    }
+
 
     // Physics Priority = 1
     // Meaning this gets called after graphscene _PhysicsProcess
@@ -243,17 +267,21 @@ public partial class Vertex : RigidBody3D
                 Sprite.Modulate = Colors.Orange;
                 ScaleTarget = 2f;
                 break;
+            case VertexEffect.OnAlgoPath:
+                Sprite.Modulate = new Color(1, 1, 0, 0.5f);
+                ScaleTarget = 1.5f;
+                break;
             case VertexEffect.Transparent:
-                Sprite.Modulate = new Color(1, 1, 1, 0.1f);
+                Sprite.Modulate = new Color(1, 1, 1, 0.01f);
                 CollisionShape.Disabled = true;
                 ScaleTarget = 1f;
                 return; // return so collision shape stays disabled
             case VertexEffect.Sleeping:
-                Sprite.Modulate = Colors.Purple;
+                Sprite.Modulate = new Color(1, 0, 1, 0.5f);
                 ScaleTarget = 1f;
                 break;
             case null:
-                Sprite.Modulate = Colors.White;
+                Sprite.Modulate = new Color(1, 1, 1, 0.5f);
                 ScaleTarget = 1f;
                 break;  
         }
@@ -268,6 +296,7 @@ public enum VertexEffect {
     Solved = 1,
     Initial = 2,
     AlgoCurrent = 3,
-    Transparent = 4,
-    Sleeping = 5,
+    OnAlgoPath = 4,
+    Transparent = 5,
+    Sleeping = 6,
 }

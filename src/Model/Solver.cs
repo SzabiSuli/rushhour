@@ -296,7 +296,11 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
     public float EvalWithDepth(RHGameState state, int depth) {
         // balanced search:
         // f = g + h
-        return depth + Evaluate(state) * 1.00000001f;
+        return depth + Evaluate(state);
+        
+        // A greater depth can be preferred when the sum is equal
+        // to find the solution slightly faster 
+        // return depth + Evaluate(state) * 1.00000001f;
     }
 
 
