@@ -142,6 +142,7 @@ public partial class MainGameBoard : GameBoard
 			v.Placement = state.PlacedPieces[i];
 			v.UpdateArrows(state);
 		}
+		StatusContainer.Instance.UpdateHeuristicLabel(state);
 	}
 }
 

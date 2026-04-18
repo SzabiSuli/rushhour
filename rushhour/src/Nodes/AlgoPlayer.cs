@@ -2,6 +2,7 @@ namespace rushhour.src.Nodes;
 
 
 using System;
+using System.Linq;
 using Godot;
 using rushhour.src.Model;
 using rushhour.src.Nodes.Board;
@@ -82,10 +83,12 @@ public partial class AlgoPlayer : VBoxContainer {
 
         solver.Start(level);
 
+        StatusContainer.Instance.SetSolutionLength(null);
+
         // start paused
         running = false;
 
-        // Switch to game board tab
+        // Switch to solver settings tab
         TabCont.CurrentTab = 1;
     }
 
@@ -103,20 +106,26 @@ public partial class AlgoPlayer : VBoxContainer {
         solver.PathChange += Edge.OnPathChange;
         solver.PathChange += Vertex.OnPathChange;
         solver.NewCurrent += Vertex.OnNewCurrent;
-        // TODO make label step count, status update
         solver.NewCurrent += MainGameBoard.Instance.OnNewAlgoCurrent;
+        solver.NewCurrent += OnNewCurrent;
         solver.Terminated += OnSolverTerminated;
-        // TODO show solution, calculate length
     }
+
 
     public void UnSubFromSolver() {
         solver.NewEdge -= Edge.OnNewEdge;
         solver.PathChange -= Edge.OnPathChange;
         solver.NewCurrent -= Vertex.OnNewCurrent;
         solver.NewCurrent -= MainGameBoard.Instance.OnNewAlgoCurrent;
+        solver.NewCurrent -= OnNewCurrent;
         solver.Terminated -= OnSolverTerminated;
     }
-
+    public void OnNewCurrent(object? s, RHGameState _) {
+        int c = solver.StepCount;
+        StatusContainer.Instance.SetStepCount(c);
+        // The solver enters Running status after calling Start on it, so bypass this by checking the step count.
+        StatusContainer.Instance.SetStatusLabel(c == 0 ? SolverStatus.NotStarted : solver.Status);
+    }
     public void OnSliderValueChanged(double value) {
         if (value == slider.MaxValue) {
             algoStepDelay = minAlgoStepdelay;
@@ -154,6 +163,8 @@ public partial class AlgoPlayer : VBoxContainer {
         solver = SolverSettingsTab.Instance.GetSolver();
         SubToSolver();
 
+        StatusContainer.Instance.SetSolutionLength(null);
+
         MainGameBoard.Instance.AlgoCurrent = initialState;
         MainGameBoard.Instance.Mode = BoardMode.ALGO;
 
@@ -165,8 +176,13 @@ public partial class AlgoPlayer : VBoxContainer {
     public void OnSolverTerminated(object? sender, SolverStatus status) {
         playPauseButton.Disabled = true;
         stepButton.Disabled = true;
+        StatusContainer.Instance.SetStatusLabel(status);
+
         if (status == SolverStatus.Solved) {
             var solutionPath = solver.GetSolutionPath();
+
+            StatusContainer.Instance.SetSolutionLength(solutionPath.Count());
+
             foreach (StateMove stateMove in solutionPath) {
                 Edge.Dict[stateMove].AddEffect(EdgeEffect.SolutionEdge);
             }

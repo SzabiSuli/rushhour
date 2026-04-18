@@ -294,23 +294,6 @@ script = ExtResource("14_7nt27")
 layout_mode = 2
 text = "Hide irrelevant edges and vertices"
 
-[node name="StatusContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=1675483775]
-layout_mode = 2
-size_flags_vertical = 8
-script = ExtResource("14_bcnxi")
-
-[node name="StepCountLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=1516398705]
-layout_mode = 2
-text = "Step count: "
-
-[node name="SolverStatusLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=283641232]
-layout_mode = 2
-text = "Solver status: "
-
-[node name="SolutionLenghtLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=1227360677]
-layout_mode = 2
-text = "Solution length"
-
 [node name="AlgoStepSpeed" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=780199178]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
@@ -373,3 +356,28 @@ region_rect = Rect2(48, 0, 192, 192)
 script = ExtResource("5_gubc5")
 manualButton = NodePath("../../../../MarginContainer/ButtonContainer/ManualButton")
 algoButton = NodePath("../../../../MarginContainer/ButtonContainer/AlgoButton")
+
+[node name="StatusContainer" type="GridContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=103907419]
+layout_mode = 2
+size_flags_vertical = 10
+columns = 2
+script = ExtResource("14_bcnxi")
+
+[node name="SolverStatusLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=283641232]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Solver status: -"
+
+[node name="StepCountLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=1516398705]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Step count: -"
+
+[node name="SolutionLenghtLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=1227360677]
+layout_mode = 2
+text = "Solution length: -"
+
+[node name="HeuristicLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=1783544616]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Heuristic score: -"
