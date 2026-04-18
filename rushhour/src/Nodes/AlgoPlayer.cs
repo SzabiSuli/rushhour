@@ -14,8 +14,6 @@ public partial class AlgoPlayer : VBoxContainer {
     [Export] public Label playPauseLabel = null!;
     [Export] public Button stepButton = null!;
     [Export] public Button restartButton = null!;
-    [Export] public Label stepCountLabel = null!;
-    [Export] public Label solverStatusLabel = null!;
 
 
     public const double minAlgoStepdelay = 0.001; 

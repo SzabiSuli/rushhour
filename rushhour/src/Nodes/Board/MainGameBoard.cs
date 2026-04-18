@@ -11,6 +11,7 @@ public partial class MainGameBoard : GameBoard
 {
 	[Export] public Button manualButton = null!;
 	[Export] public Button algoButton = null!;
+    [Export] public CheckButton followAlgoButton = null!;
 
 	private BoardMode _mode = BoardMode.ALGO;
 
@@ -40,9 +41,15 @@ public partial class MainGameBoard : GameBoard
 		get => _algoCurrent;
 		set {
 			_algoCurrent = value;
-			if (Mode == BoardMode.ALGO) {
-				UpdateBoard();
+			
+			if (_algoCurrent == null) return;
+
+			if (followAlgoButton.ButtonPressed) {
+				Camera3d.Instance.followTarget = Vertex.Dict[_algoCurrent];
 			}
+			if (Mode != BoardMode.ALGO) return;
+
+			UpdateBoard();
 		}	
 	}
     
@@ -52,15 +59,19 @@ public partial class MainGameBoard : GameBoard
 		set {
 			if (_manualCurrent == value) return;
 			if (_manualCurrent != null) {
+				// Update previous manual current effect
 				Vertex.Dict[_manualCurrent].RemoveEffect(VertexEffect.ManualCurrent);
 			}
 			_manualCurrent = value;
-
-			if (_manualCurrent != null) {
-				Vertex.Dict[_manualCurrent].AddEffect(VertexEffect.ManualCurrent);
-				Mode = BoardMode.MANUAL;
-			}
 			UpdateBoard();
+
+			if (_manualCurrent == null) return;
+		
+			// Update new manual current effect
+			Vertex.Dict[_manualCurrent].AddEffect(VertexEffect.ManualCurrent);
+			// Put the camera's center to the new manual current
+			Camera3d.Instance.followTarget = Vertex.Dict[_manualCurrent];
+			Mode = BoardMode.MANUAL;
 		}
 	}
 

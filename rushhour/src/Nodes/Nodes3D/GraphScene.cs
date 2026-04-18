@@ -29,6 +29,7 @@ public partial class GraphScene : Node3D
         // create the initial state
         Vertex v = Vertex.GetOrCreate(initial, null);
         v.AddEffect(VertexEffect.Initial);
+        Camera3d.Instance.followTarget = v;
     }
 
     public void Clear() {

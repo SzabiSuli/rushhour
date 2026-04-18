@@ -281,18 +281,33 @@ layout_mode = 2
 text = "MAX"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=661149213]
+[node name="HideContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=661149213]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 0
 
-[node name="HideButton" type="CheckButton" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/HBoxContainer" unique_id=1976372017]
+[node name="HideButton" type="CheckButton" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/HideContainer" unique_id=1976372017]
 layout_mode = 2
 size_flags_horizontal = 0
 script = ExtResource("14_7nt27")
 
-[node name="HideLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/HBoxContainer" unique_id=1701734812]
+[node name="HideLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/HideContainer" unique_id=1701734812]
 layout_mode = 2
+theme_override_font_sizes/font_size = 19
 text = "Hide irrelevant edges and vertices"
+
+[node name="FollowContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=1014416124]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="FollowAlgoButton" type="CheckButton" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/FollowContainer" unique_id=1095142318]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="FollowAlgoLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/FollowContainer" unique_id=1921018065]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 19
+text = "Follow vertices extended by algorithm "
 
 [node name="AlgoStepSpeed" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=780199178]
 layout_mode = 2
@@ -348,7 +363,7 @@ physics_object_picking = true
 size = Vector2i(416, 416)
 render_target_update_mode = 0
 
-[node name="MainGameBoard" type="Sprite2D" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport" unique_id=851370481 node_paths=PackedStringArray("manualButton", "algoButton")]
+[node name="MainGameBoard" type="Sprite2D" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport" unique_id=851370481 node_paths=PackedStringArray("manualButton", "algoButton", "followAlgoButton")]
 texture = ExtResource("5_rt2n2")
 centered = false
 region_enabled = true
@@ -356,6 +371,7 @@ region_rect = Rect2(48, 0, 192, 192)
 script = ExtResource("5_gubc5")
 manualButton = NodePath("../../../../MarginContainer/ButtonContainer/ManualButton")
 algoButton = NodePath("../../../../MarginContainer/ButtonContainer/AlgoButton")
+followAlgoButton = NodePath("../../../../FollowContainer/FollowAlgoButton")
 
 [node name="StatusContainer" type="GridContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=103907419]
 layout_mode = 2
