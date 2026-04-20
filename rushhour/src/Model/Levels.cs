@@ -126,6 +126,60 @@ static class Levels {
         f.ggG.
         """,
         """
+        Level 2
+        B..Ddd
+        b..c.E
+        aA.CFe
+        Kkk.fe
+        ..i.Gg
+        jJIHh.
+        """,
+        """
+        Level 3
+        ......
+        ......
+        .aAC..
+        .bBc.F
+        .D.c.f
+        .deE.f
+        """,
+        """
+        Level 4
+        b..c..
+        b..c..
+        BaAC..
+        ..dggG
+        ..D..f
+        ..EeeF
+        """,
+        """
+        Level 5
+        Bb.C.h
+        d..cgH
+        daAcgI
+        DffFGi
+        E...jJ
+        e...Kk
+        """,
+        """
+        Level 6
+        bB.c..
+        dD.CEf
+        .aAGef
+        hHigeF
+        J.Ig..
+        j..kkK
+        """,
+        """
+        Level 7
+        .BCcde
+        .b.FDE
+        .aAf.G
+        ..hH.g
+        ...i..
+        ...I..
+        """,
+        """
         Level 8
         ...nNm
         ..jJkm
@@ -133,6 +187,24 @@ static class Levels {
         bBHIlL
         cCGeeE
         dDgffF
+        """,
+        """
+        Level 9
+        .bCcDd
+        .B.LeE
+        aA.lfG
+        hIiifg
+        h.j.FK
+        h.J..k
+        """,
+        """
+        Level 10
+        Bbc.dD
+        eEC..F
+        GaA..f
+        ghhH.f
+        g..IjJ
+        Kk.ilL
         """,
         """
         Level ? Easy
