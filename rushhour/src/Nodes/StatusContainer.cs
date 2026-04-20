@@ -4,7 +4,7 @@ using Godot;
 using rushhour.src.Model;
 using System;
 
-public partial class StatusContainer : GridContainer
+public partial class StatusContainer : VBoxContainer
 {
     public static StatusContainer Instance {get; private set;} = null!;
     public StatusContainer() {
@@ -23,7 +23,7 @@ public partial class StatusContainer : GridContainer
     
     // Called when the node enters the scene tree for the first time.
 
-    public void SetStatusLabel(SolverStatus? status) {
+    public void SetStatusLabel(SolverStatus? status, int? stepCount = null) {
         switch (status) {
             case null:
                 SolverStatusLabel.Text = "Solver status: -";
@@ -32,7 +32,11 @@ public partial class StatusContainer : GridContainer
                 SolverStatusLabel.Text = "Solver status: Initiated";
                 break;
             case SolverStatus.Running:
-                SolverStatusLabel.Text = "Solver status: Running";
+                if (stepCount == 0) {
+                    SolverStatusLabel.Text = "Solver status: Initiated";
+                } else {
+                    SolverStatusLabel.Text = "Solver status: Running";
+                }
                 break;
             case SolverStatus.Solved:
                 SolverStatusLabel.Text = "Solver status: Solved";
@@ -42,6 +46,15 @@ public partial class StatusContainer : GridContainer
                 break;
             case SolverStatus.Terminated:
                 SolverStatusLabel.Text = "Solver status: Stuck in dead end";
+                break;
+            case SolverStatus.Discovering:
+                SolverStatusLabel.Text = "Discover status: Discovering states";
+                break;
+            case SolverStatus.DiscoverEndAllFound:
+                SolverStatusLabel.Text = "Discover status: All states discovered";
+                break;
+            case SolverStatus.DiscoverEndLimitReached:
+                SolverStatusLabel.Text = "Discover status: State limit reached";
                 break;
         }
     }

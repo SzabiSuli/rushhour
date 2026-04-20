@@ -3,7 +3,6 @@ namespace rushhour.src.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Godot;
 
 public abstract class Solver {
     private SolverStatus _status = SolverStatus.NotStarted;
@@ -13,7 +12,9 @@ public abstract class Solver {
             _status = value;
             if (   _status == SolverStatus.Solved 
                 || _status == SolverStatus.NoSolution 
-                || _status == SolverStatus.Terminated) {
+                || _status == SolverStatus.Terminated
+                || _status == SolverStatus.DiscoverEndAllFound 
+                || _status == SolverStatus.DiscoverEndLimitReached) {
                 OnTerminated();
             }
         } 
@@ -21,7 +22,7 @@ public abstract class Solver {
     protected Random rand = new Random();
     protected float randomFactor;
     private RHGameState? _current;
-    public int StepCount {get; private set;} = 0;
+    public int StepCount {get; protected set;} = 0;
     protected RHGameState? _solvedStateFound;
 
     // TODO these shouldn't create vertices directly, 
@@ -71,12 +72,10 @@ public abstract class Solver {
     }
 
     // TODO might not need to return anything
-    public bool Extend(RHGameState state) {
+    public virtual bool Extend(RHGameState state) {
         OnNewCurrent(state);
 
         if (state.IsSolved()) {
-            GD.Print("Found Solution!");
-            state.PrintState();
             _solvedStateFound = state;
             Status = SolverStatus.Solved;
             return true;
@@ -89,7 +88,7 @@ public abstract class Solver {
         _skipNewCurrent = true;
         for (int i = 0; i < stepCount - 1; i++) {
             Step();
-            if (Status != SolverStatus.Running) {
+            if (Status != SolverStatus.Running && Status != SolverStatus.Discovering) {
                 // quit the function if the solver terminated
                 _skipNewCurrent = false;
                 return;
@@ -245,14 +244,14 @@ public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
 
 // TODO make A and A* searches?
 public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
-    private PriorityQueue<StateMove, float> OpenStates { get; } = new ();
+    protected PriorityQueue<StateMove, float> OpenStates { get; } = new ();
 
-    struct DiscoveredState {
+    protected struct DiscoveredState {
         public int depth;
         public StateMove? moveFromParent;
     }
 
-    private Dictionary<RHGameState, DiscoveredState> DiscoveredStates = new();
+    protected Dictionary<RHGameState, DiscoveredState> DiscoveredStates = new();
 
     public override void Start(RHGameState initial) {
         base.Start(initial);
@@ -293,7 +292,7 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
         }
     }
 
-    public float EvalWithDepth(RHGameState state, int depth) {
+    public virtual float EvalWithDepth(RHGameState state, int depth) {
         // balanced search:
         // f = g + h
         return depth + Evaluate(state);
@@ -323,6 +322,53 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
         return solutionPath;
     }
 }
+
+public abstract class Discoverer : AcGraphSolver {
+    private int maxSteps;
+    public Discoverer(MonotoneHeuristic h, int maxStates) : base(h, 0) {
+        maxSteps = maxStates; 
+    }
+
+    public override void Start(RHGameState initial) {
+        Status = SolverStatus.Discovering;
+        Extend(initial);
+        DiscoveredStates.Add(initial, new DiscoveredState{depth = 0, moveFromParent = null});
+        AddOpenStates(initial);
+    }
+
+    public override bool Extend(RHGameState state) {
+        // TODO Maybe or not use this 
+        OnNewCurrent(state);
+        return false;
+    }
+
+    public override void Step() { 
+        StepCount++;
+        if(!OpenStates.TryDequeue(out StateMove? bestMove, out float p)) {
+            Status = SolverStatus.DiscoverEndAllFound;
+            return;
+        }
+
+        OnNewEdge(bestMove);
+
+        RHGameState extended = bestMove.To;
+
+        // We never check if the state is solved
+        Extend(extended);
+
+        if (StepCount >= maxSteps) {
+            Status = SolverStatus.DiscoverEndLimitReached;
+            return;
+        }
+
+        AddOpenStates(extended);
+    }
+}
+
+public class BFSDiscoverer(int maxStates) : Discoverer (new NullHeuristic(), maxStates) {}
+public class DFSDiscoverer(int maxStates) : Discoverer (new NullHeuristic(), maxStates) {
+    public override float EvalWithDepth(RHGameState state, int depth) => -depth;
+} 
 
 public struct PathChangeArgs {
     public bool onPath;

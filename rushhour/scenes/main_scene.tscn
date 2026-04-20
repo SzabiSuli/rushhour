@@ -96,6 +96,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 split_offsets = PackedInt32Array(-392)
+dragging_enabled = false
 split_offset = -392
 
 [node name="3DPanel" type="Control" parent="HSplitContainer" unique_id=1775059871]
@@ -163,7 +164,7 @@ size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0fll")
 
 [node name="TextureRect" type="TextureRect" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove1/PanelContainer" unique_id=76783720]
-custom_minimum_size = Vector2(48, 32)
+custom_minimum_size = Vector2(60, 40)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
@@ -322,27 +323,98 @@ horizontal_scroll_mode = 0
 metadata/_tab_index = 0
 metadata/_tab_name = "Levels"
 
-[node name="LevelsGrid" type="GridContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/LevelsTab" unique_id=520347428]
+[node name="LevelsVBoxC" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/LevelsTab" unique_id=729682087]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/LevelsTab/LevelsVBoxC" unique_id=436623034]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Select a level to begin"
+horizontal_alignment = 1
+
+[node name="LevelsGrid" type="GridContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/LevelsTab/LevelsVBoxC" unique_id=520347428]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 2
 script = ExtResource("7_c16ls")
 
-[node name="SolverSettingsTab" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont" unique_id=1118978242 node_paths=PackedStringArray("algoOption", "tabuSizeSpin", "heuristicOption", "randomBox", "applyButton")]
+[node name="SolverSettingsTab" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont" unique_id=1118978242 node_paths=PackedStringArray("algoOption", "tabuSizeSpin", "heuristicOption", "randomBox", "applyButton", "searchCountBox", "unlimitedSearchButton", "bfsSearchButton", "dfsSearchButton")]
 visible = false
 layout_mode = 2
 script = ExtResource("10_6wevv")
 algoOption = NodePath("AlgoOption")
-tabuSizeSpin = NodePath("TabuSize")
-heuristicOption = NodePath("HeuristicOption")
+tabuSizeSpin = NodePath("TabuCont/TabuSize")
+heuristicOption = NodePath("HBoxContainer/HeuristicOption")
 randomBox = NodePath("RandomBox")
 applyButton = NodePath("ApplySolver")
+searchCountBox = NodePath("TabuCont2/MaxStatesSpinBox")
+unlimitedSearchButton = NodePath("TabuCont2/UnlimitedSearchCheckButton")
+bfsSearchButton = NodePath("Search Button Container/BfsSearchButton")
+dfsSearchButton = NodePath("Search Button Container/DfsSearchButton")
 metadata/_tab_index = 1
 metadata/_tab_name = "Solver algorithm settings"
 
+[node name="Label2" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1931427458]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "Discover states"
+
+[node name="TabuCont2" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1068782563]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="MaxStatesLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont2" unique_id=998352504]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Max states to discover:"
+
+[node name="MaxStatesSpinBox" type="SpinBox" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont2" unique_id=1654292231]
+layout_mode = 2
+size_flags_horizontal = 0
+min_value = 1.0
+max_value = 100000.0
+value = 1000.0
+rounded = true
+
+[node name="UnlimitedSearchCheckButton" type="CheckButton" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont2" unique_id=745453368]
+layout_mode = 2
+
+[node name="UnlimitedLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont2" unique_id=1254223597]
+layout_mode = 2
+text = "Unlimited"
+
+[node name="Search Button Container" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=171747895]
+layout_mode = 2
+
+[node name="BfsSearchButton" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/Search Button Container" unique_id=928790395]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+disabled = true
+text = "Discover with BFS"
+
+[node name="DfsSearchButton" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/Search Button Container" unique_id=577719028]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+disabled = true
+text = "Discover with DFS"
+
+[node name="HSeparator" type="HSeparator" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1500840543]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1082731639]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "Select Solver settings"
+
 [node name="AlgoOption" type="OptionButton" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1753465646]
 layout_mode = 2
+theme_override_font_sizes/font_size = 28
 selected = 0
 item_count = 3
 popup/item_0/text = "Tabu algorithm"
@@ -352,13 +424,34 @@ popup/item_1/id = 1
 popup/item_2/text = "Graph search (Ac) algorithm"
 popup/item_2/id = 2
 
-[node name="TabuSize" type="SpinBox" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=841800583]
+[node name="TabuCont" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=597833565]
 layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont" unique_id=683771613]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Tabu size: "
+
+[node name="TabuSize" type="SpinBox" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont" unique_id=841800583]
+layout_mode = 2
+size_flags_horizontal = 0
+value = 1.0
 rounded = true
 
-[node name="HeuristicOption" type="OptionButton" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1479166621]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=883989609]
 layout_mode = 2
-selected = 0
+
+[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/HBoxContainer" unique_id=57921274]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 22
+text = "Heuristic:  "
+
+[node name="HeuristicOption" type="OptionButton" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/HBoxContainer" unique_id=1479166621]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 3
 item_count = 4
 popup/item_0/text = "Non-informative heuristic"
 popup/item_0/id = 0
@@ -377,6 +470,7 @@ autowrap_mode = 3
 
 [node name="ApplySolver" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1838076237]
 layout_mode = 2
+theme_override_font_sizes/font_size = 26
 text = "Apply solver algorithm"
 
 [node name="GameBoardTab" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont" unique_id=1575641859]
@@ -591,7 +685,7 @@ stretch = true
 [node name="BoardSubViewport" type="SubViewport" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AspectRatioContainer/BoardSubViewContainer" unique_id=536987835]
 handle_input_locally = false
 physics_object_picking = true
-size = Vector2i(192, 192)
+size = Vector2i(416, 416)
 render_target_update_mode = 0
 
 [node name="MainGameBoard" type="Sprite2D" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport" unique_id=851370481 node_paths=PackedStringArray("manualButton", "algoButton", "followAlgoButton")]
@@ -604,10 +698,9 @@ manualButton = NodePath("../../../../MarginContainer/ButtonContainer/ManualButto
 algoButton = NodePath("../../../../MarginContainer/ButtonContainer/AlgoButton")
 followAlgoButton = NodePath("../../../../FollowContainer/FollowAlgoButton")
 
-[node name="StatusContainer" type="GridContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=103907419]
+[node name="StatusContainer" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=515878272]
 layout_mode = 2
 size_flags_vertical = 10
-columns = 2
 script = ExtResource("14_bcnxi")
 
 [node name="SolverStatusLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=283641232]

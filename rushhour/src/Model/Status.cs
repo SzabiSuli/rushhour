@@ -5,5 +5,8 @@ public enum SolverStatus {
     Running,
     Solved,
     NoSolution,
-    Terminated
+    Terminated,
+    Discovering,
+    DiscoverEndAllFound,
+    DiscoverEndLimitReached
 }

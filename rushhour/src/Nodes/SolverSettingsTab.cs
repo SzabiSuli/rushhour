@@ -10,12 +10,24 @@ public partial class SolverSettingsTab : VBoxContainer {
     [Export] public OptionButton heuristicOption = null!;
     [Export] public CheckBox randomBox = null!;
     [Export] public Button applyButton = null!;
+    [Export] public SpinBox searchCountBox = null!;
+    [Export] public CheckButton unlimitedSearchButton = null!;
+    [Export] public Button bfsSearchButton = null!;
+    [Export] public Button dfsSearchButton = null!;
 
     
     private int _heuristicSelected;
     private float _randomFactor;
     private int _algoOptionSelected;
     private int _tabuSize;
+    public int maxStatesToDiscover {get {
+            if (unlimitedSearchButton.ButtonPressed) {
+                return int.MaxValue;
+            } else {
+                return (int)searchCountBox.Value;
+            }
+        }
+    }
 
     public TabCont TabCont => GetParent<TabCont>();
 
@@ -33,8 +45,25 @@ public partial class SolverSettingsTab : VBoxContainer {
     public override void _Ready() {
         algoOption.ItemSelected += OnAlgoOptionChanged;
         applyButton.Pressed += OnApplyButtonPressed;
-        
+        unlimitedSearchButton.Toggled += OnUnlimitedSearchButtonToggled;
+        bfsSearchButton.Pressed += StartBfsSearcher;
+        dfsSearchButton.Pressed += StartDfsSearcher;
+
         ApplySettings();
+    }
+
+    public void OnUnlimitedSearchButtonToggled(bool on) => searchCountBox.Editable = !on;
+    public void StartBfsSearcher() {
+        // assume a level is loaded
+        AlgoPlayer.Instance.ResetSolver(new BFSDiscoverer(maxStatesToDiscover), true);
+        Slider s = AlgoPlayer.Instance.slider;
+        s.Value = s.MaxValue - 1; 
+    }
+    public void StartDfsSearcher() {
+        // assume a level is loaded
+        AlgoPlayer.Instance.ResetSolver(new DFSDiscoverer(maxStatesToDiscover), true);
+        Slider s = AlgoPlayer.Instance.slider;
+        s.Value = s.MaxValue - 1; 
     }
 
     public void ApplySettings() {
@@ -52,12 +81,11 @@ public partial class SolverSettingsTab : VBoxContainer {
             TabCont.CurrentTab = 0;
         } else {
             AlgoPlayer.Instance.ResetSolver();
-            TabCont.CurrentTab = 2;
         }
     }
 
     public void OnAlgoOptionChanged(long index) {
-        tabuSizeSpin.Visible = index == 0;
+        tabuSizeSpin.GetParent<HBoxContainer>().Visible = index == 0;
     }
 
     public Solver GetSolver() {
