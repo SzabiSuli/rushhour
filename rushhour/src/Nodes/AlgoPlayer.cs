@@ -113,6 +113,7 @@ public partial class AlgoPlayer : VBoxContainer {
     public void UnSubFromSolver() {
         solver.NewEdge -= Edge.OnNewEdge;
         solver.PathChange -= Edge.OnPathChange;
+        solver.PathChange -= Vertex.OnPathChange;
         solver.NewCurrent -= Vertex.OnNewCurrent;
         solver.NewCurrent -= MainGameBoard.Instance.OnNewAlgoCurrent;
         solver.NewCurrent -= OnNewCurrent;
