@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://donc33jgavrvr" path="res://src/Nodes/PlayPauseB.cs" id="6_r6p65"]
 [ext_resource type="Texture2D" uid="uid://dcm4fg48tmab5" path="res://assets/m1.png" id="6_xdqt8"]
 [ext_resource type="Texture2D" uid="uid://s8s7gki1bpm2" path="res://assets/restart.svg" id="7_4w45t"]
+[ext_resource type="Texture2D" uid="uid://164qj8ducqtj" path="res://assets/scroll_wheel.png" id="7_adb74"]
 [ext_resource type="Script" uid="uid://b8vvp53qo65cv" path="res://src/Nodes/LevelsGrid.cs" id="7_c16ls"]
 [ext_resource type="Texture2D" uid="uid://dqyunwoflvk0x" path="res://assets/pause.svg" id="7_si52b"]
 [ext_resource type="Script" uid="uid://bfpbdcwwoasu2" path="res://src/Nodes/SolverSettingsTab.cs" id="10_6wevv"]
@@ -215,6 +216,27 @@ flip_h = true
 [node name="Label" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove2" unique_id=1845401090]
 layout_mode = 2
 text = "Rotate graph"
+
+[node name="LegendLineMove4" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=1392945605]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove4" unique_id=2093914690]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0fll")
+
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove4/PanelContainer" unique_id=235529025]
+custom_minimum_size = Vector2(24, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = ExtResource("7_adb74")
+expand_mode = 1
+flip_h = true
+
+[node name="Label" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove4" unique_id=1375567034]
+layout_mode = 2
+text = "Zoom in/out"
 
 [node name="HSeparator" type="HSeparator" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=1828631972]
 layout_mode = 2
