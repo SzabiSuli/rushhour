@@ -1,0 +1,45 @@
+1. Bevezetés
+
+2. Felhasználói leírás
+	lásd https://www.inf.elte.hu/content/programtervezo-informatikus-bsc-szakdolgozat-tudnivalok.t.1138?m=192
+	(Bírálat szempontrendszere)
+  ​​​2. Felhasználói dokumentáció, mely tartalmazza
+
+    a megoldott probléma rövid megfogalmazását,
+
+    A probléma két fő részből tevődik össze:
+        - A Keresőalgoritmusok implementálása az adott problémára
+        - A Keresőalgoritmus során felfedezett állapotok és lépések megjelenítése, és azok struktúrális elrendezése, hogy elhelyezkedésük reflektálja a viszonyait a csúcsokkal. TODO
+
+
+
+
+    a felhasznált módszerek rövid leírását,
+    a program használatához szükséges összes információt.
+        A program futtatásához 
+
+
+3. Fejlesztői leírás
+  3.1. Elemzés
+    3.1.1. Feladat leírás
+    3.1.2. Funkcionális leírás
+	user story
+	usecase diagram
+    3.1.3. Nem-funkcionális leírás
+  3.2. Tervezés
+    3.2.1. Szoftver architektúra
+    3.2.2. Modell
+	osztály diagram
+	osztályok
+    3.2.3. Nézet
+    3.2.4. Adatbázis
+    3.2.5. -- speciális elemek, pl. MI --
+  3.3. Megvalósítás
+    3.3.1. Felhasznált technológiák
+    3.3.2. Esetleges eltérések a tervtől
+    3.3.3. ... 
+  3.4. Tesztelés
+    3.4.1. Egység tesztek
+    3.4.2. Végfelhasználói tesztesetek
+	user story táblázat alapján generált táblázat
+4. Irodalom jegyzék
