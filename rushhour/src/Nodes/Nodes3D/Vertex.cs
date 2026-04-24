@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using rushhour.src.Model;
+using rushhour.src.Nodes.UI;
 
 public partial class Vertex : RigidBody3D
 {
@@ -17,7 +18,7 @@ public partial class Vertex : RigidBody3D
 
     public readonly Vector3 negMaxVelocity = Vector3.One * (-100);
     public RHGameState GameState { get; set; } = null!;
-    public const String scenePath = "res://scenes/vertex.tscn";
+    public const String scenePath = "res://scenes/graph/vertex.tscn";
     public static PackedScene Creator {get;} = ResourceLoader.Load<PackedScene>(scenePath);
     public static Dictionary<RHGameState, Vertex> Dict { get; } = new();
 
@@ -155,7 +156,7 @@ public partial class Vertex : RigidBody3D
     public override void _Ready() {
         this.InputEvent += OnInputEvent;
 
-        if (MainScene.debug) {
+        if (OS.IsDebugBuild()) {
             SleepingStateChanged += OnSleepingStateChanged;
         }
 

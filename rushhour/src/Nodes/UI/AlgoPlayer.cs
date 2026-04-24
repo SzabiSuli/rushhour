@@ -1,5 +1,4 @@
-namespace rushhour.src.Nodes;
-
+namespace rushhour.src.Nodes.UI;
 
 using System;
 using System.Linq;
@@ -22,7 +21,7 @@ public partial class AlgoPlayer : VBoxContainer {
     public double timeSinceLastStep = 0;
     public bool running = false;
 
-    public Solver solver = null!;
+    public RHSolver solver = null!;
 
     public RHGameState? initialState;
 
@@ -155,7 +154,7 @@ public partial class AlgoPlayer : VBoxContainer {
 
     public void ResetSolver() => ResetSolver(SolverSettingsTab.Instance.GetSolver());
 
-    public void ResetSolver(Solver newSolver, bool startPlaying = false) {
+    public void ResetSolver(RHSolver newSolver, bool startPlaying = false) {
         if (initialState is null) {
             throw new Exception("Can't restart with no level loaded");
         }

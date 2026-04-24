@@ -2,31 +2,42 @@ namespace rushhour.src.Model;
 
 using System;
 
-public abstract class Heuristic{
-    public abstract int Evaluate(RHGameState state);
+public abstract class Heuristic<TState>{
+    public abstract int Evaluate(TState state);
 }
 
 
-public abstract class NonNegiativeHeuristic : Heuristic {}
-public abstract class AdmissibleHeuristic : NonNegiativeHeuristic {} 
-public abstract class MonotoneHeuristic : AdmissibleHeuristic {}
+public abstract class NonNegiativeHeuristic<TState> : Heuristic<TState> {}
+public abstract class AdmissibleHeuristic<TState> : NonNegiativeHeuristic<TState> {} 
+public abstract class MonotoneHeuristic<TState> : AdmissibleHeuristic<TState> {}
 
 
-public class NullHeuristic : MonotoneHeuristic {
+public class NullHeuristic : MonotoneHeuristic<RHGameState> {
     public override int Evaluate(RHGameState _) => 0;
 }
 
-public class DistanceHeuristic : MonotoneHeuristic {
+public class DistanceHeuristic : MonotoneHeuristic<RHGameState> {
     public override int Evaluate(RHGameState state) {
+        // Assume the main car is facing right
+        if (state.PlacedPieces[0].Position.Y != state.ExitPosition.Y) {
+            return int.MaxValue;
+        }
+
         return 5 - state.PlacedPieces[0].Position.X;
     }
 }
 
-public class FreeSpacesHeuristic : MonotoneHeuristic {
-    // Adds distance of the main car and
-    // how many cars are in its way
+public class FreeSpacesHeuristic : MonotoneHeuristic<RHGameState> {
     
     public override int Evaluate(RHGameState state) {
+        // Assume the main car is facing right
+    
+        if (state.PlacedPieces[0].Position.Y != state.ExitPosition.Y) {
+            return int.MaxValue;
+        }
+
+        // Adds distance of the main car and
+        // how many cars are in its way
         int distance = 5 - state.PlacedPieces[0].Position.X;
         int blocks = 0;
 
@@ -40,10 +51,15 @@ public class FreeSpacesHeuristic : MonotoneHeuristic {
     }
 }
 
-public class MoverHeuristic : MonotoneHeuristic {
-    // Adds distance of the main car and
-    // how many moves it takes at least to push out each car of its way
+public class MoverHeuristic : MonotoneHeuristic<RHGameState> {
     public override int Evaluate(RHGameState state) {
+        // Assume the main car is facing right
+        if (state.PlacedPieces[0].Position.Y != state.ExitPosition.Y) {
+            return int.MaxValue;
+        }
+
+        // Adds distance of the main car and
+        // how many moves it takes at least to push out each car of its way
         int distance = 5 - state.PlacedPieces[0].Position.X;
         int moves = 0;
 

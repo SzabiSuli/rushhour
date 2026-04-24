@@ -1,0 +1,248 @@
+[gd_scene format=3 uid="uid://di7oxg16i851v"]
+
+[ext_resource type="Texture2D" uid="uid://c6rptcsiapkhr" path="res://assets/wasd.png" id="1_bx2gm"]
+[ext_resource type="Texture2D" uid="uid://dcm4fg48tmab5" path="res://assets/m1.png" id="2_8q157"]
+[ext_resource type="Texture2D" uid="uid://164qj8ducqtj" path="res://assets/scroll_wheel.png" id="3_i8ucc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u0fll"]
+bg_color = Color(0.11858138, 0.11858138, 0.11858138, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7nt27"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6f3i"]
+bg_color = Color(1, 1, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xdqt8"]
+bg_color = Color(0, 1, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adb74"]
+bg_color = Color(0.25490198, 0.4117647, 0.88235295, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_58gk3"]
+bg_color = Color(1, 0.64705884, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_to7gp"]
+bg_color = Color(1, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[node name="LegendPanelContainer" type="PanelContainer" unique_id=274209587]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -170.0
+offset_right = 361.0
+grow_vertical = 0
+
+[node name="LegendMargin" type="MarginContainer" parent="." unique_id=30097535]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="LegendHbox" type="VBoxContainer" parent="LegendMargin" unique_id=1283694441]
+layout_mode = 2
+
+[node name="ControlsLabel" type="Label" parent="LegendMargin/LegendHbox" unique_id=661679275]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "Controls"
+
+[node name="LegendLineMove1" type="HBoxContainer" parent="LegendMargin/LegendHbox" unique_id=1922762799]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="LegendMargin/LegendHbox/LegendLineMove1" unique_id=1952380941]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0fll")
+
+[node name="TextureRect" type="TextureRect" parent="LegendMargin/LegendHbox/LegendLineMove1/PanelContainer" unique_id=223797916]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = ExtResource("1_bx2gm")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="LegendMargin/LegendHbox/LegendLineMove1" unique_id=1680455020]
+layout_mode = 2
+text = "Move graph around"
+
+[node name="LegendLineMove3" type="HBoxContainer" parent="LegendMargin/LegendHbox" unique_id=936834297]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="LegendMargin/LegendHbox/LegendLineMove3" unique_id=771707314]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0fll")
+
+[node name="TextureRect" type="TextureRect" parent="LegendMargin/LegendHbox/LegendLineMove3/PanelContainer" unique_id=1446968001]
+custom_minimum_size = Vector2(24, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = ExtResource("2_8q157")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="LegendMargin/LegendHbox/LegendLineMove3" unique_id=1799164467]
+layout_mode = 2
+text = "Select a vertex and show it's state"
+
+[node name="LegendLineMove2" type="HBoxContainer" parent="LegendMargin/LegendHbox" unique_id=1718905959]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="LegendMargin/LegendHbox/LegendLineMove2" unique_id=192267204]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0fll")
+
+[node name="TextureRect" type="TextureRect" parent="LegendMargin/LegendHbox/LegendLineMove2/PanelContainer" unique_id=1468689206]
+custom_minimum_size = Vector2(24, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = ExtResource("2_8q157")
+expand_mode = 1
+flip_h = true
+
+[node name="Label" type="Label" parent="LegendMargin/LegendHbox/LegendLineMove2" unique_id=741841468]
+layout_mode = 2
+text = "Rotate graph"
+
+[node name="LegendLineMove4" type="HBoxContainer" parent="LegendMargin/LegendHbox" unique_id=1725678472]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="LegendMargin/LegendHbox/LegendLineMove4" unique_id=1859703343]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0fll")
+
+[node name="TextureRect" type="TextureRect" parent="LegendMargin/LegendHbox/LegendLineMove4/PanelContainer" unique_id=272491317]
+custom_minimum_size = Vector2(24, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = ExtResource("3_i8ucc")
+expand_mode = 1
+flip_h = true
+
+[node name="Label" type="Label" parent="LegendMargin/LegendHbox/LegendLineMove4" unique_id=103234605]
+layout_mode = 2
+text = "Zoom in/out"
+
+[node name="HSeparator" type="HSeparator" parent="LegendMargin/LegendHbox" unique_id=1659240172]
+layout_mode = 2
+
+[node name="LegendTopLabel" type="Label" parent="LegendMargin/LegendHbox" unique_id=465932121]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "Vertex, edge colors legend"
+
+[node name="LegendLine1" type="HBoxContainer" parent="LegendMargin/LegendHbox" unique_id=1797554357]
+layout_mode = 2
+
+[node name="ColorBox" type="PanelContainer" parent="LegendMargin/LegendHbox/LegendLine1" unique_id=2031055982]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7nt27")
+
+[node name="LegendLabel" type="Label" parent="LegendMargin/LegendHbox/LegendLine1" unique_id=196447595]
+layout_mode = 2
+text = "Normal state/move"
+
+[node name="LegendLine2" type="HBoxContainer" parent="LegendMargin/LegendHbox" unique_id=1067600395]
+layout_mode = 2
+
+[node name="ColorBox" type="PanelContainer" parent="LegendMargin/LegendHbox/LegendLine2" unique_id=852744566]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_k6f3i")
+
+[node name="LegendLabel" type="Label" parent="LegendMargin/LegendHbox/LegendLine2" unique_id=179108587]
+layout_mode = 2
+text = "State/move tracked by algorithm"
+
+[node name="LegendLine3" type="HBoxContainer" parent="LegendMargin/LegendHbox" unique_id=1682411942]
+layout_mode = 2
+
+[node name="ColorBox" type="PanelContainer" parent="LegendMargin/LegendHbox/LegendLine3" unique_id=549427708]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xdqt8")
+
+[node name="LegendLabel" type="Label" parent="LegendMargin/LegendHbox/LegendLine3" unique_id=1199210273]
+layout_mode = 2
+text = "Solved state/move part of found solution"
+
+[node name="LegendLine4" type="HBoxContainer" parent="LegendMargin/LegendHbox" unique_id=816795857]
+layout_mode = 2
+
+[node name="ColorBox" type="PanelContainer" parent="LegendMargin/LegendHbox/LegendLine4" unique_id=1361829842]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_adb74")
+
+[node name="LegendLabel" type="Label" parent="LegendMargin/LegendHbox/LegendLine4" unique_id=1888903490]
+layout_mode = 2
+text = "Initial state of puzzle"
+
+[node name="LegendLine5" type="HBoxContainer" parent="LegendMargin/LegendHbox" unique_id=1188451004]
+layout_mode = 2
+
+[node name="ColorBox" type="PanelContainer" parent="LegendMargin/LegendHbox/LegendLine5" unique_id=1869913089]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_58gk3")
+
+[node name="LegendLabel" type="Label" parent="LegendMargin/LegendHbox/LegendLine5" unique_id=1694608610]
+layout_mode = 2
+text = "Actual state of the algorithm"
+
+[node name="LegendLine6" type="HBoxContainer" parent="LegendMargin/LegendHbox" unique_id=529934868]
+layout_mode = 2
+
+[node name="ColorBox" type="PanelContainer" parent="LegendMargin/LegendHbox/LegendLine6" unique_id=1503021268]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_to7gp")
+
+[node name="LegendLabel" type="Label" parent="LegendMargin/LegendHbox/LegendLine6" unique_id=1096861742]
+layout_mode = 2
+text = "Actual state moved manually"

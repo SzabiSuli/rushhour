@@ -1,9 +1,10 @@
-namespace rushhour.src.Nodes;
+namespace rushhour.src.Nodes.UI;
+
 
 using System;
 using Godot;
 
-public partial class PlayPauseB : Button
+public partial class PlayPauseButton : Button
 {
 
     [Export] CompressedTexture2D playIcon = null!;

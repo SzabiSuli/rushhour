@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://qa0rwlpsm13u"]
 
-[ext_resource type="Script" uid="uid://dubajcrucl7v1" path="res://src/Nodes/LoadLevelButton.cs" id="1_kn3cl"]
-[ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="1_qgtpk"]
-[ext_resource type="Script" uid="uid://cexthht87gg41" path="res://src/Nodes/Board/GameBoard.cs" id="1_xvbj6"]
+[ext_resource type="Script" uid="uid://dubajcrucl7v1" path="res://src/Nodes/UI/LoadLevelButton.cs" id="1_hj7d7"]
+[ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="2_acgw5"]
+[ext_resource type="Script" uid="uid://cexthht87gg41" path="res://src/Nodes/Board/GameBoard.cs" id="3_wr2yp"]
 
 [node name="LoadLevelContainer" type="PanelContainer" unique_id=542511165 node_paths=PackedStringArray("button", "gameBoard", "label")]
 offset_right = 196.0
 offset_bottom = 223.0
-script = ExtResource("1_kn3cl")
+script = ExtResource("1_hj7d7")
 button = NodePath("Button")
 gameBoard = NodePath("VBoxContainer/SubViewportContainer/SubViewport/GameBoard")
 label = NodePath("VBoxContainer/LevelString")
@@ -25,11 +25,11 @@ size = Vector2i(196, 196)
 render_target_update_mode = 4
 
 [node name="GameBoard" type="Sprite2D" parent="VBoxContainer/SubViewportContainer/SubViewport" unique_id=165836224]
-texture = ExtResource("1_qgtpk")
+texture = ExtResource("2_acgw5")
 centered = false
 region_enabled = true
 region_rect = Rect2(48, 0, 192, 192)
-script = ExtResource("1_xvbj6")
+script = ExtResource("3_wr2yp")
 
 [node name="LevelString" type="Label" parent="VBoxContainer" unique_id=1609862946]
 layout_mode = 2

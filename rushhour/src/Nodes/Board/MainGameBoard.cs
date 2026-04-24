@@ -1,11 +1,11 @@
 namespace rushhour.src.Nodes.Board;
 
 using System;
-using System.Data.Common;
 using System.Linq;
 using Godot;
 using rushhour.src.Model;
 using rushhour.src.Nodes.Nodes3D;
+using rushhour.src.Nodes.UI;
 
 public partial class MainGameBoard : GameBoard
 {

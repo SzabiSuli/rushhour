@@ -1,4 +1,5 @@
-namespace rushhour.src.Nodes;
+namespace rushhour.src.Nodes.UI;
+
 
 using System;
 using Godot;
@@ -8,7 +9,7 @@ using rushhour.src.Model;
 public partial class LevelsGrid : GridContainer
 {
 
-    public const String levelButtonScenePath = "res://scenes/load_level_button.tscn";
+    public const String levelButtonScenePath = "res://scenes/ui/tabs/load_level_button.tscn";
 
 
     public static PackedScene LevelButtonCreator { get; } = 

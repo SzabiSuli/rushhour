@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://uiqnby3t6sso"]
+
+[ext_resource type="Script" uid="uid://b8vvp53qo65cv" path="res://src/Nodes/UI/LevelsGrid.cs" id="1_i6pn6"]
+
+[node name="LevelsTab" type="ScrollContainer" unique_id=1423987321]
+horizontal_scroll_mode = 0
+metadata/_tab_index = 0
+metadata/_tab_name = "Levels"
+
+[node name="LevelsVBoxC" type="VBoxContainer" parent="." unique_id=1902752923]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="LevelsVBoxC" unique_id=19271577]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Select a level to begin"
+horizontal_alignment = 1
+
+[node name="LevelsGrid" type="GridContainer" parent="LevelsVBoxC" unique_id=303155202]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+script = ExtResource("1_i6pn6")

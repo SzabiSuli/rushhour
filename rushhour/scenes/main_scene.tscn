@@ -1,83 +1,19 @@
 [gd_scene format=3 uid="uid://cdjjjlp5rpgc3"]
 
-[ext_resource type="Script" uid="uid://x4magystxd2i" path="res://src/Nodes/MainScene.cs" id="1_w2twt"]
 [ext_resource type="Script" uid="uid://bvew5r8aeo2te" path="res://src/Nodes/Nodes3D/GraphScene.cs" id="2_18nlu"]
 [ext_resource type="Script" uid="uid://bkqpls8s2agia" path="res://src/Nodes/Nodes3D/Camera3d.cs" id="2_pw63i"]
-[ext_resource type="StyleBox" uid="uid://5jsi7mxxo17c" path="res://scenes/selected_button.tres" id="3_gubc5"]
-[ext_resource type="ButtonGroup" uid="uid://hw2xrwwg5ixa" path="res://scenes/board_mode_button_group.tres" id="3_pu3yx"]
 [ext_resource type="Script" uid="uid://dfdyyf2top3sj" path="res://src/Nodes/Nodes3D/Processor.cs" id="4_01n6w"]
-[ext_resource type="Script" uid="uid://34xeanpy8klb" path="res://src/Nodes/AlgoPlayer.cs" id="4_c1pb6"]
-[ext_resource type="Script" uid="uid://y81v2bpvndyk" path="res://src/Nodes/TabCont.cs" id="5_6u1mn"]
-[ext_resource type="Script" uid="uid://bccrutn7gpw3f" path="res://src/Nodes/Board/MainGameBoard.cs" id="5_gubc5"]
-[ext_resource type="Texture2D" uid="uid://c6rptcsiapkhr" path="res://assets/wasd.png" id="5_k6f3i"]
-[ext_resource type="Texture2D" uid="uid://clc0oftordjci" path="res://assets/play.svg" id="5_mngbo"]
-[ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="5_rt2n2"]
-[ext_resource type="Texture2D" uid="uid://ba6rbns1pytu2" path="res://assets/step.svg" id="6_4w45t"]
-[ext_resource type="Script" uid="uid://donc33jgavrvr" path="res://src/Nodes/PlayPauseB.cs" id="6_r6p65"]
-[ext_resource type="Texture2D" uid="uid://dcm4fg48tmab5" path="res://assets/m1.png" id="6_xdqt8"]
-[ext_resource type="Texture2D" uid="uid://s8s7gki1bpm2" path="res://assets/restart.svg" id="7_4w45t"]
-[ext_resource type="Texture2D" uid="uid://164qj8ducqtj" path="res://assets/scroll_wheel.png" id="7_adb74"]
-[ext_resource type="Script" uid="uid://b8vvp53qo65cv" path="res://src/Nodes/LevelsGrid.cs" id="7_c16ls"]
-[ext_resource type="Texture2D" uid="uid://dqyunwoflvk0x" path="res://assets/pause.svg" id="7_si52b"]
-[ext_resource type="Script" uid="uid://bfpbdcwwoasu2" path="res://src/Nodes/SolverSettingsTab.cs" id="10_6wevv"]
-[ext_resource type="Script" uid="uid://d15tkkh8kmxml" path="res://src/Nodes/HideButton.cs" id="14_7nt27"]
-[ext_resource type="Script" uid="uid://c20g3raawrb7e" path="res://src/Nodes/StatusContainer.cs" id="14_bcnxi"]
+[ext_resource type="PackedScene" uid="uid://di7oxg16i851v" path="res://scenes/ui/legend_panel_container.tscn" id="4_c1pb6"]
+[ext_resource type="Script" uid="uid://y81v2bpvndyk" path="res://src/Nodes/UI/TabCont.cs" id="5_6u1mn"]
+[ext_resource type="PackedScene" uid="uid://cij7w4pmoahdj" path="res://scenes/ui/status_panel_container.tscn" id="7_e1cbu"]
+[ext_resource type="PackedScene" uid="uid://uiqnby3t6sso" path="res://scenes/ui/tabs/levels_tab.tscn" id="9_e1cbu"]
+[ext_resource type="PackedScene" uid="uid://4afovasuuqay" path="res://scenes/ui/tabs/solver_settings_tab.tscn" id="10_mngbo"]
+[ext_resource type="PackedScene" uid="uid://dtkdep24pwda1" path="res://scenes/ui/tabs/game_board_tab.tscn" id="11_4w45t"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u0fll"]
-bg_color = Color(0.11858138, 0.11858138, 0.11858138, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1cbu"]
+bg_color = Color(0.2509804, 0.2509804, 0.2509804, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7nt27"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6f3i"]
-bg_color = Color(1, 1, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xdqt8"]
-bg_color = Color(0, 1, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adb74"]
-bg_color = Color(0.25490198, 0.4117647, 0.88235295, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_58gk3"]
-bg_color = Color(1, 0.64705884, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_to7gp"]
-bg_color = Color(1, 0, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mngbo"]
 
 [node name="MainScene" type="Control" unique_id=203170334]
 layout_mode = 3
@@ -86,7 +22,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_w2twt")
 metadata/_edit_horizontal_guides_ = [-275.0]
 
 [node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=887258662]
@@ -96,18 +31,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-split_offsets = PackedInt32Array(-392)
+split_offsets = PackedInt32Array(-416)
 dragging_enabled = false
-split_offset = -392
+split_offset = -416
 
 [node name="3DPanel" type="Control" parent="HSplitContainer" unique_id=1775059871]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="3DSubViewContainer" type="SubViewportContainer" parent="HSplitContainer/3DPanel" unique_id=56734458]
-layout_mode = 0
-offset_right = 1492.0
-offset_bottom = 1080.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 stretch = true
 mouse_target = true
@@ -131,615 +69,31 @@ script = ExtResource("2_pw63i")
 process_physics_priority = 2
 script = ExtResource("4_01n6w")
 
-[node name="LegendPanel" type="PanelContainer" parent="HSplitContainer/3DPanel" unique_id=694733356]
+[node name="LegendPanelContainer" parent="HSplitContainer/3DPanel" unique_id=274209587 instance=ExtResource("4_c1pb6")]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -170.0
-offset_right = 361.0
-grow_vertical = 0
+offset_top = -414.0
 
-[node name="LegendMargin" type="MarginContainer" parent="HSplitContainer/3DPanel/LegendPanel" unique_id=1792179547]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+[node name="StatusPanelContainer" parent="HSplitContainer/3DPanel" unique_id=89654311 instance=ExtResource("7_e1cbu")]
+layout_mode = 1
 
-[node name="LegendHbox" type="VBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin" unique_id=78799193]
+[node name="TabCont" type="TabContainer" parent="HSplitContainer" unique_id=2141901880]
 layout_mode = 2
-
-[node name="ControlsLabel" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=1815857611]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 20
-text = "Controls"
-
-[node name="LegendLineMove1" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=713001570]
-layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove1" unique_id=350497966]
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_u0fll")
-
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove1/PanelContainer" unique_id=76783720]
-custom_minimum_size = Vector2(60, 40)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-texture = ExtResource("5_k6f3i")
-expand_mode = 1
-
-[node name="Label" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove1" unique_id=2045048208]
-layout_mode = 2
-text = "Move graph around"
-
-[node name="LegendLineMove3" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=1628815526]
-layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove3" unique_id=1937387648]
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_u0fll")
-
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove3/PanelContainer" unique_id=1371397803]
-custom_minimum_size = Vector2(24, 32)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-texture = ExtResource("6_xdqt8")
-expand_mode = 1
-
-[node name="Label" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove3" unique_id=1148987139]
-layout_mode = 2
-text = "Select a vertex and show it's state"
-
-[node name="LegendLineMove2" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=730537109]
-layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove2" unique_id=2075162592]
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_u0fll")
-
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove2/PanelContainer" unique_id=2128891536]
-custom_minimum_size = Vector2(24, 32)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-texture = ExtResource("6_xdqt8")
-expand_mode = 1
-flip_h = true
-
-[node name="Label" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove2" unique_id=1845401090]
-layout_mode = 2
-text = "Rotate graph"
-
-[node name="LegendLineMove4" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=1392945605]
-layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove4" unique_id=2093914690]
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_u0fll")
-
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove4/PanelContainer" unique_id=235529025]
-custom_minimum_size = Vector2(24, 32)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-texture = ExtResource("7_adb74")
-expand_mode = 1
-flip_h = true
-
-[node name="Label" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLineMove4" unique_id=1375567034]
-layout_mode = 2
-text = "Zoom in/out"
-
-[node name="HSeparator" type="HSeparator" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=1828631972]
-layout_mode = 2
-
-[node name="LegendTopLabel" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=510303211]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 20
-text = "Vertex, edge colors legend"
-
-[node name="LegendLine1" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=819960780]
-layout_mode = 2
-
-[node name="ColorBox" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine1" unique_id=141698889]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_7nt27")
-
-[node name="LegendLabel" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine1" unique_id=545664594]
-layout_mode = 2
-text = "Normal state/move"
-
-[node name="LegendLine2" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=1370303020]
-layout_mode = 2
-
-[node name="ColorBox" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine2" unique_id=1021821254]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_k6f3i")
-
-[node name="LegendLabel" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine2" unique_id=837393068]
-layout_mode = 2
-text = "State/move tracked by algorithm"
-
-[node name="LegendLine3" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=584754023]
-layout_mode = 2
-
-[node name="ColorBox" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine3" unique_id=2141064194]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_xdqt8")
-
-[node name="LegendLabel" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine3" unique_id=1465203845]
-layout_mode = 2
-text = "Solved state/move part of found solution"
-
-[node name="LegendLine4" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=846972297]
-layout_mode = 2
-
-[node name="ColorBox" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine4" unique_id=1054719165]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_adb74")
-
-[node name="LegendLabel" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine4" unique_id=262340754]
-layout_mode = 2
-text = "Initial state of puzzle"
-
-[node name="LegendLine5" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=72928206]
-layout_mode = 2
-
-[node name="ColorBox" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine5" unique_id=740007698]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_58gk3")
-
-[node name="LegendLabel" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine5" unique_id=868184821]
-layout_mode = 2
-text = "Actual state of the algorithm"
-
-[node name="LegendLine6" type="HBoxContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox" unique_id=839070683]
-layout_mode = 2
-
-[node name="ColorBox" type="PanelContainer" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine6" unique_id=1615814387]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_to7gp")
-
-[node name="LegendLabel" type="Label" parent="HSplitContainer/3DPanel/LegendPanel/LegendMargin/LegendHbox/LegendLine6" unique_id=778358542]
-layout_mode = 2
-text = "Actual state moved manually"
-
-[node name="MenuPanelContainer" type="PanelContainer" parent="HSplitContainer" unique_id=716870133]
-custom_minimum_size = Vector2(416, 0)
-layout_mode = 2
-
-[node name="HSeparator" type="VSeparator" parent="HSplitContainer/MenuPanelContainer" unique_id=418677575]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="Background" type="ColorRect" parent="HSplitContainer/MenuPanelContainer" unique_id=1496019322]
-layout_mode = 2
-color = Color(0.50928617, 0.50928617, 0.50928617, 1)
-
-[node name="TabCont" type="TabContainer" parent="HSplitContainer/MenuPanelContainer" unique_id=2141901880]
-layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_e1cbu")
+theme_override_styles/tabbar_background = SubResource("StyleBoxFlat_mngbo")
+tab_alignment = 1
 current_tab = 0
 tab_0/title = "Levels"
 tab_1/title = "Solver algorithm settings"
 tab_2/title = "Game board"
 script = ExtResource("5_6u1mn")
 
-[node name="LevelsTab" type="ScrollContainer" parent="HSplitContainer/MenuPanelContainer/TabCont" unique_id=1204269940]
+[node name="LevelsTab" parent="HSplitContainer/TabCont" unique_id=1423987321 instance=ExtResource("9_e1cbu")]
 layout_mode = 2
-horizontal_scroll_mode = 0
-metadata/_tab_index = 0
-metadata/_tab_name = "Levels"
 
-[node name="LevelsVBoxC" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/LevelsTab" unique_id=729682087]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/LevelsTab/LevelsVBoxC" unique_id=436623034]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Select a level to begin"
-horizontal_alignment = 1
-
-[node name="LevelsGrid" type="GridContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/LevelsTab/LevelsVBoxC" unique_id=520347428]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 2
-script = ExtResource("7_c16ls")
-
-[node name="SolverSettingsTab" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont" unique_id=1118978242 node_paths=PackedStringArray("algoOption", "tabuSizeSpin", "heuristicOption", "randomBox", "applyButton", "searchCountBox", "unlimitedSearchButton", "bfsSearchButton", "dfsSearchButton")]
+[node name="SolverSettingsTab" parent="HSplitContainer/TabCont" unique_id=364222569 instance=ExtResource("10_mngbo")]
 visible = false
 layout_mode = 2
-script = ExtResource("10_6wevv")
-algoOption = NodePath("AlgoOption")
-tabuSizeSpin = NodePath("TabuCont/TabuSize")
-heuristicOption = NodePath("HBoxContainer/HeuristicOption")
-randomBox = NodePath("RandomBox")
-applyButton = NodePath("ApplySolver")
-searchCountBox = NodePath("TabuCont2/MaxStatesSpinBox")
-unlimitedSearchButton = NodePath("TabuCont2/UnlimitedSearchCheckButton")
-bfsSearchButton = NodePath("Search Button Container/BfsSearchButton")
-dfsSearchButton = NodePath("Search Button Container/DfsSearchButton")
-metadata/_tab_index = 1
-metadata/_tab_name = "Solver algorithm settings"
 
-[node name="Label2" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1931427458]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 32
-text = "Discover states"
-
-[node name="TabuCont2" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1068782563]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="MaxStatesLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont2" unique_id=998352504]
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Max states to discover:"
-
-[node name="MaxStatesSpinBox" type="SpinBox" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont2" unique_id=1654292231]
-layout_mode = 2
-size_flags_horizontal = 0
-min_value = 1.0
-max_value = 100000.0
-value = 1000.0
-rounded = true
-
-[node name="UnlimitedSearchCheckButton" type="CheckButton" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont2" unique_id=745453368]
-layout_mode = 2
-
-[node name="UnlimitedLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont2" unique_id=1254223597]
-layout_mode = 2
-text = "Unlimited"
-
-[node name="Search Button Container" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=171747895]
-layout_mode = 2
-
-[node name="BfsSearchButton" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/Search Button Container" unique_id=928790395]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 22
-disabled = true
-text = "Discover with BFS"
-
-[node name="DfsSearchButton" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/Search Button Container" unique_id=577719028]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 22
-disabled = true
-text = "Discover with DFS"
-
-[node name="HSeparator" type="HSeparator" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1500840543]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1082731639]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 32
-text = "Select Solver settings"
-
-[node name="AlgoOption" type="OptionButton" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1753465646]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-selected = 0
-item_count = 3
-popup/item_0/text = "Tabu algorithm"
-popup/item_0/id = 0
-popup/item_1/text = "Backtracking algorithm"
-popup/item_1/id = 1
-popup/item_2/text = "Graph search (Ac) algorithm"
-popup/item_2/id = 2
-
-[node name="TabuCont" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=597833565]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont" unique_id=683771613]
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Tabu size: "
-
-[node name="TabuSize" type="SpinBox" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/TabuCont" unique_id=841800583]
-layout_mode = 2
-size_flags_horizontal = 0
-value = 1.0
-rounded = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=883989609]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/HBoxContainer" unique_id=57921274]
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 22
-text = "Heuristic:  "
-
-[node name="HeuristicOption" type="OptionButton" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab/HBoxContainer" unique_id=1479166621]
-layout_mode = 2
-size_flags_horizontal = 3
-selected = 3
-item_count = 4
-popup/item_0/text = "Non-informative heuristic"
-popup/item_0/id = 0
-popup/item_1/text = "Distance heuristic"
-popup/item_1/id = 1
-popup/item_2/text = "Distance + Free spaces heuristic"
-popup/item_2/id = 2
-popup/item_3/text = "Least moves to goal way heuristic"
-popup/item_3/id = 3
-
-[node name="RandomBox" type="CheckBox" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=229588873]
-layout_mode = 2
-button_pressed = true
-text = "Choose randomly between nodes with the same heuristic score"
-autowrap_mode = 3
-
-[node name="ApplySolver" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/SolverSettingsTab" unique_id=1838076237]
-layout_mode = 2
-theme_override_font_sizes/font_size = 26
-text = "Apply solver algorithm"
-
-[node name="GameBoardTab" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont" unique_id=1575641859]
+[node name="GameBoardTab" parent="HSplitContainer/TabCont" unique_id=612282537 instance=ExtResource("11_4w45t")]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 2
-metadata/_tab_name = "Game board"
-
-[node name="AlgoPlayer" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=47271723 node_paths=PackedStringArray("slider", "playPauseButton", "playPauseLabel", "stepButton", "restartButton")]
-layout_mode = 2
-script = ExtResource("4_c1pb6")
-slider = NodePath("AlgoSpeed")
-playPauseButton = NodePath("ControlButtons/PlayPauseC/PlayPauseB")
-playPauseLabel = NodePath("ControlButtons/PlayPauseC/PlayPauseL")
-stepButton = NodePath("ControlButtons/StepC/StepB")
-restartButton = NodePath("ControlButtons/RestartC/RestartB")
-
-[node name="ControlButtons" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer" unique_id=1276842777]
-layout_mode = 2
-alignment = 1
-
-[node name="AgloControlsL" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/ControlButtons" unique_id=1906249821]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Algorithm Controls:"
-
-[node name="PlayPauseC" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/ControlButtons" unique_id=1524565958]
-layout_mode = 2
-
-[node name="PlayPauseB" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/ControlButtons/PlayPauseC" unique_id=1477732592 node_paths=PackedStringArray("playPauseLabel")]
-layout_mode = 2
-disabled = true
-toggle_mode = true
-icon = ExtResource("5_mngbo")
-script = ExtResource("6_r6p65")
-playIcon = ExtResource("5_mngbo")
-pauseIcon = ExtResource("7_si52b")
-playPauseLabel = NodePath("../PlayPauseL")
-
-[node name="PlayPauseL" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/ControlButtons/PlayPauseC" unique_id=906490363]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 0
-theme_override_font_sizes/font_size = 16
-text = "Start"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="StepC" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/ControlButtons" unique_id=48662940]
-layout_mode = 2
-
-[node name="StepB" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/ControlButtons/StepC" unique_id=2013363554]
-layout_mode = 2
-disabled = true
-icon = ExtResource("6_4w45t")
-
-[node name="StepL" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/ControlButtons/StepC" unique_id=1366122179]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Step"
-horizontal_alignment = 1
-
-[node name="RestartC" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/ControlButtons" unique_id=788949507]
-layout_mode = 2
-
-[node name="RestartB" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/ControlButtons/RestartC" unique_id=815699453]
-layout_mode = 2
-disabled = true
-icon = ExtResource("7_4w45t")
-
-[node name="RestartL" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/ControlButtons/RestartC" unique_id=1261945993]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Restart"
-horizontal_alignment = 1
-
-[node name="StepSpeed" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer" unique_id=589612816]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Solver algorithm speed:"
-horizontal_alignment = 1
-
-[node name="AlgoSpeed" type="HSlider" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer" unique_id=452749383]
-layout_mode = 2
-min_value = -2.0
-max_value = 4.0
-step = 0.25
-value = 1.0
-tick_count = 7
-ticks_on_borders = true
-
-[node name="SpeedLabels" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer" unique_id=1186308]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/SpeedLabels" unique_id=943957991]
-layout_mode = 2
-text = "0.1x"
-horizontal_alignment = 1
-
-[node name="Label2" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/SpeedLabels" unique_id=951472960]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "0.25x"
-horizontal_alignment = 1
-
-[node name="Label3" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/SpeedLabels" unique_id=1256280639]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "0.5x"
-horizontal_alignment = 1
-
-[node name="Label4" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/SpeedLabels" unique_id=707640975]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "1x"
-horizontal_alignment = 1
-
-[node name="Label5" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/SpeedLabels" unique_id=1242521540]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "2x"
-horizontal_alignment = 1
-
-[node name="Label6" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/SpeedLabels" unique_id=1487358366]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "4x"
-horizontal_alignment = 1
-
-[node name="Label7" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AlgoPlayer/SpeedLabels" unique_id=401364812]
-layout_mode = 2
-text = "MAX"
-horizontal_alignment = 1
-
-[node name="HideContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=661149213]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="HideButton" type="CheckButton" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/HideContainer" unique_id=1976372017]
-layout_mode = 2
-size_flags_horizontal = 0
-script = ExtResource("14_7nt27")
-
-[node name="HideLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/HideContainer" unique_id=1701734812]
-layout_mode = 2
-theme_override_font_sizes/font_size = 19
-text = "Hide irrelevant edges and vertices"
-
-[node name="FollowContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=1014416124]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="FollowAlgoButton" type="CheckButton" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/FollowContainer" unique_id=1095142318]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="FollowAlgoLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/FollowContainer" unique_id=1921018065]
-layout_mode = 2
-size_flags_horizontal = 10
-theme_override_font_sizes/font_size = 19
-text = "Follow vertices extended by algorithm "
-
-[node name="AlgoStepSpeed" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=780199178]
-layout_mode = 2
-theme_override_font_sizes/font_size = 26
-text = "Display mode:"
-horizontal_alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=2002915317]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_right = 5
-
-[node name="ButtonContainer" type="HBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/MarginContainer" unique_id=1895014618]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="ManualButton" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/MarginContainer/ButtonContainer" unique_id=1926166480]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 26
-theme_override_styles/pressed = ExtResource("3_gubc5")
-disabled = true
-toggle_mode = true
-button_group = ExtResource("3_pu3yx")
-text = "Manual"
-
-[node name="AlgoButton" type="Button" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/MarginContainer/ButtonContainer" unique_id=419938152]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 26
-theme_override_styles/pressed = ExtResource("3_gubc5")
-disabled = true
-toggle_mode = true
-button_pressed = true
-button_group = ExtResource("3_pu3yx")
-text = "Algorithm"
-
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=1754232532]
-layout_mode = 2
-size_flags_vertical = 8
-stretch_mode = 0
-alignment_vertical = 0
-
-[node name="BoardSubViewContainer" type="SubViewportContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AspectRatioContainer" unique_id=29632429]
-custom_minimum_size = Vector2(192, 192)
-layout_mode = 2
-stretch = true
-
-[node name="BoardSubViewport" type="SubViewport" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AspectRatioContainer/BoardSubViewContainer" unique_id=536987835]
-handle_input_locally = false
-physics_object_picking = true
-size = Vector2i(192, 192)
-render_target_update_mode = 0
-
-[node name="MainGameBoard" type="Sprite2D" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/AspectRatioContainer/BoardSubViewContainer/BoardSubViewport" unique_id=851370481 node_paths=PackedStringArray("manualButton", "algoButton", "followAlgoButton")]
-texture = ExtResource("5_rt2n2")
-centered = false
-region_enabled = true
-region_rect = Rect2(48, 0, 192, 192)
-script = ExtResource("5_gubc5")
-manualButton = NodePath("../../../../MarginContainer/ButtonContainer/ManualButton")
-algoButton = NodePath("../../../../MarginContainer/ButtonContainer/AlgoButton")
-followAlgoButton = NodePath("../../../../FollowContainer/FollowAlgoButton")
-
-[node name="StatusContainer" type="VBoxContainer" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab" unique_id=515878272]
-layout_mode = 2
-size_flags_vertical = 10
-script = ExtResource("14_bcnxi")
-
-[node name="SolverStatusLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=283641232]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Solver status: -"
-
-[node name="StepCountLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=1516398705]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Step count: -"
-
-[node name="SolutionLenghtLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=1227360677]
-layout_mode = 2
-text = "Solution length: -"
-
-[node name="HeuristicLabel" type="Label" parent="HSplitContainer/MenuPanelContainer/TabCont/GameBoardTab/StatusContainer" unique_id=1783544616]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Heuristic score: -"

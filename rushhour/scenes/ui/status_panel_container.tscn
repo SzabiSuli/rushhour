@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cij7w4pmoahdj"]
+
+[ext_resource type="Script" uid="uid://c20g3raawrb7e" path="res://src/Nodes/UI/StatusContainer.cs" id="1_5jtkr"]
+
+[node name="StatusPanelContainer" type="PanelContainer" unique_id=89654311]
+custom_minimum_size = Vector2(250, 0)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -250.0
+offset_bottom = 120.0
+grow_horizontal = 0
+
+[node name="StatusMarginC" type="MarginContainer" parent="." unique_id=1237080708]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="StatusContainer" type="VBoxContainer" parent="StatusMarginC" unique_id=1046710465]
+layout_mode = 2
+size_flags_vertical = 10
+script = ExtResource("1_5jtkr")
+
+[node name="SolverStatusLabel" type="Label" parent="StatusMarginC/StatusContainer" unique_id=1475702952]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Solver status: -"
+
+[node name="StepCountLabel" type="Label" parent="StatusMarginC/StatusContainer" unique_id=1403015337]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Step count: -"
+
+[node name="SolutionLenghtLabel" type="Label" parent="StatusMarginC/StatusContainer" unique_id=1320580881]
+layout_mode = 2
+text = "Solution length: -"
+
+[node name="HeuristicLabel" type="Label" parent="StatusMarginC/StatusContainer" unique_id=1014268441]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Heuristic score: -"

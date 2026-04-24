@@ -1,0 +1,236 @@
+[gd_scene format=3 uid="uid://dtkdep24pwda1"]
+
+[ext_resource type="Script" uid="uid://cnh0vbelp65oq" path="res://src/Nodes/UI/AlgoPlayer.cs" id="1_rsakt"]
+[ext_resource type="Texture2D" uid="uid://clc0oftordjci" path="res://assets/play.svg" id="2_4rra3"]
+[ext_resource type="Script" uid="uid://bui1o4jj1na0" path="res://src/Nodes/UI/PlayPauseButton.cs" id="3_r6smd"]
+[ext_resource type="Texture2D" uid="uid://dqyunwoflvk0x" path="res://assets/pause.svg" id="4_7aqeh"]
+[ext_resource type="Texture2D" uid="uid://ba6rbns1pytu2" path="res://assets/step.svg" id="5_g2nc6"]
+[ext_resource type="Texture2D" uid="uid://s8s7gki1bpm2" path="res://assets/restart.svg" id="6_bqd7q"]
+[ext_resource type="Script" uid="uid://d15tkkh8kmxml" path="res://src/Nodes/UI/HideButton.cs" id="7_8unu7"]
+[ext_resource type="StyleBox" uid="uid://5jsi7mxxo17c" path="res://scenes/resources/selected_button.tres" id="8_rptxl"]
+[ext_resource type="ButtonGroup" uid="uid://hw2xrwwg5ixa" path="res://scenes/resources/board_mode_button_group.tres" id="9_lpppo"]
+[ext_resource type="Texture2D" uid="uid://bv2iy6tdpirb8" path="res://assets/spritemap.png" id="10_lnrdn"]
+[ext_resource type="Script" uid="uid://bccrutn7gpw3f" path="res://src/Nodes/Board/MainGameBoard.cs" id="11_ma77c"]
+
+[node name="GameBoardTab" type="VBoxContainer" unique_id=612282537]
+metadata/_tab_index = 2
+metadata/_tab_name = "Game board"
+
+[node name="AlgoPlayer" type="VBoxContainer" parent="." unique_id=1872073066 node_paths=PackedStringArray("slider", "playPauseButton", "playPauseLabel", "stepButton", "restartButton")]
+layout_mode = 2
+script = ExtResource("1_rsakt")
+slider = NodePath("AlgoSpeed")
+playPauseButton = NodePath("ControlButtons/PlayPauseC/PlayPauseButton")
+playPauseLabel = NodePath("ControlButtons/PlayPauseC/PlayPauseLabel")
+stepButton = NodePath("ControlButtons/StepC/StepB")
+restartButton = NodePath("ControlButtons/RestartC/RestartB")
+
+[node name="ControlButtons" type="HBoxContainer" parent="AlgoPlayer" unique_id=1500950839]
+layout_mode = 2
+alignment = 1
+
+[node name="AgloControlsL" type="Label" parent="AlgoPlayer/ControlButtons" unique_id=1797361586]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Algorithm Controls:"
+
+[node name="PlayPauseC" type="VBoxContainer" parent="AlgoPlayer/ControlButtons" unique_id=2092201856]
+layout_mode = 2
+
+[node name="PlayPauseButton" type="Button" parent="AlgoPlayer/ControlButtons/PlayPauseC" unique_id=543835688 node_paths=PackedStringArray("playPauseLabel")]
+layout_mode = 2
+disabled = true
+toggle_mode = true
+icon = ExtResource("2_4rra3")
+script = ExtResource("3_r6smd")
+playIcon = ExtResource("2_4rra3")
+pauseIcon = ExtResource("4_7aqeh")
+playPauseLabel = NodePath("../PlayPauseLabel")
+
+[node name="PlayPauseLabel" type="Label" parent="AlgoPlayer/ControlButtons/PlayPauseC" unique_id=1734982667]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 16
+text = "Start"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StepC" type="VBoxContainer" parent="AlgoPlayer/ControlButtons" unique_id=989167810]
+layout_mode = 2
+
+[node name="StepB" type="Button" parent="AlgoPlayer/ControlButtons/StepC" unique_id=772190354]
+layout_mode = 2
+disabled = true
+icon = ExtResource("5_g2nc6")
+
+[node name="StepL" type="Label" parent="AlgoPlayer/ControlButtons/StepC" unique_id=435092065]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Step"
+horizontal_alignment = 1
+
+[node name="RestartC" type="VBoxContainer" parent="AlgoPlayer/ControlButtons" unique_id=926891512]
+layout_mode = 2
+
+[node name="RestartB" type="Button" parent="AlgoPlayer/ControlButtons/RestartC" unique_id=953912836]
+layout_mode = 2
+disabled = true
+icon = ExtResource("6_bqd7q")
+
+[node name="RestartL" type="Label" parent="AlgoPlayer/ControlButtons/RestartC" unique_id=669768575]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Restart"
+horizontal_alignment = 1
+
+[node name="StepSpeed" type="Label" parent="AlgoPlayer" unique_id=968781854]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Solver algorithm speed:"
+horizontal_alignment = 1
+
+[node name="AlgoSpeed" type="HSlider" parent="AlgoPlayer" unique_id=324925738]
+layout_mode = 2
+min_value = -2.0
+max_value = 4.0
+step = 0.25
+value = 1.0
+tick_count = 7
+ticks_on_borders = true
+
+[node name="SpeedLabels" type="HBoxContainer" parent="AlgoPlayer" unique_id=1877231605]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="AlgoPlayer/SpeedLabels" unique_id=1221323326]
+layout_mode = 2
+text = "0.1x"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="AlgoPlayer/SpeedLabels" unique_id=1602835516]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.25x"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="AlgoPlayer/SpeedLabels" unique_id=740169474]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.5x"
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="AlgoPlayer/SpeedLabels" unique_id=1569774463]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1x"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="AlgoPlayer/SpeedLabels" unique_id=1054068590]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "2x"
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="AlgoPlayer/SpeedLabels" unique_id=863162725]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "4x"
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="AlgoPlayer/SpeedLabels" unique_id=1555758168]
+layout_mode = 2
+text = "MAX"
+horizontal_alignment = 1
+
+[node name="HideContainer" type="HBoxContainer" parent="." unique_id=1357932456]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="HideButton" type="CheckButton" parent="HideContainer" unique_id=1765697991]
+layout_mode = 2
+size_flags_horizontal = 0
+script = ExtResource("7_8unu7")
+
+[node name="HideLabel" type="Label" parent="HideContainer" unique_id=471141623]
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "Hide irrelevant edges and vertices"
+
+[node name="FollowContainer" type="HBoxContainer" parent="." unique_id=23579373]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="FollowAlgoButton" type="CheckButton" parent="FollowContainer" unique_id=636794398]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="FollowAlgoLabel" type="Label" parent="FollowContainer" unique_id=2009138344]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 19
+text = "Follow vertices extended by algorithm "
+
+[node name="AlgoStepSpeed" type="Label" parent="." unique_id=1390335524]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Display mode:"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1701452620]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="ButtonContainer" type="HBoxContainer" parent="MarginContainer" unique_id=573271680]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="ManualButton" type="Button" parent="MarginContainer/ButtonContainer" unique_id=394379112]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+theme_override_styles/pressed = ExtResource("8_rptxl")
+disabled = true
+toggle_mode = true
+button_group = ExtResource("9_lpppo")
+text = "Manual"
+
+[node name="AlgoButton" type="Button" parent="MarginContainer/ButtonContainer" unique_id=1238646095]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+theme_override_styles/pressed = ExtResource("8_rptxl")
+disabled = true
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("9_lpppo")
+text = "Algorithm"
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="." unique_id=342877329]
+layout_mode = 2
+size_flags_vertical = 8
+stretch_mode = 0
+alignment_vertical = 0
+
+[node name="BoardSubViewContainer" type="SubViewportContainer" parent="AspectRatioContainer" unique_id=1068964505]
+custom_minimum_size = Vector2(192, 192)
+layout_mode = 2
+stretch = true
+
+[node name="BoardSubViewport" type="SubViewport" parent="AspectRatioContainer/BoardSubViewContainer" unique_id=693047916]
+handle_input_locally = false
+physics_object_picking = true
+size = Vector2i(407, 407)
+render_target_update_mode = 4
+
+[node name="MainGameBoard" type="Sprite2D" parent="AspectRatioContainer/BoardSubViewContainer/BoardSubViewport" unique_id=1635121835 node_paths=PackedStringArray("manualButton", "algoButton", "followAlgoButton")]
+texture = ExtResource("10_lnrdn")
+centered = false
+region_enabled = true
+region_rect = Rect2(48, 0, 192, 192)
+script = ExtResource("11_ma77c")
+manualButton = NodePath("../../../../MarginContainer/ButtonContainer/ManualButton")
+algoButton = NodePath("../../../../MarginContainer/ButtonContainer/AlgoButton")
+followAlgoButton = NodePath("../../../../FollowContainer/FollowAlgoButton")

@@ -5,7 +5,7 @@ using rushhour.src.Model;
 
 public abstract partial class VehicleNode : Sprite2D {
 
-    public const string arrowScenePath = "res://scenes/arrow.tscn";
+    public const string arrowScenePath = "res://scenes/board/arrow.tscn";
 
     public static PackedScene ArrowCreator { get; } = 
         ResourceLoader.Load<PackedScene>(arrowScenePath);

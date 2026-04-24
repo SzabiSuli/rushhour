@@ -18,6 +18,10 @@ public partial class GraphScene : Node3D
         }
     }
 
+    public override void _Ready() {
+        RenderingServer.SetDefaultClearColor(Colors.Black);
+    }
+
     public async override void _PhysicsProcess(double delta) {
         // Rebuild the Barnes-Hut OctTree once per physics update for repulsion forces
         OctTree.BuildAndSetCurrent(Vertex.Dict.Values);

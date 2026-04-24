@@ -11,8 +11,8 @@ public partial class GameBoard : Sprite2D
 
 
     // TODO make these exported?
-    public const string carScenePath = "res://scenes/car.tscn";
-    public const string busScenePath = "res://scenes/bus.tscn";
+    public const string carScenePath = "res://scenes/board/car.tscn";
+    public const string busScenePath = "res://scenes/board/bus.tscn";
 
     public static PackedScene CarCreator { get; } = 
         ResourceLoader.Load<PackedScene>(carScenePath);

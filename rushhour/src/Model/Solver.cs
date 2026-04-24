@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public abstract class Solver {
+public abstract class RHSolver {
     private SolverStatus _status = SolverStatus.NotStarted;
     public SolverStatus Status { 
         get => _status;
@@ -49,9 +49,9 @@ public abstract class Solver {
         Terminated?.Invoke(this, Status);
     } 
     
-    public Heuristic Heuristic { get; protected init; }
+    public Heuristic<RHGameState> Heuristic { get; protected init; }
 
-    public Solver(Heuristic heuristic, float randomFactor = 0) {
+    public RHSolver(Heuristic<RHGameState> heuristic, float randomFactor = 0) {
         Heuristic = heuristic;
         this.randomFactor = randomFactor;
     }
@@ -108,12 +108,12 @@ public abstract class Solver {
     protected abstract IEnumerable<StateMove> GetSolutionPathSolved();
 }
 
-public class TabuSolver : Solver {
+public class TabuSolver : RHSolver {
     public List<StateMove> Route { get; set; } = new();
     public int TabuSize { get; init; }
     public StateMove? nextMove;
 
-    public TabuSolver(Heuristic h, int tabuSize, float rf = 0) : base(h, rf) {
+    public TabuSolver(Heuristic<RHGameState> h, int tabuSize, float rf = 0) : base(h, rf) {
         TabuSize = tabuSize;
     }
 
@@ -174,7 +174,7 @@ public class TabuSolver : Solver {
     protected override List<StateMove> GetSolutionPathSolved() => Route;
 }
 
-public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
+public class BacktrackingSolver(Heuristic<RHGameState> h, float rf = 0) : RHSolver(h, rf) {
     public List<List<StateMove>> CurrentRoute { get; } = new ();
 
     public override void Start(RHGameState initial) {
@@ -243,7 +243,7 @@ public class BacktrackingSolver(Heuristic h, float rf = 0) : Solver(h, rf) {
 }
 
 // TODO make A and A* searches?
-public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
+public class AcGraphSolver(MonotoneHeuristic<RHGameState> h, float rf = 0) : RHSolver(h, rf) {
     protected PriorityQueue<StateMove, float> OpenStates { get; } = new ();
 
     protected struct DiscoveredState {
@@ -325,7 +325,7 @@ public class AcGraphSolver(MonotoneHeuristic h, float rf = 0) : Solver(h, rf) {
 
 public abstract class Discoverer : AcGraphSolver {
     private int maxSteps;
-    public Discoverer(MonotoneHeuristic h, int maxStates) : base(h, 0) {
+    public Discoverer(MonotoneHeuristic<RHGameState> h, int maxStates) : base(h, 0) {
         maxSteps = maxStates; 
     }
 

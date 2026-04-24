@@ -1,0 +1,133 @@
+[gd_scene format=3 uid="uid://4afovasuuqay"]
+
+[ext_resource type="Script" uid="uid://bfpbdcwwoasu2" path="res://src/Nodes/UI/SolverSettingsTab.cs" id="1_jgqg3"]
+
+[node name="SolverSettingsTab" type="VBoxContainer" unique_id=364222569 node_paths=PackedStringArray("algoOption", "tabuSizeSpin", "heuristicOption", "randomBox", "applyButton", "searchCountBox", "unlimitedSearchButton", "bfsSearchButton", "dfsSearchButton")]
+script = ExtResource("1_jgqg3")
+algoOption = NodePath("AlgoOption")
+tabuSizeSpin = NodePath("TabuCont/TabuSize")
+heuristicOption = NodePath("HBoxContainer/HeuristicOption")
+randomBox = NodePath("RandomBox")
+applyButton = NodePath("ApplySolver")
+searchCountBox = NodePath("TabuCont2/MaxStatesSpinBox")
+unlimitedSearchButton = NodePath("TabuCont2/UnlimitedSearchCheckButton")
+bfsSearchButton = NodePath("Search Button Container/BfsSearchButton")
+dfsSearchButton = NodePath("Search Button Container/DfsSearchButton")
+metadata/_tab_index = 1
+metadata/_tab_name = "Solver algorithm settings"
+
+[node name="Label2" type="Label" parent="." unique_id=65859499]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "Discover states"
+
+[node name="TabuCont2" type="HBoxContainer" parent="." unique_id=273111885]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="MaxStatesLabel" type="Label" parent="TabuCont2" unique_id=949747817]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Max states to discover:"
+
+[node name="MaxStatesSpinBox" type="SpinBox" parent="TabuCont2" unique_id=2024701159]
+layout_mode = 2
+size_flags_horizontal = 0
+min_value = 1.0
+max_value = 100000.0
+value = 1000.0
+rounded = true
+
+[node name="UnlimitedSearchCheckButton" type="CheckButton" parent="TabuCont2" unique_id=554689505]
+layout_mode = 2
+
+[node name="UnlimitedLabel" type="Label" parent="TabuCont2" unique_id=1383578840]
+layout_mode = 2
+text = "Unlimited"
+
+[node name="Search Button Container" type="HBoxContainer" parent="." unique_id=2121541237]
+layout_mode = 2
+
+[node name="BfsSearchButton" type="Button" parent="Search Button Container" unique_id=1075270552]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+disabled = true
+text = "Discover with BFS"
+
+[node name="DfsSearchButton" type="Button" parent="Search Button Container" unique_id=2143689686]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+disabled = true
+text = "Discover with DFS"
+
+[node name="HSeparator" type="HSeparator" parent="." unique_id=1947708345]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="." unique_id=2032096844]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "Select Solver settings"
+
+[node name="AlgoOption" type="OptionButton" parent="." unique_id=1639272975]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+selected = 0
+item_count = 3
+popup/item_0/text = "Tabu algorithm"
+popup/item_0/id = 0
+popup/item_1/text = "Backtracking algorithm"
+popup/item_1/id = 1
+popup/item_2/text = "Graph search (Ac) algorithm"
+popup/item_2/id = 2
+
+[node name="TabuCont" type="HBoxContainer" parent="." unique_id=1586024229]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Label" type="Label" parent="TabuCont" unique_id=1839351622]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Tabu size: "
+
+[node name="TabuSize" type="SpinBox" parent="TabuCont" unique_id=1977104204]
+layout_mode = 2
+size_flags_horizontal = 0
+rounded = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1201017563]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1823857116]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 22
+text = "Heuristic:  "
+
+[node name="HeuristicOption" type="OptionButton" parent="HBoxContainer" unique_id=2132049902]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 3
+item_count = 4
+popup/item_0/text = "Non-informative heuristic"
+popup/item_0/id = 0
+popup/item_1/text = "Distance heuristic"
+popup/item_1/id = 1
+popup/item_2/text = "Distance + blocks heuristic"
+popup/item_2/id = 2
+popup/item_3/text = "Least moves to goal way heuristic"
+popup/item_3/id = 3
+
+[node name="RandomBox" type="CheckBox" parent="." unique_id=520860355]
+layout_mode = 2
+button_pressed = true
+text = "Choose randomly between nodes with the same heuristic score"
+autowrap_mode = 3
+
+[node name="ApplySolver" type="Button" parent="." unique_id=915235576]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Apply solver algorithm"

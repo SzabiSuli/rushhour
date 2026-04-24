@@ -1,4 +1,4 @@
-namespace rushhour.src.Nodes;
+namespace rushhour.src.Nodes.UI;
 
 using System;
 using Godot;
@@ -88,15 +88,15 @@ public partial class SolverSettingsTab : VBoxContainer {
         tabuSizeSpin.GetParent<HBoxContainer>().Visible = index == 0;
     }
 
-    public Solver GetSolver() {
-        Heuristic h = heuristicOption.Selected switch {
+    public RHSolver GetSolver() {
+        Heuristic<RHGameState> h = heuristicOption.Selected switch {
             0 => new NullHeuristic(),
             1 => new DistanceHeuristic(),
             2 => new FreeSpacesHeuristic(),
             3 => new MoverHeuristic(),
             _ => throw new Exception("Invalid heuristic option selected")
         };
-        Solver s;
+        RHSolver s;
         switch (algoOption.Selected) {
             case 0:             
                 s = new TabuSolver(h, _tabuSize, _randomFactor);
@@ -105,7 +105,7 @@ public partial class SolverSettingsTab : VBoxContainer {
                 s = new BacktrackingSolver(h, _randomFactor);
                 break;
             case 2:
-                if (h is not MonotoneHeuristic mh) {
+                if (h is not MonotoneHeuristic<RHGameState> mh) {
                     throw new ArgumentException("Monotone heuristic must be selected for AcGraphSolver!");
                 }
                 s = new AcGraphSolver(mh, _randomFactor);

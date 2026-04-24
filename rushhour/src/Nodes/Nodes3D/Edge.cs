@@ -3,9 +3,9 @@ namespace rushhour.src.Nodes.Nodes3D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using Godot;
 using rushhour.src.Model;
+using rushhour.src.Nodes.UI;
 
 
 public partial class Edge : MeshInstance3D
@@ -20,7 +20,7 @@ public partial class Edge : MeshInstance3D
     public Vertex From { get; set; } = null!;
     public Vertex To { get; set; } = null!;
     public StateMove MoveUsed { get; set; } = null!;
-    public const String scenePath = "res://scenes/edge.tscn";
+    public const String scenePath = "res://scenes/graph/edge.tscn";
     public static PackedScene Creator { get; } = 
         ResourceLoader.Load<PackedScene>(scenePath);
 
