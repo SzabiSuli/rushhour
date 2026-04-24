@@ -107,30 +107,21 @@ static class Levels {
     // Capital letter marks the front of the vehicle
     public static readonly string[] levelStrings = [
         """
-        Template
+        Demos - Rectangle
+        ......
+        ......
         aA....
-        ......
-        ......
-        ......
+        bbB...
         ......
         ......
         """,
         """
-        Square
+        Demos - Hollowed cube
+        ...b..
+        ...B..
         aA....
-        bB....
-        ......
-        ......
-        ......
-        ......
-        """,
-        """
-        Cube
-        ......
-        aA....
-        ......
-        bB....
         cC....
+        ......
         ......
         """,
         """
@@ -224,6 +215,60 @@ static class Levels {
         Kk.ilL
         """,
         """
+        Level 15
+        bCcD..
+        b..d..
+        BaAd..
+        ..eFff
+        ..E..g
+        ..hhHG
+        """,
+        """
+        Level 20
+        .bC.dD
+        ebcFfG
+        EBaA.g
+        hHiJ.g
+        ..IjkK
+        .lLmM.
+        """,
+        """
+        Level 25
+        bBc.Dd
+        e.C..F
+        e.aAGf
+        EHhhgf
+        ...IJj
+        Kk.i..
+        """,
+        """
+        Level 30
+        ..BCcc
+        dDbEF.
+        GaAef.
+        g..eHh
+        IiJj.K
+        lLmM.k
+        """,
+        """
+        Level 35
+        .bBcCd
+        ..ef.D
+        aAEF.G
+        H.ijJg
+        h.IkKg
+        hlLmmM
+        """,
+        """
+        Level 40
+        Ddd.gH
+        CbbBGh
+        c.FaAi
+        eEfL.I
+        ...lJj
+        kkKl..
+        """,
+        """
         Level ? Easy
         ......
         ..E.f.
@@ -250,15 +295,6 @@ static class Levels {
         ..D...
         E.dCcc
         e...fF
-        """,
-        """
-        Level 40
-        Ddd.gH
-        CbbBGh
-        c.FaAi
-        eEfL.I
-        ...lJj
-        kkKl..
         """
     ];
 }
