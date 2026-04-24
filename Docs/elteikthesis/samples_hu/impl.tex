@@ -1,129 +1,522 @@
 \chapter{Fejlesztői dokumentáció}
 \label{ch:impl}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nibh leo, dapibus in elementum nec, aliquet id sem. Suspendisse potenti. Nullam sit amet consectetur nibh. Donec scelerisque varius turpis at tincidunt.
+Ez a fejezet az alkalmazás elemzését, tervezését, implementációját és tesztelését mutatja be.
+
+%% ============================================================
+\section{Elemzés}
+%% ============================================================
+
+\subsection{Feladatleírás}
+
+A feladat egy olyan interaktív alkalmazás fejlesztése, amely:
+\begin{compactenum}
+\item Modellezi a Rush Hour tologatós rejtvényt~\cite{rushhour_puzzle} egy immutábilis állapot-átmenet rendszerként egy $6\times6$-os táblán, $1\times2$-es autókkal és $1\times3$-as buszokkal.
+\item Implementál három konfigurálható keresőalgoritmust (tabu keresés, visszalépéses keresés, A$^C$ gráfkeresés) négy heurisztikus függvénnyel.
+\item Vizualizálja a feltárt állapotgráfot 3D-ben, erő-alapú elrendezést (force-directed layout) és Barnes–Hut optimalizációt~\cite{barneshut1986} használva.
+\item Lehetővé teszi a kézi játékot és az állapotok interaktív vizsgálatát a gráfcsúcsokra való kattintással.
+\end{compactenum}
+
+\subsection{Funkcionális leírás}
+
+A funkcionális követelményeket a \ref{tab:userstory}. táblázatban található felhasználói történetek (user stories) foglalják össze.
+
+\begin{center}
+\begin{longtable}{ | p{0.20\textwidth} | p{0.20\textwidth} | p{0.20\textwidth} | p{0.30\textwidth} | }
+
+\hline
+\multicolumn{4}{|c|}{\textbf{Felhasználói történetek}}
+\\ \hline
+\textbf{Cél} & \textbf{Előfeltétel} & \textbf{Esemény} & \textbf{Eredmény}
+\\ \hline \hline
+\endfirsthead
+
+\hline
+\textbf{Cél} & \textbf{Előfeltétel} & \textbf{Esemény} & \textbf{Eredmény}
+\\ \hline \hline
+\endhead
+
+\hline
+\endfoot
+\endlastfoot
+Kiválasztani egy pályát & A feladvány választó fül meg van nyitva & Rányomok a megfelelő pálya előnézet rublikájára & Betöltődik a pálya kezőállapota, a állapotgráfon csak a kezdőállapot látszik, átvált a jobb panel az algoritmus beállítások fülre \\ \hline
+Felfedezni az állapotgráf csúcsait & Kereső algoritmus beállítások fül meg van nyitva & Rányomok a csúcsfelfedezés gombjára & Az állapotgráfon felvesszük a felfedezett csúcsokat, a célcsúcsok ki vannak emelve \\ \hline
+Megállítani a csúcsfelfedezést & Épp fut csúcsfelfedezés & Rányomok a csúcsfelfedezés megállítása gombjára & A csúcsfelfedezés megáll \\ \hline
+Kiválasztani milyen keresőalgoritmust legyen kiválasztva & Kereső algoritmus beállítások fül meg van nyitva & Kiválasztom a megfelelő keresőalgoritmust az opciók közül & A keresőalgoritmus beállításra kerül \\ \hline
+Kiválasztani milyen heurisztikus függvény legyen kiválasztva & Kereső algoritmus beállítások fül meg van nyitva & Kiválasztom a megfelelő heurisztikus függvényt az opciók közül & A heurisztika beállításra kerül \\ \hline
+Futtatni a beállított keresőalgoritmust & Kereső algoritmus beállítások fül meg van nyitva & Rányomok a keresőalgoritmus alkalmazása gombra & A kiválasztott beállítások alapján alkalmazva lesz a kereső algoritmus a betöltött feladványra \\ \hline
+Elindítani/ folytatni a keresőalgoritmust & A játéktábla fül meg van nyitva & Rányomok a keresőalgoritmus indítása/folytatása gombjára & A keresőalgoritmus elindul, a gráfon ki vannak emelve a globális munkaterületen tárolt csúcsok és élek, ha a keresőalgoritmus talál célállapotot, akkor leáll az algoritmus \\ \hline
+Megállítani a keresőalgoritmust & A játéktábla fül meg van nyitva és épp fut keresőalgoritmus & Rányomok a keresőalgoritmus megállítása gombjára & A keresőalgoritmus megáll, a gráfon a globális munkaterületen tárolt csúcsok és élek ki vannak emelve \\ \hline
+Lépésenként futtatni a keresőalgoritmust & A játéktábla fül meg van nyitva & Rányomok a keresőalgoritmus lépésenkénti futtatása gombjára & A keresőalgoritmus egy lépést futtat, a gráfon ki vannak emelve a globális munkaterületen tárolt csúcsok és élek \\ \hline
+Beállítani a keresőalgoritmus sebességét & A játéktábla fül meg van nyitva & A sebesség állító csúszkát a megfelelő helyre húzom & A keresőalgoritmus minden lépése a beállított sebességgel történik \\ \hline
+Manuálisan lépni a táblán & A játéktábla fül meg van nyitva & A játéktáblán kattintok a lépésnek megfelelő piros nyílra & A játéktáblán elmozdul az autó, az állapotgráfon felfedezzük, kitüntetjük az új állapot csúcsát \\ \hline
+A játéktáblát manuális módba váltani & A játéktábla fül meg van nyitva & A játéktábla fölötti manuális gombra kattintok & A játéktábla manuális módba vált, az állapotgráfon ki van tüntetve a megjelenített állapot, ha futott algoritmus az a háttérben fut tovább \\ \hline
+Az algoritmus lépéseit megjeleníteni a táblán & A játéktábla fül meg van nyitva & A játéktábla fölötti algoritmus gombra kattintok & A játéktábla algoritmus módba vált, a táblán az algoritmus által legutóbb kiterjesztett állapot van megjelenítve, a játéktábla mutatja az algoritmus újjab kiterjesztett állapotait \\ \hline
+Egy felfedezett állapotba ugrani & Egy feladvány be van töltve & Rányomok (M1) egy felfedezett állapot csúcsára az állapotgráfon & A játéktábla a kiválasztott állapotot mutatja, a gráfon a kiválasztott csúcs ki van emelve \\ \hline
+Forgarni az állapotgráfot & Egy feladvány be van töltve & Az állapotgráfon kattintok (M2) és húzom az egeret & Az állapotgráf forog az aktív csúcs körül az egér mozgásának megfelelően \\ \hline
+Mozgatni az állapotgráfot & Egy feladvány be van töltve & A WASD gombok közül nyomom valamelyiket & Az állapotgráf elmozdul a vásznon a gombnak megfelelően \\ \hline
+Az állapotgráfon elrejteni/megjeleníteni a nem releváns éleket, csúcsokat & A játéktábla fül meg van nyitva & Rákattintok az irreleváns élek és csúcsok elrejtésének kapcsolójára & Az állapotgráfon elrejtődnek/megjelennek az irreleváns élek, csúcsok \\ \hline
+Követni az állapotgráfon az algoritmus által kiterjesztett csúcsokat & A játéktábla fül meg van nyitva & Rákattintok az algoritmus csúcsai követésének kapcsolójára & Az állapotgráf kamerája követi az algoritmus által kiterjesztett csúcsokat \\ \hline
+Nagyítani/ kicsinyíteni az állapotgráfot & Egy feladvány be van töltve & Az állapotgráfon az egér görgőjét használom & Az állapotgráf nagyítódik/kicsinyítódik az egér görgőjének megfelelően \\ \hline
+Kilépni a programból & A program fut & Bezárom a program ablakát & A program bezárul \\ \hline
+\caption{Felhasználói történetek}
+\label{tab:userstory}
+\end{longtable}
+\end{center}
 
 
-\section{Tételek, definíciók, megjegyzések}
+\subsection{Nem-funkcionális követelmények}
 
-\begin{definition}
-Mauris tristique sollicitudin ultrices. Etiam tristique quam sit amet metus dictum imperdiet. Nunc id lorem sed nisl pulvinar aliquet vitae quis arcu. Morbi iaculis eleifend porttitor.
-\end{definition}
+\begin{compactitem}
+\item \textbf{Teljesítmény}: a 3D gráfnak interaktívnak kell maradnia akár több ezer csúcs esetén is. A Barnes–Hut optimalizációnak kezelhető szinten kell tartania a képkockánkénti számítási igényt.
+\item \textbf{Hordozhatóság}: önálló futtatható fájlok Windowsra és Linuxra; fordíthatóság más platformokra a Godot szerkesztőn keresztül.
+\item \textbf{Használhatóság}: intuitív felhasználói felület színkódolt gráfelemekkel és reagáló vezérlőkkel.
+\item \textbf{Helyesség}: a keresőalgoritmusoknak az elvárt tulajdonságok szerint kell működniük (pl. az A$^C$ gráfkeresésnek monoton heurisztikával optimális megoldást kell találnia).
+\end{compactitem}
 
-Maecenas rutrum eros sem, pharetra interdum nulla porttitor sit amet. In vitae viverra ante. Maecenas sit amet placerat orci, sed tincidunt velit. Vivamus mattis, enim vel suscipit elementum, quam odio venenatis elit, et mollis nulla nunc a risus. Praesent purus magna, tristique sed lacus sit amet, convallis malesuada magna. Phasellus faucibus varius purus, nec tristique enim porta vitae.
+%% ============================================================
+\section{Tervezés}
+%% ============================================================
 
-\begin{theorem}
-Nulla finibus ante vel arcu tincidunt, ut consectetur ligula finibus. Mauris mollis lectus sed ipsum bibendum, ac ultrices erat dictum. Suspendisse faucibus euismod lacinia. Etiam vel odio ante.
-\end{theorem}
-\begin{proof}
-Etiam pulvinar nibh quis massa auctor congue. Pellentesque quis odio vitae sapien molestie vestibulum sit amet et quam. Pellentesque vel dui eget enim hendrerit finibus at sit amet libero. Quisque sollicitudin ultrices enim, nec porta magna imperdiet vitae. Cras condimentum nunc dui.
-\end{proof}
+\subsection{Szoftverarchitektúra}
 
-Donec dapibus sodales ante, at scelerisque nunc laoreet sit amet. Mauris porttitor tincidunt neque, vel ullamcorper neque pulvinar et. Integer eu lorem euismod, faucibus lectus sed, accumsan felis. 
+% TODO cite something?
+Az alkalmazás a \textbf{Modell--Nézet (Model--View)} architektúrát követi:
 
-\begin{remark}
-Nunc ornare mi at augue vulputate, eu venenatis magna mollis. Nunc sed posuere dui, et varius nulla. Sed mollis nibh augue, eget scelerisque eros ornare nec. Praesent porta, metus eget eleifend consequat, eros ligula eleifend ex, a pellentesque mi est vitae urna. Vivamus turpis nunc, iaculis non leo eget, mattis vulputate tellus.
-\end{remark}
+\begin{description}
+\item[Modell réteg] (\texttt{src/Model/}) Tiszta C\# osztályokat tartalmaz a játékállapot reprezentációjára, a lépésgenerálásra, a heurisztikus kiértékelésre és a keresőalgoritmusokra. A modell nem függ a Godot motortól, egyedül a Godot-ban definiált \texttt{Vector2I} struktúrát használja a, hogy ne kelljen később konvertálni azt.
+\item[Nézet réteg] (\texttt{src/Nodes/}) Olyan Godot node scripteket tartalmaz, amelyek a motor alaposztályaiból származnak (\texttt{Control}, \texttt{RigidBody3D}, \texttt{MeshInstance3D}, stb.). Ezek az osztályok kezelik a kirajzolást, a fizikai szimulációt, a felhasználói felületet és bevitelt. Feliratkoznak a modell eseményeire (\texttt{NewEdge}, \texttt{PathChange}, \texttt{NewCurrent}, \texttt{Terminated}), hogy reagáljanak az algoritmus előrehaladására.
+\end{description}
 
-Fusce in aliquet neque, in pretium sem. Donec tincidunt tellus id lectus pretium fringilla. Nunc faucibus, erat pretium tempus tempor, tortor mi fringilla neque, ac congue ex dui vitae mauris. Donec pretium et quam a cursus.
+A modell és a nézet közötti kommunikáció az absztrakt \texttt{Solver} alaposztályon definiált C\# eseményeken (events) keresztül valósul meg. A nézet feliratkozik ezekre az eseményekre, és létrehozza vagy frissíti a megfelelő vizuális elemeket (csúcsok, élek, kiemelések).
 
-\begin{note}
-Aliquam vehicula luctus mi a pretium. Nulla quam neque, maximus nec velit in, aliquam mollis tortor. Aliquam erat volutpat. Curabitur vitae laoreet turpis. Integer id diam ligula.
-\end{note}
+\subsection{Modell}
+\label{sec:model}
 
-Ut sollicitudin tempus urna et mollis. Aliquam et aliquam turpis, sed fermentum mauris. Nulla eget ex diam. Donec eget tellus pharetra, semper neque eget, rutrum diam.
+A modell osztálydiagramja a \ref{fig:model-class}. ábrán látható.
 
-\subsection{Egyenletek, matematika}
+% TODO redo this
 
-Duis suscipit ipsum nec urna blandit, $2 + 2 = 4$ pellentesque vehicula quam fringilla. Vivamus euismod, lectus sit amet euismod viverra, dolor metus consequat sapien, ut hendrerit nisl nulla id nisi. Nam in leo eu quam sollicitudin semper a quis velit.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{model_class_diagram}
+\caption{A Modell réteg osztálydiagramja}
+\label{fig:model-class}
+\end{figure}
 
-$$a^2 + b^2 = c^2$$
+A legfontosabb modellosztályok:
 
-Phasellus mollis, elit sed convallis feugiat, dolor quam dapibus nibh, suscipit consectetur lacus risus quis sem. Vivamus scelerisque porta odio, vitae euismod dolor accumsan ut.
+\begin{description}
+\item[\texttt{RHGameState}] Egy táblakonfiguráció módosíthatatlan reprezentációja, a módosíthatatlanságot az \texttt{init;} kulcsszóval biztosítjuk. Az elhelyezett járműveket \texttt{PlacedRHPiece} objektumok tömbjét tárolja,  ezekből pedig generál egy $6\times6$-os egész értékű mátrixot tárol a gyors mező eléréshez. Biztosítja a \texttt{GetPossibleMoves()}, \texttt{WithMove()}, \texttt{IsSolved()} metódusokat, valamint érték-alapú egyenlőségvizsgálatot amit hash kódokkal van felgyorsítva. Mivel nem módosítható az adatszerkezet, ezért csak inicializáláskor egyszer kiszámolja a hash kódját az állásra, és később mindig ezt adja vissza.
 
-In mathematica, identitatem Euleri (equation est scriptor vti etiam notum) sit aequalitatem \ref{eq:euler}.~egyenlet:
-\begin{equation}\label{eq:euler}
-e^{i \times \pi} + 1 = 0
-\end{equation}
+\item[\texttt{PlacedRHPiece}] Összekapcsol egy \texttt{RushHourPiece}-t (Car, MainCar vagy Bus) egy táblapozícióval és iránnyal. A \texttt{WithMove()} metódus egy új példányt ad vissza frissített pozícióval.
 
-Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nullam pulvinar purus at pharetra elementum.
-Aequationes adsignans aequationis signum:
-\begin{align}
-	A & = \frac{\pi r^2}{2} \\
-	  & = \frac{1}{2} \pi r^2
-\end{align}
+\item[\texttt{Move} / \texttt{StateMove}] A \texttt{Move} egy önmagában nem sok információt hordozó struktúra (járműindex + irány). A \texttt{StateMove} egy teljes átmenetet rögzít: forrásállapot, célállapot és az előbb említett lépést. Mivel a modellünkben minden lépésnek meg lehet tenni a fordítottját is, ezért egyenlőségvizsgálatnál nem teszünk különbséget a fordított lépéssel: $(A \to B) = (B \to A)$, így irányítatlan gráfot alkotunk a modellünkhöz.
 
-Proin tempor risus a efficitur condimentum. Cras lobortis ligula non sollicitudin euismod. Fusce non pellentesque nibh, non elementum tellus.
-Omissa numeratione aliquarum aequationum:
-\begin{align}
-	f(u) & =\sum_{j=1}^{n} x_jf(u_j) \nonumber \\
-	     & =\sum_{j=1}^{n} x_j \sum_{i=1}^{m} a_{ij}v_i \nonumber \\
-	     & =\sum_{j=1}^{n} \sum_{i=1}^{m} a_{ij}x_jv_i
-\end{align}
+\item[\texttt{Heuristic} hierarchia] Absztrakt osztályhierarchia, amely a típusrendszeren keresztül kényszeríti ki a heurisztika tulajdonságait: \texttt{Heuristic} $\supset$ \texttt{NonNegativeHeuristic} $\supset$ \texttt{AdmissibleHeuristic} $\supset$ \texttt{MonotoneHeuristic}. Az A$^C$ gráfkereső fordítási időben megköveteli a \texttt{MonotoneHeuristic} típust.
 
-\section{Forráskódok}
+\item[\texttt{Solver} hierarchia] Az absztrakt \texttt{Solver} alaposztály definiálja az eseményvezérelt interfészt és a közös logikát. Konkrét alosztályok:
+\begin{compactitem}
+\item \texttt{TabuSolver}: fenntart egy listát a legutóbbi állapotokról; kiválasztja a legjobb nem-tabu szomszédot.
+\item \texttt{BacktrackingSolver}: rendezett opciólisták vermét tartja fenn; visszalép zsákutcák esetén.
+\item \texttt{AcGraphSolver}: $f = g + h$ szerint rendezett \texttt{PriorityQueue}-t használ; egy szótárban követi a felfedezett állapotokat.
+\item \texttt{BFSDiscoverer} / \texttt{DFSDiscoverer}: a \texttt{Discoverer} (a gráfkeresést veszi alapul ezért a \texttt{AcGraphSolver}-ből öröklődik) osztály nem ellenőrzi és terminál megoldott állapot kiterjesztése esetén, a szélességi és mélységi felfedező alosztályai a kiértékelő függvényt definiálják felül.
+\end{compactitem}
 
-Nulla sodales purus id mi consequat, eu venenatis odio pharetra. Cras a arcu quam. Suspendisse augue risus, pulvinar a turpis et, commodo aliquet turpis. Nulla aliquam scelerisque mi eget pharetra. Mauris sed posuere elit, ac lobortis metus. Proin lacinia sit amet diam sed auctor. Nam viverra orci id sapien sollicitudin, a aliquam lacus suscipit. Quisque ac tincidunt leo \ref{src:cpp}. és \ref{src:csharp}.~forráskód:
+\item[\texttt{Levels}] Statikus osztály, amely a szinteket leíró sztringeket és egy feldolgozó metódust tartalmaz, amely \texttt{RHGameState} példányokká alakítja azokat. Ezzel könnyen leírható egy pálya, ahelyett, hogy az objektumok pozíció struktúráját kéne megadni.
+\end{description}
 
-\lstset{caption={Hello World in C++}, label=src:cpp}
-\begin{lstlisting}[language={C++}]
-#include <stdio>
 
-int main() 
-{
-	int c;
-	std::cout << "Hello World!" << std::endl;
+\subsection{Nézet}
+\label{sec:view}
 
-	std::cout << "Press any key to exit." << std::endl;
-	std::cin >> c;
-	
-	return 0;
-}
-\end{lstlisting}
+A nézet osztálydiagramja a \ref{fig:node-class}. ábrán látható.
 
-\lstset{caption={Hello World in C\#}, label=src:csharp}
-\begin{lstlisting}[language={[Sharp]C}]
-using System;
-namespace HelloWorld
-{
-	class Hello 
-	{
-		static void Main() 
-		{
-			Console.WriteLine("Hello World!");
-			
-			Console.WriteLine("Press any key to exit.");
-			Console.ReadKey();
-		}
-	}
-}
-\end{lstlisting}
 
-\subsection{Algoritmusok}
+% TODO rework this
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{node_class_diagram}
+\caption{A Nézet (Node) réteg osztálydiagramja}
+\label{fig:node-class}
+\end{figure}
 
-Az \ref{alg:ibb}.~algoritmus egy általános elágazás és korlátozás algoritmust (\emph{Branch and Bound algorithm}) mutat be. A \ref{step:selrule}.~lépésben egy megfelelő kiválasztási szabályt kell alkalmazni.
-Példa forrása: \href{https://www.inf.u-szeged.hu/actacybernetica/}{Acta Cybernetica (ez egy hiperlink)}.
+Főbb nézetkomponensek:
 
-\begin{algorithm}[H]
-\caption{A general interval B\&B algorithm}
-\label{alg:ibb}
-\textbf{\underline{Funct}} IBB($S,f$)
-\begin{algorithmic}[1] % sorszámok megjelenítése minden n. sor előtt, most n = 1
-\State Set the working list ${\cal L}_W$ := $\{S\}$ and the final list ${\cal L}_Q$ := $\{\}$
-\While{( ${\cal L}_W \neq \emptyset$ )} \label{alg:igoend}
-	\State Select an interval $X$ from ${\cal L}_W$ \label{step:selrule}\Comment{Selection rule}
-	\State Compute $lbf(X)$ \Comment{Bounding rule}
-	\If{$X$ cannot be eliminated} \Comment{Elimination rule}
-		\State Divide $X$ into $X^j,\ j=1,\dots, p$, subintervals   \Comment{Division rule}
-		\For{$j=1,\ldots,p$}
-			\If{$X^j$ satisfies the termination criterion} \Comment{Termination rule}
-				\State Store $X^j$ in ${\cal L}_W$
-			\Else
-				\State Store $X^j$ in ${\cal L}_W$
-			\EndIf
-		\EndFor
-	\EndIf
-\EndWhile
-\State \textbf{return} ${\cal L}_Q$
-\end{algorithmic}
-\end{algorithm}
+\begin{description}
+\item[\texttt{GameBoard}] Egy \texttt{RHGameState} megjelítéséért felelős objektum a feladványok előnézetei ezt használják.
+\item[\texttt{MainGameBoard}] A \texttt{GameBoard}-ból öröklődik, a játék tábla fülön kitüntett játéktábla objektum. Kezeli a Kézi/Algoritmus mód váltását, a táblaállapot megjelenítését és a járművek nyilaiért felel. Feliratkozik a csúcskattintási eseményekre a manuális navigációhoz.
+\item[\texttt{VehicleNode} / \texttt{CarNode} / \texttt{BusNode}] 2D sprite-ok, amik a járműveket reprezentálják, egy GameBoard objektumhoz tartoznak. Ha a \texttt{MainGameBoard} hoz tartozik, akkor \texttt{Arrow} léptető nyíl objektumok  tartoznak hozzá a kézi mozgatáshoz.
+\item[\texttt{GraphScene}] A 3D gyökér-node, amely a csúcsokat és éleket tárolja. Minden fizikai képkockában újjáépíti a Barnes–Hut nyolcasfát.
+\item[\texttt{Vertex}] Egy \texttt{RigidBody3D}, amely egy állapotot jelöl a 3D gráfban. Prioritás-alapú effekt-rendszert tart fenn a színhez és mérethez. Minden fizikai képkockában taszítóerőket alkalmaz a nyolcasfán keresztül. A teljesítmény érdekében használja a Godot beépített fizikai „alvás” (sleep) funkcióját.
+\item[\texttt{Edge}] Egy \texttt{MeshInstance3D}, amely vonalat húz két csúcs között \texttt{ImmediateMesh} használatával. Rugóerőket alkalmaz minden fizikai képkockában. Kihagyja a vonal újrarajzolását, ha mindkét végpont „alszik”.
+% TODO make it not static
+\item[\texttt{OctTree}] Statikus osztály, amely implementálja a Barnes–Hut nyolcasfát az $O(V \log V)$ bonyolultságú taszítóerő-közelítéshez. Minden fizikai képkockában újraépül.
+\item[\texttt{Camera3d}] Ortogonális projekciójú 3D kamera WASD mozgással, jobb egérgombos forgatással és egérgörgős zoommal.
+\item[\texttt{AlgoPlayer}] Vezérli az algoritmus futásának időzítését, feliratkozik/leiratkozik a solver eseményeiről, kezeli a lejátszást/szünetet/léptetést/újraindítást.
+\item[\texttt{SolverSettingsTab}] Felhasználói felület az algoritmus- és heurisztika-választáshoz, tabu mérethez, véletlenszerűséghez és a BFS/DFS felfedezéshez.
+\end{description}
+
+
+\subsection{Adattárolás}
+
+Az alkalmazás nem használ adatbázist. A rejtvények szintjei beégetett sztring literálokként tárolódnak a \texttt{Levels} osztályban. Minden szint egy 7 soros sztring: az első sor a szint címe, a maradék hat sor pedig a $6\times6$-os rácsot reprezentálja. Ez a reprezentáció kompakt, ember által olvasható és egyszerűen interpretálható.
+
+\subsection{Keresőalgoritmusok és heurisztikák}
+\label{sec:algorithms}
+
+Ez a szakasz részletezi a három keresőalgoritmust és az irányításukhoz használt heurisztikus függvényeket.
+
+\subsubsection{Heurisztikus függvények}
+
+Mind a négy heurisztika megfelel három alapvető tulajdonságnak:
+\begin{compactitem}
+\item \textbf{Nemnegativitás}: $h(s) \geq 0$ minden $s$ állapotra.
+\item \textbf{Megengedhetőség (Admissibility)}: $h(s) \leq h^*(s)$, ahol $h^*(s)$ a megoldáshoz szükséges minimális lépésszám $s$-ből.
+\item \textbf{Monotonitás} (konzisztencia): bármely $s$ állapotra és annak egyetlen lépéssel elérhető $s'$ utódjára $| h(s) - h(s') | \leq 1$.
+\end{compactitem}
+
+Ezek a tulajdonságok szükségesek, hogy a gráfkeresés egyben A$^C$ gráfkeresés legyen, mivel ekkor egy állapot első kiterjesztésekor a hozzá vezető legrövidebb utat már megtaláltuk, többet nincs szükség kiterjeszteni azt az állapotot.
+
+
+\paragraph{Null heurisztika.} $h(s) = 0$ minden állapotra. Nem ad információt az állapotról; a keresés nem informált brute-force felfedezéssé válik. Hasznos az alap algoritmus-viselkedés megfigyeléséhez.
+
+Az alábbi heurisztikák mind speciálisan a Rush Hour $6 \times 6$-os táblájára és a 3. sor jobb szélén lévő kijáratára lettek implementálva. 
+
+\paragraph{Távolság (Distance) heurisztika.} $h(s) = w_{\text{tábla}} - 1 - x_{\text{fő}}$, ahol $w_{\text{tábla}}$ a tábla szélessége $x_{\text{fő}}$ a főautó elejének oszlopa (0-tól indexelve). 6 mező széles táblára ez az érték 0 (megoldva) és 4 között mozog. Ez megengedhető, mivel a főautónak legalább ennyi mezőt kell elmozdulnia a kijáratig. Monoton, mert egyetlen lépés legfeljebb 1-gyel változtatja meg a főautó távolságát.
+
+\paragraph{Távolság + torlaszok heurisztika.} A távolság heurisztikához hozzáad egy-egy költséget minden olyan jármű által elfoglalt mezőért, amely a főautó és a kijárat között van a kijárat sorában. Megengedhető, mert minden blokkoló elem eltávolítása legalább egy plusz lépést igényel. Monoton, mert egy lépés legfeljebb 1-gyel módosítja a távolságot vagy a torlaszok számát.
+
+\paragraph{Legkevesebb lépés (Least-moves) heurisztika.} Kiterjeszti a távolság heurisztikát a blokkoló járművek eltávolítási költségének alsó becslésével. Minden, a főautó útját elálló járműre kiszámítja a minimális lépésszámot, amellyel félretolható, figyelembe véve: (a) az irányt, amerre tolni kell (buszoknál mindig lefelé a 4–6. sorokba, mivel a kijárat a 3. sorban van), és (b) a tolást akadályozó további járműveket. Ez az elemzés a monotonitás megőrzése érdekében már nem lehet ugyanígy kiterjeszteni a fő autót blokkoló autóknak a blokkolóinak eltolánsának lépésszámára, mivel ugyanezzel a becslési módszerrel már nem lenne monoton a heurisztika, egy ilyen autó elmozdítása 2-t is csökkenthet a heurisztikus függvény értékén. 
+
+\subsubsection{Tabu keresés}
+\label{sec:tabu}
+
+% TODO cite glover1989tabu? ~\cite{glover1989tabu}
+A tabu keresés egy lokális keresési meta-heurisztika. Minden lépésben felfedezi az összes szomszédos állapotot, kiszűri a tabu listán szereplőket, kiértékeli mindegyikre a heurisztikus függvényt és a heurisztika szerinti legjobb maradék szomszédra lép.
+
+A tabu lista az utolsó $n$ meglátogatott állapotot tárolja. Főbb konfigurációk:
+\begin{compactitem}
+\item $n = 0$: mohó keresés memória nélkül, mindig a heurisztika szerinti legjobb szomszédra lép.
+\item $n = 1$: hegymászó algoritmus; csak a közvetlenül megelőző állapotba való visszatérést kerüli el.
+\item $n > 1$: elkerüli az utolsó $n$ állapotot. Megoldás nélkül leáll, ha minden szomszéd benne van a tabuban.
+\end{compactitem}
+
+A tabu keresés \emph{nem} garantálja a megoldás megtalálását, sem annak optimalitását. Ez egy gyors, lokális módszer, amely csapdába eshet az állapottér olyan régióiban, ahol kedvezőek a heurisztikus pontszámok, de nincs megoldás.
+
+\subsubsection{Visszalépéses (Backtracking) keresés}
+\label{sec:backtracking}
+
+A visszalépéses keresés minden állapothoz a szomszédos még az úton még azelőtt nem látogatott állapotok heurisztika szerint rendezett sorozatát tartja fenn: minden lépésben a jelenlegi út utolsó állapotának a legjobb még nem próbált opciót vizsgálja meg. Ha már nincs új opció akkor leveszi az állapotot feléített út végéről, azaz algoritmus visszalép.
+
+\textbf{Leállási garancia}: a backtracking algoritmus véges állapotú állapotgráfra garantáltan leáll. Ha megoldás nélkül áll le, akkor a kezdőállapotból nem érhető el megoldás. Ugyanakkor csak az aktuális útvonalon lévő állapotokat kerüli el, a korábban már bejártakat nem. Ez azt jelenti, hogy többször is feltárhat nagy állapotcsoportokat, ami jelentős redundáns munkához vezethet.
+
+\textbf{Időbonyolultság}: legrosszabb esetben a backtracking $O(V!)$ útvonalat jár be, ahol $V$ az elérhető állapotok száma. Pontosabban, minden egyszerű utat feltárhat a kezdőállapotból. Egy $b$ elágazási tényezőjű és $V$ állapotú térben a legrosszabb eset $O(b^V)$. A Rush Hour esetében egy adott feladványra az elágazási tényező legfeljebb $2 N_{\text{jármű}}$ ahol $N_{\text{jármű}}$ az autók és buszok száma összesen. Megfelelő heurisztikával az algoritmus a legtöbb esetben ennél sokkal gyorsabban talál megoldást, amennyiben elérhető.
+
+\subsubsection{A\textsuperscript{C} gráfkeresés}
+\label{sec:graphsearch}
+
+Az A$^C$ gráfkeresés egy informált keresőalgoritmus, amely az $f(n) = g(n) + h(n)$ kiértékelő függvényt használja, ahol $g(n)$ a mélység, $h(n)$ pedig a heurisztikus pontszám.
+% TODO ~\cite{hart1968astar}.
+
+Mivel minden alkalmazható heurisztika nemnegatív, megengedhető és monoton, a következő tulajdonság teljesül: amikor egy állapotot kiveszünk a prioritási sorból kiterjeszteni, az az útvonal, amelyen elértük, a legrövidebb út az adott állapothoz. Ezért minden állapotot legfeljebb egyszer kell kiterjeszteni (az A$^C$-ben a „C” a „closed list”-re utal – a már kiterjesztett állapotokat nem terjesztjük ki újra).
+
+Ez kiküszöböli a backtracking körbejárási és újrafelfedezési problémáit, de az algoritmus sok olyan állapotot is feltárhat, amelyek nem szükségesek a megoldáshoz, mivel megvizsgál minden állapotot, amelynek $f$-értéke kisebb az optimális megoldás költségénél.
+
+\textbf{Időbonyolultság}: Az A$^C$ gráfkeresés minden állapotot legfeljebb egyszer fejt ki, ami $O(V)$ kifejtést jelent. Minden kifejtés legfeljebb $O(b)$ utódot generál ($b$ az elágazási tényező, max $2 \times N_{\text{jármű}}$), és minden beillesztés a prioritási sorba $O(\log V)$ költségű. Összesen: $O(V \cdot b \cdot \log V)$. A tárigény $O(V)$ a felfedezett és kiterjesztett állapotok szótára miatt.
+
+\subsubsection{Barnes–Hut algoritmus és a nyolcasfa}
+\label{sec:barneshut}
+
+% TODO ~\cite{fruchterman1991graph}
+Az erő-alapú gráfelrendezés megköveteli a taszítóerők kiszámítását minden csúcspár között, ami képkockánként $O(V^2)$. Több ezer csúcsnál ez teljesítménybeli szűk keresztmetszetté válik.
+
+A Barnes–Hut algoritmus~\cite{barneshut1986} ezt $O(V \log V)$-re csökkenti egy térbeli hierarchikus adatszerkezet – 3D-ben egy \textbf{nyolcasfa (octree)} – használatával. Az algoritmus menete:
+
+\begin{enumerate}
+\item \textbf{Nyolcasfa felépítése}: kiszámítjuk az összes csúcsot befoglaló tengelypárhuzamos kockát azaz amibe minden csúcs belefér, ezt vesszük alapul és rekurzívan beillesztjük a csúcsokat. Minden belső csomópont tárolja a részfájában lévő csúcsok számát és tömegközéppontját. A levelek egyetlen csúcsot tartalmaznak.
+\item \textbf{Erők kiszámítása}: minden $v$ csúcsra bejárjuk a fát. Minden belső csomópontnál:
+\begin{compactitem}
+\item Ha $s / d < \theta$ (ahol $s$ a cella mérete, $d$ pedig $v$ távolsága a tömegközépponttól), akkor az egész cellát egyetlen testként kezeljük, amelynek tömege megegyezik a benne lévő csúcsok számával. Ez a \emph{Barnes–Hut kritérium}.
+\item Ellenkező esetben rekurzívan bejárjuk a csomópont gyerekeit.
+\end{compactitem}
+\item A tipikusan $0.5 -- 1.5$ intervallumra beállított $\theta$ paraméter szabályozza a pontosság és a sebesség közötti kompromisszumot. Az alkalmazás a $\theta = 1.0$ értéket használja.
+\end{enumerate}
+
+A két pont közötti taszítóerő a fordított négyzetes törvényt követi: $\vec{F} = -k \cdot m / d^2 \cdot \hat{r}$.
+
+A nyolcasfát minden fizikai frissítésnél elölről felépítjük, mivel a csúcsok pozíciója folyamatosan változik. A faépítés $O(V \log V)$, az erő számítása csúcsonként $O(\log V)$, így a teljes időkomplexitás $O(V \log V)$ frissítésként.
+
+%% ============================================================
+\section{Implementáció}
+%% ============================================================
+
+\subsection{Felhasznált technológiák}
+
+\begin{compactitem}
+\item \textbf{Godot Engine 4.6} (Mono/.NET variáns)~\cite{godot_engine}: nyílt forráskódú játékmotor a 2D/3D rendereléshez, fizikához és felhasználói felülethez.
+\item \textbf{C\# és .NET SDK 10.0}~\cite{dotnet10}: az összes alkalmazáslogika ezen a nyelven készült. Az egyike a Godot által támogatott nyelvek közül és ideális az objektum orientált logikához.
+\end{compactitem}
+
+Kihasznált motorfunkciók:
+\begin{compactitem}
+\item \texttt{RigidBody3D} a csúcsok fizikájához (erők, sebességkorlátozás, alvás).
+\item \texttt{ImmediateMesh} a dinamikus élvonalak kirajzolásához.
+\item \texttt{CollisionShape3D} a csúcsok kattintás érzékeléséhez (ray-cast).
+\item A Godot \texttt{\_PhysicsProcess} metódusa prioritásos sorrenddel a folyamatok ütemezéséhez és párhuzamosításához.
+\end{compactitem}
+
+\subsection{Eltérések az eredeti tervtől}
+
+\paragraph{Erő kíértékelés és alvási optimalizáció.}
+A fejlesztés során az élek vizuális vonalainak frissítése számításigényesnek bizonyult. Ennek megoldására a csúcsokra kifejtett erőt nem közvetlen a motor függvényein keresztül alkalmazzuk:
+
+\begin{compactenum}
+\item Ahelyett, hogy az erőket közvetlenül a Godot fizikai API-ján keresztül alkalmaznánk, az erők egy csúcsonkénti (\texttt{Vector3 \_pendingForces}) mezőben gyűlnek.
+\item Minden fizikai frissítés végén egy \texttt{Processor} node végigmegy a csúcsokon meghívja a kiértékelő függvényüket.
+\item Egy dinamikus küszöbérték dönti el, hogy a függőben lévő erő elég jelentős-e az alkalmazáshoz. Ez a küszöb a csúcs „életkorával” (\texttt{\_timeAwake}) és az összes csúcs számával skálázódik, így nagy, stabilizálódott gráfoknál a kis maradék erőket figyelmen kívül hagyja, a jelentős erőket pedig meghívja a Godot függvényeivel.
+\item Ha az erők tartósan a küszöb alatt maradnak, a csúcsokra beállított sebesség tompítás miatt el fogják érni a nyugalmi állapotot, ekkor a motor „alvó” módba teszi a \texttt{RigidBody3D}-t, leállítva a mozgását és a \texttt{\_PhysicsProcess} hívását, ezután a csúcs újra felébredhet, ha egy élnek a rugóereje a küszöb fölé kerül és applikálva lesz az erő a csúcsra.
+\item Azok az élek, amelyeknek mindkét végpontja alszik, kihagyják a vonal-mesh frissítését, jelentős renderelési terhet levéve a rendszerről.
+\end{compactenum}
+
+Ez a lépcsőzetes optimalizáció (erőküszöb $\to$ fizikai alvás $\to$ render-kihagyás) jelentős teljesítménynövekedést eredményez nagy, már beállt gráfok esetén.
+
+%% ============================================================
+\section{Tesztelés}
+%% ============================================================
+
+\subsection{Egységtesztek}
+
+A következő egységtesztek ellenőrzik a program helyességét:
+
+\begin{center}
+\begin{longtable}{ | p{0.05\textwidth} | p{0.30\textwidth} | p{0.55\textwidth} | }
+
+\hline
+\multicolumn{3}{|c|}{\textbf{Egységtesztek}}
+\\ \hline
+\textbf{\#} & \textbf{Teszteset} & \textbf{Ellenőrzés}
+\\ \hline \hline
+\endfirsthead
+
+\hline
+\textbf{\#} & \textbf{Teszteset} & \textbf{Ellenőrzés}
+\\ \hline \hline
+\endhead
+
+\hline
+\endfoot
+\endlastfoot
+
+U1
+& Szint-parzolás
+& Minden szint kivétel nélkül betöltődik; a járművek száma és pozíciója egyezik az elvárttal.
+\\ \hline
+
+U2
+& Táblarács konzisztencia
+& Parzolás után a $6\times6$-os rács helyesen rendeli a cellákat a járművekhez vagy $-1$-hez.
+\\ \hline
+
+U3
+& Lépésgenerálás
+& A \texttt{GetPossibleMoves()} csak érvényes lépéseket ad vissza (nincs átfedés, nincs kilépés a tábláról).
+\\ \hline
+
+U4
+& Állapot immutabilitás
+& A \texttt{WithMove()} új állapotot ad vissza; az eredeti állapot változatlan marad.
+\\ \hline
+
+U5
+& Állapot egyenlőség
+& Két azonos járműpozíciójú állapot egyenlő; az eltérőek nem.
+\\ \hline
+
+U6
+& Hash konzisztencia
+& Az egyenlő állapotok hash kódja azonos; a különbözőeké (nagy valószínűséggel) eltérő.
+\\ \hline
+
+U7
+& Megoldás detektálása
+& Egy állapot akkor és csak akkor megoldott, ha a főautó pozíciója $(5, 2)$.
+\\ \hline
+
+U8
+& Null heurisztika
+& Minden állapotra 0-t ad vissza.
+\\ \hline
+
+U9
+& Távolság heurisztika tartomány
+& Az érték $[0, 4]$ között van; csak megoldott állapotra 0.
+\\ \hline
+
+U10
+& Heurisztika megengedhetőség
+& Minden heurisztikára: $h(s) \leq$ tényleges minimális lépésszám (ismert feladványokon mérve).
+\\ \hline
+
+U11
+& Heurisztika monotonitás
+& Minden $s$ állapotra és $s'$ utódra: $h(s) \leq h(s') + 1$.
+\\ \hline
+
+U12
+& Tabu solver leállása
+& Megfelelő tabu mérettel egy megoldható feladványon a solver vagy megoldást talál, vagy jelzi a leállást.
+\\ \hline
+
+U13
+& Backtracking teljesség
+& Megoldható feladványon a backtracking megtalálja a megoldást. Ha a feladványra megoldhatatlan jelzi azt.
+\\ \hline
+
+U14
+& A$^C$ optimalitás
+& Adott feladványra ismert optimális hosszúságú megoldással az A$^C$ monoton heurisztikával optimális hosszúságó megoldást talál.
+\\ \hline
+
+U15
+& StateMove szimmetria
+& $(A \to B)$ megegyezik $(B \to A)$-val az élek irányítatlansága miatt.
+\\ \hline
+
+U16
+& BFS/DFS felfedezési szám
+& Állapotlimit esetén a felfedezés pontosan a megadott számnál áll le.
+\\ \hline
+
+\caption{Egységtesztek a programhoz}
+\label{tab:unit-tests}
+\end{longtable}
+\end{center}
+
+% TODO node tests?
+
+\subsection{Végfelhasználói tesztesetek}
+
+A következő tesztesetek a \ref{tab:userstory}. táblázat felhasználói történetein alapulnak.
+
+\begin{center}
+\begin{longtable}{ | p{0.05\textwidth} | p{0.20\textwidth} | p{0.20\textwidth} | p{0.20\textwidth} | p{0.20\textwidth} | }
+
+\hline
+\multicolumn{5}{|c|}{\textbf{Végfelhasználói tesztesetek}}
+\\ \hline
+\textbf{\#} & \textbf{Művelet} & \textbf{Előfeltétel} & \textbf{Bemenet} & \textbf{Elvárt eredmény}
+\\ \hline \hline
+\endfirsthead
+
+\hline
+\textbf{\#} & \textbf{Művelet} & \textbf{Előfeltétel} & \textbf{Bemenet} & \textbf{Elvárt eredmény}
+\\ \hline \hline
+\endhead
+
+\hline
+\endfoot
+\endlastfoot
+
+E1
+& Szint betöltése
+& Nem fut algoritmus
+& „Level 1” gomb
+& Tábla mutatja az 1. szintet; a gráfon egy kék csúcs van.
+\\ \hline
+
+E2
+& Kézi lépés
+& Szint betöltve
+& Kattintás egy autó előre nyilára
+& Az autó elmozdul; új csúcs és él jelenik meg a gráfon.
+\\ \hline
+
+E3
+& BFS felfedezés
+& Szint betöltve
+& Max áll.: 50; BFS indítás
+& A gráf feltöltődik max. 50 csúccsal; a megoldások zöldek.
+\\ \hline
+
+E4
+& Felfedezés leállítása
+& Felfedezés fut
+& Stop gomb
+& A folyamat megáll; a csúcsok megmaradnak.
+\\ \hline
+
+E5
+& Tabu keresés futtatása
+& Szint betöltve
+& Tabu: 5, Távolság heur.; Play
+& Algoritmus fut, narancs/sárga kiemelések; státusz: „Running”.
+\\ \hline
+
+E6
+& Algoritmus léptetése
+& Algoritmus nem terminált
+& Step gomb
+& Egy lépés lefut; a lépésszámláló nő.
+\\ \hline
+
+E7
+& Megoldás megtalálása
+& Futás megoldható szinten
+& Kivárás
+& Státusz: „Solved”; megoldási út zöld; megoldási hossz látható.
+\\ \hline
+
+E8
+& Ugrás csúcsra
+& Több csúcs van, nincs futás
+& Bal klikk egy csúcsra
+& Tábla Kézi módba vált az adott állapottal; a csúcs piros lesz.
+\\ \hline
+
+E9
+& Kamera forgatása
+& Gráf látható
+& Jobb egérgomb + húzás
+& A kamera forog a gráf körül.
+\\ \hline
+
+E10
+& Nagyítás
+& Gráf látható
+& Egérgörgő
+& A nézet közelít vagy távolít.
+\\ \hline
+
+E11
+& Kamera mozgatása
+& Gráf látható
+& W/A/S/D billentyűk
+& A kamera elmozdul az lenyomott gomb szerint.
+\\ \hline
+
+E12
+& Csúcsok elrejtése
+& Gráf látható
+& Hide kapcsoló
+& Minden fehér csúcs és él el lesz rejtve.
+\\ \hline
+
+E13
+& Solver újraindítása
+& Futott már az algoritmus
+& Restart gomb
+& Algoritmus alaphelyzetbe áll; algoritmus kiemelések és lépésszám törlődnek.
+\\ \hline
+
+E14
+& Módváltás (Kézi/Algo)
+& Szint betöltve
+& Manuális/Algoritmus gomb
+& A tábla a manuális vagy az algoritmus módba vált.
+\\ \hline
+
+\caption{Felhasználói történeteken alapuló tesztesetek}
+\label{tab:user-tests}
+\end{longtable}
+\end{center}
