@@ -4,15 +4,28 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
+public struct Level {
+    public string title;
+    public RHGameState state;
+}
+
 static class Levels {
     // return the title, and the state
-    public static (string, RHGameState) LoadLevel(int index) {
+    public static Level LoadLevel(int index) {
         if (index < 0 || index >= levelStrings.Length) {
             throw new ArgumentException($"Level index must be between 0 and {levelStrings.Length}");
         }
-        string[] lvlS = levelStrings[index].Split("\n");
+        
+        try {
+            return LoadLevelString(levelStrings[index]);
+        } catch (Exception e) {
+            throw new Exception($"Error loading level at index {index}: {e.Message}");
+        }
+    }
+    public static Level LoadLevelString(string levelString) {
+        string[] lvlS = levelString.Split("\n");
         if (lvlS.Length != 7) {
-            throw new Exception($"Level {index} is not formatted correctly.");
+            throw new Exception($"Level is not formatted correctly.");
         }
         string title = lvlS[0];
 
@@ -36,16 +49,20 @@ static class Levels {
             }
         }
 
-        return (title, new RHGameState(vehicles.ToArray()));
+        return new Level {
+            title = title,
+            state = new RHGameState(vehicles.ToArray())
+        };
     }
+
     public static int LevelCount => levelStrings.Length;
-    public static IEnumerable<(string, RHGameState)> LoadLevels() {
+    public static IEnumerable<Level> LoadLevels() {
         for(int i = 0; i < LevelCount; i++) {
             yield return LoadLevel(i);
         }
     }
 
-    public static PlacedRHPiece GetPiece(string[] lvlS, char c, int i, int j) {
+    private static PlacedRHPiece GetPiece(string[] lvlS, char c, int i, int j) {
         if (lvlS[i][j] != c) {
             throw new ArgumentException($"The front of car labeled with {c} is not at cooridinates {i}, {j}.");
         }
@@ -74,7 +91,7 @@ static class Levels {
         throw new Exception($"No neighbouring cell for {c} at ({i},{j}) contains its lower-case body.");
     }
 
-    public static char? GetChar(string[] lvlS, int i, int j, Direction d, int tiles = 1) {
+    private static char? GetChar(string[] lvlS, int i, int j, Direction d, int tiles = 1) {
         
         int[,] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
 

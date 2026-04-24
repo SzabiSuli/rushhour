@@ -18,9 +18,9 @@ public partial class LoadLevelButton : PanelContainer
         
     }
 
-    public void Init(string levelString, RHGameState level) {
-        label.Text = levelString;
-        gameBoard.Setup(level);
+    public void Init(Level level) {
+        label.Text = level.title;
+        gameBoard.Setup(level.state);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

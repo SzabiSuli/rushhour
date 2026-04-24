@@ -18,11 +18,11 @@ public partial class LevelsGrid : GridContainer
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
         for (int i = 0; i < Levels.LevelCount; i++) {
-            var (levelString, level) = Levels.LoadLevel(i);
+            Level level = Levels.LoadLevel(i);
             LoadLevelButton llb = LevelButtonCreator.Instantiate<LoadLevelButton>();
-            llb.Init(levelString, level);
+            llb.Init(level);
             AddChild(llb);
-            llb.button.Pressed += () => AlgoPlayer.Instance.LoadLevel(level);
+            llb.button.Pressed += () => AlgoPlayer.Instance.LoadLevel(level.state);
         }
     }
 }
