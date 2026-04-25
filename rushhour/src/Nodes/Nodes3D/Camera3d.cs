@@ -46,7 +46,7 @@ public partial class Camera3d : Camera3D {
 		}
 	}
     public float OrbitDistance { get; set; } = 4000.0f;
-	public Node3D? followTarget;
+	public Vertex? followTarget;
 	private Vector3 _offsetDirection;
 	private Vector3 _upVector;
 

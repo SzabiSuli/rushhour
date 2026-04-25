@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bvew5r8aeo2te" path="res://src/Nodes/Nodes3D/GraphScene.cs" id="2_18nlu"]
 [ext_resource type="Script" uid="uid://bkqpls8s2agia" path="res://src/Nodes/Nodes3D/Camera3d.cs" id="2_pw63i"]
-[ext_resource type="Script" uid="uid://dfdyyf2top3sj" path="res://src/Nodes/Nodes3D/Processor.cs" id="4_01n6w"]
+[ext_resource type="Script" uid="uid://vxwbbxcf1rkt" path="res://src/Nodes/Nodes3D/EdgeDrawer.cs" id="4_6wevv"]
 [ext_resource type="PackedScene" uid="uid://di7oxg16i851v" path="res://scenes/ui/legend_panel_container.tscn" id="4_c1pb6"]
+[ext_resource type="Script" uid="uid://cnihwcs04i1yn" path="res://src/Nodes/Nodes3D/VertexDrawer.cs" id="4_e1cbu"]
 [ext_resource type="Script" uid="uid://y81v2bpvndyk" path="res://src/Nodes/UI/TabCont.cs" id="5_6u1mn"]
 [ext_resource type="PackedScene" uid="uid://cij7w4pmoahdj" path="res://scenes/ui/status_panel_container.tscn" id="7_e1cbu"]
 [ext_resource type="PackedScene" uid="uid://uiqnby3t6sso" path="res://scenes/ui/tabs/levels_tab.tscn" id="9_e1cbu"]
@@ -52,7 +53,6 @@ mouse_target = true
 
 [node name="3DSubViewport" type="SubViewport" parent="HSplitContainer/3DPanel/3DSubViewContainer" unique_id=1927452465]
 handle_input_locally = false
-physics_object_picking = true
 size = Vector2i(1492, 1080)
 render_target_update_mode = 4
 
@@ -65,9 +65,11 @@ size = 100.0
 far = 8000.0
 script = ExtResource("2_pw63i")
 
-[node name="Processor" type="Node" parent="HSplitContainer/3DPanel/3DSubViewContainer/3DSubViewport/GraphScene" unique_id=1825544511]
-process_physics_priority = 2
-script = ExtResource("4_01n6w")
+[node name="EdgeDrawer" type="MultiMeshInstance3D" parent="HSplitContainer/3DPanel/3DSubViewContainer/3DSubViewport/GraphScene" unique_id=1565364764]
+script = ExtResource("4_6wevv")
+
+[node name="VertexDrawer" type="MultiMeshInstance3D" parent="HSplitContainer/3DPanel/3DSubViewContainer/3DSubViewport/GraphScene" unique_id=1468477134]
+script = ExtResource("4_e1cbu")
 
 [node name="LegendPanelContainer" parent="HSplitContainer/3DPanel" unique_id=274209587 instance=ExtResource("4_c1pb6")]
 layout_mode = 1
