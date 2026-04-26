@@ -98,7 +98,9 @@ public partial class Camera3d : Camera3D {
 					Size -= 10;
 				}
 			} else if (mouseButton.Pressed && mouseButton.ButtonIndex == MouseButton.WheelDown) {
-				Size += 10;
+				if (Size <= 990){
+					Size += 10;
+				}
 			}
 
 			// Start/stop rotate+tilt with M2
