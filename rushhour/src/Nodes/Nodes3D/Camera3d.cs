@@ -47,17 +47,13 @@ public partial class Camera3d : Camera3D {
 	}
     public float OrbitDistance { get; set; } = 4000.0f;
 	public Vertex? followTarget;
-	private Vector3 _offsetDirection;
-	private Vector3 _upVector;
+	private Vector3 _offsetDirection = new Vector3(0, 1, 0);
+	private Vector3 _upVector = new Vector3(0, 0, -1);
 
     private bool _isRmbRotating = false;
-    private float _yaw = 0.0f;
-    private float _pitch = Mathf.Pi / 2;
 
 	// With a Size of 10 a 256px sprite is 64px on the screen
 	public float ZoomFactor => 2.5f / Size;
-
-    public override void _Ready() => UpdateHelperVectors();
     public override void _Process(double delta) {
         var movement = Vector3.Zero;
 
@@ -124,28 +120,25 @@ public partial class Camera3d : Camera3D {
 			float dx = (mouseMotion.Relative.X / vmin) * YawSensitivity * Mathf.Tau * sixtyFps;
 			float dy = (mouseMotion.Relative.Y / vmin) * PitchSensitivity * Mathf.Tau * sixtyFps;
 
-			_yaw -= dx;
-			_pitch += dy; // flip for inverted tilt
-
-			UpdateHelperVectors();
+			// Local left axis
+			Vector3 leftAxis = _offsetDirection.Cross(_upVector).Normalized();
+			
+			// Pitch rotation
+			Basis pitchRotation = new Basis(leftAxis, dy);
+			_offsetDirection = pitchRotation * _offsetDirection;
+			_upVector = pitchRotation * _upVector;
+			
+			// Yaw rotation
+			Basis yawRotation = new Basis(_upVector, -dx);
+			_offsetDirection = yawRotation * _offsetDirection;
+			_upVector = yawRotation * _upVector;
+			
+			_offsetDirection = _offsetDirection.Normalized();
+			_upVector = _upVector.Normalized();
+			
+			// Re-orthogonalize to prevent drift over time
+			leftAxis = _offsetDirection.Cross(_upVector).Normalized();
+			_upVector = leftAxis.Cross(_offsetDirection).Normalized();
 		}
-	}
-
-	// =========================
-	// Helpers
-	// =========================
-	private void UpdateHelperVectors() {
-		// Spherical direction from yaw/pitch
-		_offsetDirection = new Vector3(
-			Mathf.Sin(_yaw) * Mathf.Cos(_pitch),
-			Mathf.Sin(_pitch),
-			Mathf.Cos(_yaw) * Mathf.Cos(_pitch)
-		).Normalized();
-
-		_upVector = new Vector3(
-			-Mathf.Sin(_yaw) * Mathf.Sin(_pitch),
-			Mathf.Cos(_pitch),
-			-Mathf.Cos(_yaw) * Mathf.Sin(_pitch)
-		).Normalized();
 	}
 }
