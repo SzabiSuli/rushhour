@@ -1,5 +1,7 @@
 namespace rushhour.src.Nodes.Nodes3D;
 
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public partial class EdgeDrawer : MultiMeshInstance3D {
@@ -26,10 +28,11 @@ public partial class EdgeDrawer : MultiMeshInstance3D {
     public void UpdateVisuals() {
         _mesh.ClearSurfaces();
 
-        if (Edge.Dict.Count == 0) return;
+        IEnumerable<Edge> visableEdges = Edge.Dict.Values.Where(e => !e.Hidden);
+        if (!visableEdges.Any()) return;
 
         _mesh.SurfaceBegin(Mesh.PrimitiveType.Lines);
-        foreach (Edge edge in Edge.Dict.Values) {
+        foreach (Edge edge in visableEdges) {
             Color color = edge.GetColor();
             _mesh.SurfaceSetColor(color);
             _mesh.SurfaceAddVertex(edge.From.Position);

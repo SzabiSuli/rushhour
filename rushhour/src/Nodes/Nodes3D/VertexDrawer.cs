@@ -1,5 +1,7 @@
 namespace rushhour.src.Nodes.Nodes3D;
 
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public partial class VertexDrawer : MultiMeshInstance3D {
@@ -35,16 +37,16 @@ public partial class VertexDrawer : MultiMeshInstance3D {
     // Manually builds a camera-facing (billboard) basis per instance so that
     // scale from GetScale() is correctly preserved in the final transform.
     public void UpdateVisuals() {
-        int count = Vertex.Dict.Count;
-        Multimesh.VisibleInstanceCount = count;
-
         // Get the camera-facing basis once per frame.
         // The camera's basis columns are: X=right, Y=up, Z=back (towards camera).
         // A quad facing the camera needs its local X/Y to align with camera right/up.
         Basis cameraBasis = Camera3d.Instance.GlobalTransform.Basis;
 
+        IEnumerable<Vertex> visableVertices = Vertex.Dict.Values.Where(v => !v.Hidden);
+        Multimesh.VisibleInstanceCount = visableVertices.Count();
+
         int i = 0;
-        foreach (Vertex v in Vertex.Dict.Values) {
+        foreach (Vertex v in visableVertices) {
             float scale = v.GetScale();
             // Scale the facing basis uniformly - this is what billboard mode prevents us doing
             Basis scaledBasis = cameraBasis.Scaled(Vector3.One * scale);

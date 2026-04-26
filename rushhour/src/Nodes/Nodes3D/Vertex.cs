@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using rushhour.src.Model;
-
+using rushhour.src.Nodes.UI;
 
 public class Vertex {
     // Physics constants
@@ -71,6 +71,7 @@ public class Vertex {
         ConnectedAlgoEdges = 0;
     }
     public VertexEffect? Effect => _effects.Any() ? _effects.Min() : null;
+    public bool Hidden => HideButton.Instance.ButtonPressed && Effect == null;
 
     public Color GetColor() => Effect switch {
         VertexEffect.ManualCurrent => Colors.Red,
@@ -78,7 +79,6 @@ public class Vertex {
         VertexEffect.Initial       => Colors.RoyalBlue,
         VertexEffect.AlgoCurrent   => Colors.Orange,
         VertexEffect.OnAlgoPath    => new Color(1, 1, 0, 0.5f),
-        VertexEffect.Transparent   => new Color(1, 1, 1, 0.01f),
         _                          => new Color(1, 1, 1, 0.5f),
     };
 
@@ -162,12 +162,6 @@ public class Vertex {
         Dict[args.move.To].ConnectedAlgoEdges += diff;
         Dict[args.move.From].ConnectedAlgoEdges += diff;
     } 
-
-    public static void OnHideButtonToggled(bool on) {
-        foreach (Vertex v in Dict.Values) {
-            v.SetEffect(VertexEffect.Transparent, on);
-        }
-    }
 }
 
 
@@ -177,6 +171,5 @@ public enum VertexEffect {
     Solved = 1,
     Initial = 2,
     AlgoCurrent = 3,
-    OnAlgoPath = 4,
-    Transparent = 5
+    OnAlgoPath = 4
 }

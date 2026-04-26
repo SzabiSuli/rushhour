@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using rushhour.src.Model;
+using rushhour.src.Nodes.UI;
 
 
 public class Edge {
@@ -29,15 +30,14 @@ public class Edge {
     public void SetEffect(EdgeEffect e, bool active) {
         if (active) AddEffect(e); else RemoveEffect(e);
     }
-    public void ClearEffects() {
-        _effects.RemoveWhere(ee => ee != EdgeEffect.Transparent);
-    }
+    public void ClearEffects() => _effects.Clear();
     public EdgeEffect? Effect => _effects.Any() ? _effects.Min() : null;
+    public bool Hidden => HideButton.Instance.ButtonPressed && Effect == null;
+
 
     public Color GetColor() => Effect switch {
         EdgeEffect.SolutionEdge => new Color(0, 1, 0, 1f),
         EdgeEffect.AlgoEdge     => new Color(1, 1, 0, 0.5f),
-        EdgeEffect.Transparent  => new Color(1, 1, 1, 0.01f),
         _                       => new Color(1, 1, 1, 0.1f),
     };
 
@@ -108,17 +108,10 @@ public class Edge {
     public static void OnPathChange(object? _, PathChangeArgs args) {
         Dict[args.move].SetEffect(EdgeEffect.AlgoEdge, args.onPath);
     } 
-
-    public static void OnHideButtonToggled(bool on) {
-        foreach (Edge e in Dict.Values) {
-            e.SetEffect(EdgeEffect.Transparent, on);
-        }
-    }
 }
 
 public enum EdgeEffect {
     // listed from highest priority to lowest
     SolutionEdge = 0,
-    AlgoEdge = 1,
-    Transparent = 2,
+    AlgoEdge = 1
 }

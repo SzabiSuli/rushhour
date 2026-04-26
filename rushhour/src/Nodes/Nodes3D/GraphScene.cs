@@ -54,7 +54,7 @@ public partial class GraphScene : Node3D {
 
         foreach (Vertex v in Vertex.Dict.Values) {
             // Skip transparent (hidden) vertices
-            if (v.Effect == VertexEffect.Transparent) continue;
+            if (v.Hidden) continue;
 
             // is_position_behind returns true when the point is behind the camera
             if (cam.IsPositionBehind(v.Position)) continue;
