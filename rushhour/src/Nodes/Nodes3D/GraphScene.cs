@@ -74,8 +74,7 @@ public partial class GraphScene : Node3D {
 
     public override void _PhysicsProcess(double delta) {
         // Stage 1: OctTree Build
-        OctTree.BuildAndSetCurrent(Vertex.Dict.Values);
-        var tree = OctTree.GetCurrent();
+        OctTreeNode? tree = OctTreeNode.Build(Vertex.Dict.Values);
 
         // Stage 2: Force Computation (parallel)
 
@@ -85,7 +84,7 @@ public partial class GraphScene : Node3D {
 
         Parallel.ForEach(vertices, v => {
             if (tree != null) {
-                var force = OctTree.ComputeForce(tree, v, OctTree.Theta);
+                var force = tree.ComputeForce(v);
                 v.ApplyPendingForce(force);
             }
         });
