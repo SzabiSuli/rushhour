@@ -119,7 +119,7 @@ popup/item_1/text = "Distance heuristic"
 popup/item_1/id = 1
 popup/item_2/text = "Distance + blocks heuristic"
 popup/item_2/id = 2
-popup/item_3/text = "Least moves to goal way heuristic"
+popup/item_3/text = "Least moves to goal heuristic"
 popup/item_3/id = 3
 
 [node name="RandomBox" type="CheckBox" parent="." unique_id=520860355]
