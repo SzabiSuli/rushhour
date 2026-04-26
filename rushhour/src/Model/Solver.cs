@@ -22,11 +22,9 @@ public abstract class RHSolver {
     protected Random rand = new Random();
     protected float randomFactor;
     private RHGameState? _current;
-    public int StepCount {get; protected set;} = 0;
+    public virtual int StepCount {get; protected set;} = 0;
     protected RHGameState? _solvedStateFound;
 
-    // TODO these shouldn't create vertices directly, 
-    // but enqueue them for creation so, it does not slow down the algorithm.
     public event EventHandler<RHGameState>? NewCurrent;
     public event EventHandler<PathChangeArgs>? PathChange;
     public event EventHandler<StateMove>? NewEdge;
@@ -71,7 +69,6 @@ public abstract class RHSolver {
         Extend(initial);
     }
 
-    // TODO might not need to return anything
     public virtual bool Extend(RHGameState state) {
         OnNewCurrent(state);
 
@@ -242,7 +239,6 @@ public class BacktrackingSolver(Heuristic<RHGameState> h, float rf = 0) : RHSolv
     }
 }
 
-// TODO make A and A* searches?
 public class AcGraphSolver(MonotoneHeuristic<RHGameState> h, float rf = 0) : RHSolver(h, rf) {
     protected PriorityQueue<StateMove, float> OpenStates { get; } = new ();
 
@@ -324,9 +320,20 @@ public class AcGraphSolver(MonotoneHeuristic<RHGameState> h, float rf = 0) : RHS
 }
 
 public abstract class Discoverer : AcGraphSolver {
-    private int maxSteps;
+    private int _maxSteps;
+    private int _stepCount = 0;
+    public override int StepCount {
+        get => _stepCount;
+        protected set {
+            _stepCount = value;
+            if (_stepCount >= _maxSteps) {
+                Status = SolverStatus.DiscoverEndLimitReached;
+            }
+        }
+    }
+
     public Discoverer(MonotoneHeuristic<RHGameState> h, int maxStates) : base(h, 0) {
-        maxSteps = maxStates; 
+        _maxSteps = maxStates;
     }
 
     public override void Start(RHGameState initial) {
@@ -334,16 +341,16 @@ public abstract class Discoverer : AcGraphSolver {
         Extend(initial);
         DiscoveredStates.Add(initial, new DiscoveredState{depth = 0, moveFromParent = null});
         AddOpenStates(initial);
+        // Count the initial state when discovering
+        StepCount++;
     }
 
     public override bool Extend(RHGameState state) {
-        // TODO Maybe or not use this 
         OnNewCurrent(state);
         return false;
     }
 
     public override void Step() { 
-        StepCount++;
         if(!OpenStates.TryDequeue(out StateMove? bestMove, out float p)) {
             Status = SolverStatus.DiscoverEndAllFound;
             return;
@@ -356,12 +363,8 @@ public abstract class Discoverer : AcGraphSolver {
         // We never check if the state is solved
         Extend(extended);
 
-        if (StepCount >= maxSteps) {
-            Status = SolverStatus.DiscoverEndLimitReached;
-            return;
-        }
-
         AddOpenStates(extended);
+        StepCount++;
     }
 }
 
