@@ -132,16 +132,16 @@ static class Levels {
         E..H..
         F...Dd
         f.ggG.
-        """,
-        """
-        Level 2
-        B..Ddd
-        b..c.E
-        aA.CFe
-        Kkk.fe
-        ..i.Gg
-        jJIHh.
-        """,
+        """, // 1247
+        // """
+        // Level 2
+        // B..Ddd
+        // b..c.E
+        // aA.CFe
+        // Kkk.fe
+        // ..i.Gg
+        // jJIHh.
+        // """, // 12000+ 
         """
         Level 3
         ......
@@ -150,7 +150,7 @@ static class Levels {
         .bBc.F
         .D.c.f
         .deE.f
-        """,
+        """, // 934
         """
         Level 4
         b..c..
@@ -159,7 +159,7 @@ static class Levels {
         ..dggG
         ..D..f
         ..EeeF
-        """,
+        """, // 806
         """
         Level 5
         Bb.C.h
@@ -168,7 +168,7 @@ static class Levels {
         DffFGi
         E...jJ
         e...Kk
-        """,
+        """, // 2870
         """
         Level 6
         bB.c..
@@ -177,16 +177,16 @@ static class Levels {
         hHigeF
         J.Ig..
         j..kkK
-        """,
-        """
-        Level 7
-        .BCcde
-        .b.FDE
-        .aAf.G
-        ..hH.g
-        ...i..
-        ...I..
-        """,
+        """, // 3070
+        // """
+        // Level 7
+        // .BCcde
+        // .b.FDE
+        // .aAf.G
+        // ..hH.g
+        // ...i..
+        // ...I..
+        // """, // 8122
         """
         Level 8
         ...nNm
@@ -195,16 +195,16 @@ static class Levels {
         bBHIlL
         cCGeeE
         dDgffF
-        """,
-        """
-        Level 9
-        .bCcDd
-        .B.LeE
-        aA.lfG
-        hIiifg
-        h.j.FK
-        h.J..k
-        """,
+        """, // 952
+        // """
+        // Level 9
+        // .bCcDd
+        // .B.LeE
+        // aA.lfG
+        // hIiifg
+        // h.j.FK
+        // h.J..k
+        // """, // 7517
         """
         Level 10
         Bbc.dD
@@ -213,7 +213,7 @@ static class Levels {
         ghhH.f
         g..IjJ
         Kk.ilL
-        """,
+        """, // 4846
         """
         Level 15
         bCcD..
@@ -222,7 +222,25 @@ static class Levels {
         ..eFff
         ..E..g
         ..hhHG
-        """,
+        """, // 1553 states
+        """
+        Level 16
+        .BbcdD
+        .eEC.f
+        ..GaAF
+        Hhg..i
+        J.g..i
+        jkKlLI
+        """, // 2727
+        // """
+        // Level 18
+        // .bc.dD
+        // .Bc.eE
+        // aAC..F
+        // gHhh.f
+        // GIij.f
+        // ...JKk
+        // """, // 18495+ nice little paths tho
         """
         Level 20
         .bC.dD
@@ -231,25 +249,61 @@ static class Levels {
         hHiJ.g
         ..IjkK
         .lLmM.
-        """,
+        """, // 5750 states
         """
-        Level 25
-        bBc.Dd
-        e.C..F
-        e.aAGf
-        EHhhgf
-        ...IJj
-        Kk.i..
-        """,
+        Level 24
+        BCcdE.
+        bF.DeG
+        bf.aAg
+        hhHI.g
+        ..JikK
+        LljmM.
+        """, // 4780
+        // """
+        // Level 25 - 14000+ states
+        // bBc.Dd
+        // e.C..F
+        // e.aAGf
+        // EHhhgf
+        // ...IJj
+        // Kk.i..
+        // """,
         """
-        Level 30
-        ..BCcc
-        dDbEF.
-        GaAef.
-        g..eHh
-        IiJj.K
-        lLmM.k
-        """,
+        Level 28
+        bbB.cD
+        ....Cd
+        EaA..f
+        eghhHF
+        eGiJkK
+        lLIjmM
+        """, // 3879
+        // """
+        // Level 30 - 15000+ states No good too many
+        // ..BCcc
+        // dDbEF.
+        // GaAef.
+        // g..eHh
+        // IiJj.K
+        // lLmM.k
+        // """,
+        // """
+        // Level 31 - 13500 states a bit too much
+        // bCcd.e
+        // BF.D.e
+        // .faAGE
+        // hHIjg.
+        // ..iJkK
+        // lLimM.
+        // """,
+        """
+        Level 34
+        BCcdD.
+        b.EFff
+        aAeG.H
+        IjJgKh
+        il.gkm
+        .LnnNM
+        """, // 1469 states very nice
         """
         Level 35
         .bBcCd
@@ -258,6 +312,15 @@ static class Levels {
         H.ijJg
         h.IkKg
         hlLmmM
+        """, // 81
+        """
+        Level 39
+        BccC..
+        b.deFf
+        aADe.g
+        hHIE.G
+        .ji..K
+        .JLllk
         """,
         """
         Level 40
@@ -267,34 +330,33 @@ static class Levels {
         eEfL.I
         ...lJj
         kkKl..
-        """,
-        """
-        Level ? Easy
-        ......
-        ..E.f.
-        aAe.fg
-        bbB.FG
-        CD..hH
-        cd..iI
-        """,
-        """
-        Level ?
-        ......
-        ..E.f.
-        aAe.fg
-        bbB.FG
-        CDJ.hH
-        cdj.iI
-        """,
-        // index 7
-        """
-        Very easy
-        ...b..
-        ...b..
-        aA.B..
-        ..D...
-        E.dCcc
-        e...fF
-        """
+        """, // 9358
+        // """
+        // Level ? Easy
+        // ......
+        // ..E.f.
+        // aAe.fg
+        // bbB.FG
+        // CD..hH
+        // cd..iI
+        // """,
+        // """
+        // Level ?
+        // ......
+        // ..E.f.
+        // aAe.fg
+        // bbB.FG
+        // CDJ.hH
+        // cdj.iI
+        // """, // 7171
+        // """
+        // Very easy
+        // ...b..
+        // ...b..
+        // aA.B..
+        // ..D...
+        // E.dCcc
+        // e...fF
+        // """
     ];
 }
