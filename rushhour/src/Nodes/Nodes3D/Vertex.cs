@@ -9,7 +9,7 @@ using rushhour.src.Nodes.UI;
 
 public class Vertex {
     // Physics constants
-    public const int repulsionForce = 200;
+    public const int repulsionForce = 1000;
     public const int influenceRadius = 1000;
     public const float linearDamp = 10.0f;
     public const float maxSpeed = 100f;
