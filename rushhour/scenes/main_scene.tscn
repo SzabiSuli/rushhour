@@ -61,7 +61,7 @@ script = ExtResource("2_18nlu")
 
 [node name="Camera3D" type="Camera3D" parent="HSplitContainer/3DPanel/3DSubViewContainer/3DSubViewport/GraphScene" unique_id=1698493355]
 projection = 1
-size = 100.0
+size = 50.0
 far = 8000.0
 script = ExtResource("2_pw63i")
 

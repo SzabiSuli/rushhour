@@ -23,7 +23,9 @@ public partial class GraphScene : Node3D {
     }
 
     // Max distance in pixels from a vertex centre to register as a click
-    private const float PickRadiusPx = 40f;
+    // deliberitely make radius twice as big as the sprite, to allow bigger vertices to be selected precisely,
+    // we allow unit sized vertieces have a larger detection radius
+    private float PickRadiusPx => VertexDrawer.spriteScale * VertexDrawer.spriteSizePx * Camera3d.Instance.ZoomFactor;
 
     public override void _Ready() {
         RenderingServer.SetDefaultClearColor(Colors.Black);

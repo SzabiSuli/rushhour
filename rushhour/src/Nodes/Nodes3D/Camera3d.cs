@@ -54,6 +54,9 @@ public partial class Camera3d : Camera3D {
     private float _yaw = 0.0f;
     private float _pitch = Mathf.Pi / 2;
 
+	// With a Size of 10 a 256px sprite is 64px on the screen
+	public float ZoomFactor => 2.5f / Size;
+
     public override void _Ready() => UpdateHelperVectors();
     public override void _Process(double delta) {
         var movement = Vector3.Zero;

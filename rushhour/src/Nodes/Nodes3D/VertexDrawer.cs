@@ -6,11 +6,12 @@ using Godot;
 
 public partial class VertexDrawer : MultiMeshInstance3D {
     public const int MaxInstances = 20000;
-    public const float SpriteSize = 1f;
+    public const int spriteSizePx = 256;
+    public const float spriteScale = 1f;
 
     public override void _Ready() {
         var quadMesh = new QuadMesh {
-            Size = new Vector2(SpriteSize, SpriteSize)
+            Size = new Vector2(spriteScale, spriteScale)
         };
 
         // No BillboardMode here - we build the facing transform manually so
