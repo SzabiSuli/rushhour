@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cdjjjlp5rpgc3"]
 
+[ext_resource type="Script" uid="uid://ca66eravv20xa" path="res://src/Nodes/Nodes3D/Camera3d/Camera3d.cs" id="2_6wevv"]
 [ext_resource type="Script" uid="uid://bvew5r8aeo2te" path="res://src/Nodes/Nodes3D/GraphScene.cs" id="2_18nlu"]
-[ext_resource type="Script" uid="uid://bkqpls8s2agia" path="res://src/Nodes/Nodes3D/Camera3d.cs" id="2_pw63i"]
 [ext_resource type="Script" uid="uid://vxwbbxcf1rkt" path="res://src/Nodes/Nodes3D/EdgeDrawer.cs" id="4_6wevv"]
 [ext_resource type="PackedScene" uid="uid://di7oxg16i851v" path="res://scenes/ui/legend_panel_container.tscn" id="4_c1pb6"]
 [ext_resource type="Script" uid="uid://cnihwcs04i1yn" path="res://src/Nodes/Nodes3D/VertexDrawer.cs" id="4_e1cbu"]
@@ -63,7 +63,7 @@ script = ExtResource("2_18nlu")
 projection = 1
 size = 50.0
 far = 8000.0
-script = ExtResource("2_pw63i")
+script = ExtResource("2_6wevv")
 
 [node name="EdgeDrawer" type="MultiMeshInstance3D" parent="HSplitContainer/3DPanel/3DSubViewContainer/3DSubViewport/GraphScene" unique_id=1565364764]
 script = ExtResource("4_6wevv")

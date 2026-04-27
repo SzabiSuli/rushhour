@@ -2,8 +2,6 @@ namespace rushhour.src.Nodes.Nodes3D;
 
 using System;
 using Godot;
-// TODO cite this under MIT License
-// https://godotengine.org/asset-library/asset/3638
 
 public partial class Camera3d : Camera3D {
     // =========================
