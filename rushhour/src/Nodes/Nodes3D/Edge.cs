@@ -13,7 +13,7 @@ public class Edge {
     public const int springLength = 1;
     public const double optimalIntervalLowerBound = springLength * 0.9;
     public const double optimalIntervalUpperBound = springLength * 1.1;
-    public const float springForce = 10;
+    public const float springForce = 100;
 
     // Instance data
     public Vertex From { get; set; }
