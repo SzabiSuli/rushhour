@@ -42,7 +42,7 @@ public class FreeSpacesHeuristic : MonotoneHeuristic<RHGameState> {
         int blocks = 0;
 
         for (int i = state.PlacedPieces[0].Position.X + 1; i < 6; i++) {
-            if (state.BoardGrid[i, 2] != -1) {
+            if (state[i, 2] != -1) {
                 blocks++;
             }
         }
@@ -64,7 +64,7 @@ public class MoverHeuristic : MonotoneHeuristic<RHGameState> {
         int moves = 0;
 
         for (int i = state.PlacedPieces[0].Position.X + 1; i < 6; i++) {
-            int index = state.BoardGrid[i, 2]; 
+            int index = state[i, 2]; 
 
             if (index != -1) {
                 // In Rush hour we know 
@@ -94,7 +94,7 @@ public class MoverHeuristic : MonotoneHeuristic<RHGameState> {
                     for (int j = 3; j < 6; j++) {
                         // add 1 for each vehicle that's in the way of 
                         // putting the bus to the bottom
-                        int tile = state.BoardGrid[i, j]; 
+                        int tile = state[i, j]; 
                         if (tile != -1 && tile != index) {
                             cost++;
                         }
@@ -105,7 +105,7 @@ public class MoverHeuristic : MonotoneHeuristic<RHGameState> {
                     for (int j = 0; j < 2; j++) {
                         // add 1 for each vehicle that's in the way of 
                         // putting the bus to the bottom
-                        int tile = state.BoardGrid[i, j]; 
+                        int tile = state[i, j]; 
                         if (tile != -1 && tile != index) {
                             costToPushUp++;
                         }
@@ -115,7 +115,7 @@ public class MoverHeuristic : MonotoneHeuristic<RHGameState> {
                     for (int j = 3; j < 5; j++) {
                         // add 1 for each vehicle that's in the way of 
                         // putting the bus to the bottom
-                        int tile = state.BoardGrid[i, j]; 
+                        int tile = state[i, j]; 
                         if (tile != -1 && tile != index) {
                             costToPushDown++;
                         }

@@ -17,8 +17,8 @@ public class Vertex {
 
     // Instance data
     public RHGameState GameState { get; set; }
-    public Vector3 Position;
-    public Vector3 Velocity = Vector3.Zero;
+    public Vector3 Position { get; set; }
+    public Vector3 Velocity { get; private set; } = Vector3.Zero;
 
     // Thread safe force accumulation
     private Vector3 _pendingForces = Vector3.Zero;

@@ -72,6 +72,6 @@ public partial class StatusContainer : VBoxContainer
         HeuristicLabel.Text = $"Heuristic score: {heuristicScore?.ToString() ?? "-"}";
     }
     public void UpdateHeuristicLabel(RHGameState state) {
-        SetHeuristicLabel(AlgoPlayer.Instance.solver?.Heuristic.Evaluate(state));
+        SetHeuristicLabel(AlgoPlayer.Instance.Solver?.Heuristic.Evaluate(state));
     }
 }

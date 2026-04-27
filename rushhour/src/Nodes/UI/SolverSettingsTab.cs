@@ -75,7 +75,7 @@ public partial class SolverSettingsTab : VBoxContainer {
 
     public void OnApplyButtonPressed() {
         ApplySettings();
-        if (AlgoPlayer.Instance.initialState == null) {
+        if (AlgoPlayer.Instance.InitialState == null) {
             // if no level has been selected, 
             // switch to the levels tab, so the user selects a level
             TabCont.CurrentTab = 0;

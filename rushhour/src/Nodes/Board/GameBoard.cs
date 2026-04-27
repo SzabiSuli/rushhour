@@ -44,7 +44,7 @@ public partial class GameBoard : Sprite2D
 		int carCount = 0;
 		int busCount = 0;
 
-		for (int i = 0; i < state.PlacedPieces.Length; i++) {
+		for (int i = 0; i < state.PlacedPieces.Count; i++) {
 			PlacedRHPiece placedPiece = state.PlacedPieces[i];
 			VehicleNode v = PutOnBoard(placedPiece, i, state);
 			

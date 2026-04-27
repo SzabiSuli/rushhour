@@ -48,11 +48,11 @@ public abstract partial class VehicleNode : Sprite2D {
 		
 		backwardArrow.IsActive = 
 			0 <= bwX && bwX < 6 && 0 <= bwY && bwY < 6 
-			&& (state.BoardGrid[bwX, bwY] == -1);
+			&& (state[bwX, bwY] == -1);
 		
 		forwardArrow.IsActive = 
 			0 <= fwX && fwX < 6 && 0 <= fwY && fwY < 6 
-			&& (state.BoardGrid[fwX, fwY] == -1);
+			&& (state[fwX, fwY] == -1);
 	}
 
 	public void Move(Direction relative) {

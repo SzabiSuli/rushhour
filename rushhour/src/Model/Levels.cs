@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using Godot;
 
 public struct Level {
-    public string title;
-    public RHGameState state;
+    public string Title { get; init; }
+    public RHGameState State { get; init; }
 }
 
 static class Levels {
@@ -50,8 +50,8 @@ static class Levels {
         }
 
         return new Level {
-            title = title,
-            state = new RHGameState(vehicles.ToArray())
+            Title = title,
+            State = new RHGameState(vehicles.ToArray())
         };
     }
 

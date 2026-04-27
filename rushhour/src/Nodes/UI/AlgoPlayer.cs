@@ -17,13 +17,13 @@ public partial class AlgoPlayer : VBoxContainer {
 
     public const double minAlgoStepdelay = 0.001; 
     public const int maxStepCount = 1024; 
-    public double algoStepDelay = 0.5;
-    public double timeSinceLastStep = 0;
-    public bool running = false;
+    private double _algoStepDelay = 0.5;
+    private double _timeSinceLastStep = 0;
+    public bool Running { get; private set; } = false;
 
-    public RHSolver solver = null!;
+    public RHSolver Solver { get; set; } = null!;
 
-    public RHGameState? initialState;
+    public RHGameState? InitialState { get; private set; }
 
 
     public TabCont TabCont => GetParent<VBoxContainer>().GetParent<TabCont>();
@@ -50,40 +50,40 @@ public partial class AlgoPlayer : VBoxContainer {
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
-        if (solver.Status != SolverStatus.Running && solver.Status != SolverStatus.Discovering) return;
-        if (!running) return;
-        timeSinceLastStep += delta;
+        if (Solver.Status != SolverStatus.Running && Solver.Status != SolverStatus.Discovering) return;
+        if (!Running) return;
+        _timeSinceLastStep += delta;
         
-        if (timeSinceLastStep < algoStepDelay) return;
+        if (_timeSinceLastStep < _algoStepDelay) return;
         
         // If time between updates gets too large, execute some extra steps 
-        int stepCount = Math.Clamp((int)(timeSinceLastStep / algoStepDelay), 1, maxStepCount);
+        int stepCount = Math.Clamp((int)(_timeSinceLastStep / _algoStepDelay), 1, maxStepCount);
         
-        timeSinceLastStep = 0;
+        _timeSinceLastStep = 0;
 
-        solver.Step(stepCount);
+        Solver.Step(stepCount);
     }
 
     public void LoadLevel(RHGameState level) {
-        initialState = level;
+        InitialState = level;
 
         SetupControlButtons(false);
 
         UnSubFromSolver();
         
-        solver = SolverSettingsTab.Instance.GetSolver();
+        Solver = SolverSettingsTab.Instance.GetSolver();
         SubToSolver();
 
         MainGameBoard.Instance.Setup(level);
 
         GraphScene.Instance.Setup(level);
 
-        solver.Start(level);
+        Solver.Start(level);
 
         StatusContainer.Instance.SetSolutionLength(null);
 
         // start paused
-        running = false;
+        Running = false;
 
         // Switch to solver settings tab
         TabCont.CurrentTab = 1;
@@ -104,48 +104,48 @@ public partial class AlgoPlayer : VBoxContainer {
     }
 
     public void SubToSolver() {
-        solver.NewEdge += Edge.OnNewEdge;
-        solver.PathChange += Edge.OnPathChange;
-        solver.PathChange += Vertex.OnPathChange;
-        solver.NewCurrent += Vertex.OnNewCurrent;
-        solver.NewCurrent += MainGameBoard.Instance.OnNewAlgoCurrent;
-        solver.NewCurrent += OnNewCurrent;
-        solver.Terminated += OnSolverTerminated;
+        Solver.NewEdge += Edge.OnNewEdge;
+        Solver.PathChange += Edge.OnPathChange;
+        Solver.PathChange += Vertex.OnPathChange;
+        Solver.NewCurrent += Vertex.OnNewCurrent;
+        Solver.NewCurrent += MainGameBoard.Instance.OnNewAlgoCurrent;
+        Solver.NewCurrent += OnNewCurrent;
+        Solver.Terminated += OnSolverTerminated;
     }
 
 
     public void UnSubFromSolver() {
-        solver.NewEdge -= Edge.OnNewEdge;
-        solver.PathChange -= Edge.OnPathChange;
-        solver.PathChange -= Vertex.OnPathChange;
-        solver.NewCurrent -= Vertex.OnNewCurrent;
-        solver.NewCurrent -= MainGameBoard.Instance.OnNewAlgoCurrent;
-        solver.NewCurrent -= OnNewCurrent;
-        solver.Terminated -= OnSolverTerminated;
+        Solver.NewEdge -= Edge.OnNewEdge;
+        Solver.PathChange -= Edge.OnPathChange;
+        Solver.PathChange -= Vertex.OnPathChange;
+        Solver.NewCurrent -= Vertex.OnNewCurrent;
+        Solver.NewCurrent -= MainGameBoard.Instance.OnNewAlgoCurrent;
+        Solver.NewCurrent -= OnNewCurrent;
+        Solver.Terminated -= OnSolverTerminated;
     }
     public void OnNewCurrent(object? s, RHGameState _) {
-        int c = solver.StepCount;
+        int c = Solver.StepCount;
         StatusContainer.Instance.SetStepCount(c);
         // The solver enters Running status after calling Start on it, so bypass this by checking the step count.
-        StatusContainer.Instance.SetStatusLabel(solver.Status, c);
+        StatusContainer.Instance.SetStatusLabel(Solver.Status, c);
     }
     public void OnSliderValueChanged(double value) {
         if (value == slider.MaxValue) {
-            algoStepDelay = minAlgoStepdelay;
+            _algoStepDelay = minAlgoStepdelay;
         } else {
-            algoStepDelay = Math.Pow(2, -value);  
+            _algoStepDelay = Math.Pow(2, -value);  
         }
     }
 
     public void OnPlayPauseButtonToggled(bool playing) {
-        running = playing;
+        Running = playing;
         if (playing) {
             MainGameBoard.Instance.Mode = BoardMode.ALGO;
         }
     }
 
     public void OnStepButtonPressed() {
-        solver.Step();
+        Solver.Step();
         MainGameBoard.Instance.Mode = BoardMode.ALGO;
 
         // set algo mode to paused
@@ -155,7 +155,7 @@ public partial class AlgoPlayer : VBoxContainer {
     public void ResetSolver() => ResetSolver(SolverSettingsTab.Instance.GetSolver());
 
     public void ResetSolver(RHSolver newSolver, bool startPlaying = false) {
-        if (initialState is null) {
+        if (InitialState is null) {
             throw new Exception("Can't restart with no level loaded");
         }
 
@@ -165,15 +165,15 @@ public partial class AlgoPlayer : VBoxContainer {
 
         UnSubFromSolver();
 
-        solver = newSolver;
+        Solver = newSolver;
         SubToSolver();
 
         StatusContainer.Instance.SetSolutionLength(null);
 
-        MainGameBoard.Instance.AlgoCurrent = initialState;
+        MainGameBoard.Instance.AlgoCurrent = InitialState;
         MainGameBoard.Instance.Mode = BoardMode.ALGO;
 
-        solver.Start(initialState);
+        Solver.Start(InitialState);
 
         SetupControlButtons(startPlaying);
 
@@ -187,7 +187,7 @@ public partial class AlgoPlayer : VBoxContainer {
         StatusContainer.Instance.SetStatusLabel(status);
 
         if (status == SolverStatus.Solved) {
-            var solutionPath = solver.GetSolutionPath();
+            var solutionPath = Solver.GetSolutionPath();
 
             StatusContainer.Instance.SetSolutionLength(solutionPath.Count());
 

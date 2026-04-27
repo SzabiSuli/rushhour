@@ -31,29 +31,29 @@ public class ModelTests {
         Level level = Levels.LoadLevelString(testLevelString);
 
         // Title
-        AssertString(level.title).Equals("Test Level");
+        AssertString(level.Title).Equals("Test Level");
 
         // Vehicle count
-        AssertInt(level.state.PlacedPieces.Length).Equals(4);
+        AssertInt(level.State.PlacedPieces.Count).Equals(4);
 
         // Vehicle types (index 0 must be the MainCar)
-        AssertThat(level.state.PlacedPieces[0].Piece.GetType()).Equals(typeof(MainCar));
-        AssertThat(level.state.PlacedPieces[1].Piece.GetType()).Equals(typeof(Bus));
-        AssertThat(level.state.PlacedPieces[2].Piece.GetType()).Equals(typeof(Car));
-        AssertThat(level.state.PlacedPieces[3].Piece.GetType()).Equals(typeof(Bus));
+        AssertThat(level.State.PlacedPieces[0].Piece.GetType()).Equals(typeof(MainCar));
+        AssertThat(level.State.PlacedPieces[1].Piece.GetType()).Equals(typeof(Bus));
+        AssertThat(level.State.PlacedPieces[2].Piece.GetType()).Equals(typeof(Car));
+        AssertThat(level.State.PlacedPieces[3].Piece.GetType()).Equals(typeof(Bus));
 
         // Positions and facing directions
-        AssertThat(level.state.PlacedPieces[0].Position).Equals(new Vector2I(1, 2));
-        AssertThat(level.state.PlacedPieces[0].FacingDirection).Equals(Direction.Right);
+        AssertThat(level.State.PlacedPieces[0].Position).Equals(new Vector2I(1, 2));
+        AssertThat(level.State.PlacedPieces[0].FacingDirection).Equals(Direction.Right);
 
-        AssertThat(level.state.PlacedPieces[1].Position).Equals(new Vector2I(5, 2));
-        AssertThat(level.state.PlacedPieces[1].FacingDirection).Equals(Direction.Down);
+        AssertThat(level.State.PlacedPieces[1].Position).Equals(new Vector2I(5, 2));
+        AssertThat(level.State.PlacedPieces[1].FacingDirection).Equals(Direction.Down);
 
-        AssertThat(level.state.PlacedPieces[2].Position).Equals(new Vector2I(3, 2));
-        AssertThat(level.state.PlacedPieces[2].FacingDirection).Equals(Direction.Up);
+        AssertThat(level.State.PlacedPieces[2].Position).Equals(new Vector2I(3, 2));
+        AssertThat(level.State.PlacedPieces[2].FacingDirection).Equals(Direction.Up);
 
-        AssertThat(level.state.PlacedPieces[3].Position).Equals(new Vector2I(1, 4));
-        AssertThat(level.state.PlacedPieces[3].FacingDirection).Equals(Direction.Left);
+        AssertThat(level.State.PlacedPieces[3].Position).Equals(new Vector2I(1, 4));
+        AssertThat(level.State.PlacedPieces[3].FacingDirection).Equals(Direction.Left);
     }
 
     int[,] testBoardGrid = new int[,] {
@@ -68,12 +68,16 @@ public class ModelTests {
     [TestCase]
     public void U02_LevelGrid() {
         Level level = Levels.LoadLevelString(testLevelString);
-        AssertThat(level.state.BoardGrid).Equals(testBoardGrid);
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                AssertInt(level.State[i, j]).Equals(testBoardGrid[i, j]);
+            }
+        }
     }
 
     [TestCase]
     public void U03_LevelMoves() {
-        RHGameState state = Levels.LoadLevelString(testLevelString).state;
+        RHGameState state = Levels.LoadLevelString(testLevelString).State;
 
         var possibleMoves = state.GetPossibleMoves().ToList();
         var possibleStateMoves = state.GetPossibleStateMoves().ToList();
@@ -102,7 +106,7 @@ public class ModelTests {
     }
     [TestCase]
     public void U04_StateImmutability() {
-        RHGameState original = Levels.LoadLevelString(testLevelString).state;
+        RHGameState original = Levels.LoadLevelString(testLevelString).State;
         Move firstMove = original.GetPossibleMoves().First();
 
         Vector2I originalPos = original.PlacedPieces[firstMove.PieceIndex].Position;
@@ -118,8 +122,8 @@ public class ModelTests {
 
     [TestCase]
     public void U05_StateEquality() {
-        RHGameState state1 = Levels.LoadLevelString(testLevelString).state;
-        RHGameState state2 = Levels.LoadLevelString(testLevelString).state;
+        RHGameState state1 = Levels.LoadLevelString(testLevelString).State;
+        RHGameState state2 = Levels.LoadLevelString(testLevelString).State;
 
         // Same configuration is equal.
         AssertThat(state1).Equals(state2);
@@ -156,7 +160,7 @@ public class ModelTests {
         ...c..
         .Ddd..
         ......
-        """).state;
+        """).State;
 
         // Assert the newly loaded state is equal to the moved one
         AssertThat(moved1).Equals(state3);
@@ -167,8 +171,8 @@ public class ModelTests {
 
     [TestCase]
     public void U06_HashConsistency() {
-        RHGameState state1 = Levels.LoadLevelString(testLevelString).state;
-        RHGameState state2 = Levels.LoadLevelString(testLevelString).state;
+        RHGameState state1 = Levels.LoadLevelString(testLevelString).State;
+        RHGameState state2 = Levels.LoadLevelString(testLevelString).State;
 
         // Equal states should result in an identical hash.
         AssertInt(state1.GetHashCode()).Equals(state2.GetHashCode());
@@ -192,11 +196,11 @@ public class ModelTests {
 
     [TestCase]
     public void U07_SolvedDetection() {
-        RHGameState unsolved = Levels.LoadLevelString(testLevelString).state;
+        RHGameState unsolved = Levels.LoadLevelString(testLevelString).State;
         AssertBool(unsolved.IsSolved()).IsFalse();
 
         // Load a solved state
-        RHGameState solved = Levels.LoadLevelString(testSolvedLevelString).state;
+        RHGameState solved = Levels.LoadLevelString(testSolvedLevelString).State;
         AssertBool(solved.IsSolved()).IsTrue();
 
         // Assert exit is at the right place
@@ -206,7 +210,7 @@ public class ModelTests {
     [TestCase]
     public void U08_NullHeuristic() {
         NullHeuristic h = new NullHeuristic();
-        RHGameState state = Levels.LoadLevelString(testLevelString).state;
+        RHGameState state = Levels.LoadLevelString(testLevelString).State;
 
         AssertInt(h.Evaluate(state)).Equals(0);
 
@@ -221,7 +225,7 @@ public class ModelTests {
         DistanceHeuristic h = new DistanceHeuristic();
 
         // Explore some states and test them
-        RHGameState initial = Levels.LoadLevelString(testLevelString).state;
+        RHGameState initial = Levels.LoadLevelString(testLevelString).State;
         var visited = new HashSet<RHGameState> { initial };
         var queue = new Queue<RHGameState>();
         queue.Enqueue(initial);
@@ -251,7 +255,7 @@ public class ModelTests {
     [TestCase]
     public void U10_HeuristicAdmissibility() {
         // Start from a solved state
-        RHGameState solved = Levels.LoadLevelString(testSolvedLevelString).state;
+        RHGameState solved = Levels.LoadLevelString(testSolvedLevelString).State;
         AssertBool(solved.IsSolved()).IsTrue();
 
         Heuristic<RHGameState>[] heuristics = {
@@ -297,7 +301,7 @@ public class ModelTests {
             new MoverHeuristic()
         };
 
-        RHGameState initial = Levels.LoadLevelString(testLevelString).state;
+        RHGameState initial = Levels.LoadLevelString(testLevelString).State;
         var visited = new HashSet<RHGameState> { initial };
         var queue = new Queue<RHGameState>();
         queue.Enqueue(initial);
@@ -335,7 +339,7 @@ public class ModelTests {
         // the main car A can be in 5 places, B can be in 4, C in 5, D in 4 not subtracting overlaps
         // With a tabu size of 400 the algorithm is guaranteed to terminate
 
-        RHGameState initial = Levels.LoadLevelString(testLevelString).state;
+        RHGameState initial = Levels.LoadLevelString(testLevelString).State;
         var solver = new TabuSolver(new DistanceHeuristic(), tabuSize: 400);
 
         bool terminated = false;
@@ -367,7 +371,7 @@ public class ModelTests {
 
     [TestCase]
     public void U13_BacktrackingCompleteness() {
-        RHGameState solvable = Levels.LoadLevelString(testLevelString).state;
+        RHGameState solvable = Levels.LoadLevelString(testLevelString).State;
         var solver = new BacktrackingSolver(new NullHeuristic());
         solver.Start(solvable);
 
@@ -388,7 +392,7 @@ public class ModelTests {
 
     [TestCase]
     public void U14_AcGraphOptimality() {
-        RHGameState initial = Levels.LoadLevelString(testLevelString).state;
+        RHGameState initial = Levels.LoadLevelString(testLevelString).State;
 
 
         var stepsFromStart = new Dictionary<RHGameState, int> { [initial] = 0 };
@@ -437,7 +441,7 @@ public class ModelTests {
 
     [TestCase]
     public void U15_StateMoveSymmetry() {
-        RHGameState stateA = Levels.LoadLevelString(testLevelString).state;
+        RHGameState stateA = Levels.LoadLevelString(testLevelString).State;
         Move move = stateA.GetPossibleMoves().First();
         RHGameState stateB = stateA.WithMove(move);
 
@@ -457,7 +461,7 @@ public class ModelTests {
 
     [TestCase]
     public void U16_DiscovererStateLimit() {
-        RHGameState initial = Levels.LoadLevelString(testLevelString).state;
+        RHGameState initial = Levels.LoadLevelString(testLevelString).State;
 
         int maxStates = 400;
 

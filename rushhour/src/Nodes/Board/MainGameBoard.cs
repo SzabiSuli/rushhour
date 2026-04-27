@@ -148,7 +148,7 @@ public partial class MainGameBoard : GameBoard
 
 	public void UpdateBoard() {
 		RHGameState state = Current;
-		for (int i = 0; i < state.PlacedPieces.Length; i++) {
+		for (int i = 0; i < state.PlacedPieces.Count; i++) {
 			VehicleNode v = GetChild<VehicleNode>(i);
 			v.Placement = state.PlacedPieces[i];
 			v.UpdateArrows(state);

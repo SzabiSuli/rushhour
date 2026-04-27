@@ -8,6 +8,6 @@ public partial class TabCont : TabContainer {
     public AlgoPlayer AlgoPlayer => GetChild<VBoxContainer>(2).GetChild<AlgoPlayer>(0);
 
     public override void _Ready() {
-        AlgoPlayer.solver = SolverSettingsTab.GetSolver();
+        AlgoPlayer.Solver = SolverSettingsTab.GetSolver();
     }
 }

@@ -22,7 +22,7 @@ public partial class LevelsGrid : GridContainer
             LoadLevelButton llb = LevelButtonCreator.Instantiate<LoadLevelButton>();
             llb.Init(level);
             AddChild(llb);
-            llb.button.Pressed += () => AlgoPlayer.Instance.LoadLevel(level.state);
+            llb.button.Pressed += () => AlgoPlayer.Instance.LoadLevel(level.State);
         }
     }
 }

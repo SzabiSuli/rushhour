@@ -19,8 +19,8 @@ public abstract class RHSolver {
             }
         } 
     }
-    protected Random rand = new Random();
-    protected float randomFactor;
+    protected readonly Random rand = new Random();
+    protected readonly float randomFactor;
     private RHGameState? _current;
     public virtual int StepCount {get; protected set;} = 0;
     protected RHGameState? _solvedStateFound;
@@ -106,9 +106,10 @@ public abstract class RHSolver {
 }
 
 public class TabuSolver : RHSolver {
-    public List<StateMove> Route { get; set; } = new();
+    public IReadOnlyList<StateMove> Route => _route;
+    private List<StateMove> _route = new();
     public int TabuSize { get; init; }
-    public StateMove? nextMove;
+    private StateMove? _nextMove;
 
     public TabuSolver(Heuristic<RHGameState> h, int tabuSize, float rf = 0) : base(h, rf) {
         TabuSize = tabuSize;
@@ -121,30 +122,30 @@ public class TabuSolver : RHSolver {
 
     public override void Step() {
         base.Step();
-        if (nextMove == null) {
+        if (_nextMove == null) {
             Status = SolverStatus.Terminated;
             return;
         }
-        Route.Add(nextMove);
-        OnNewEdge(nextMove);
+        _route.Add(_nextMove);
+        OnNewEdge(_nextMove);
 
         if (TabuSize > 0) {
-            OnPathChange(new PathChangeArgs{ onPath = true, move = nextMove});
+            OnPathChange(new PathChangeArgs{ onPath = true, move = _nextMove});
             
-            if (Route.Count > TabuSize) {
+            if (_route.Count > TabuSize) {
                 OnPathChange(new PathChangeArgs{
                     onPath = false, 
-                    move = Route[^(TabuSize + 1)]
+                    move = _route[^(TabuSize + 1)]
                 });
             }
         }
 
         // return early if the state is solved.
-        if (Extend(nextMove.To)) {
+        if (Extend(_nextMove.To)) {
             return;
         }
 
-        ChooseNext(nextMove.To);
+        ChooseNext(_nextMove.To);
     }
 
     protected void ChooseNext(RHGameState state) {
@@ -155,24 +156,24 @@ public class TabuSolver : RHSolver {
         IEnumerable<StateMove> validMoves = stateMoves.Where(
             // We don't check for loop edges, as those do not exist in our game.
             stateMove => 
-                !Route[startIndex..].Select(
+                !_route[startIndex..].Select(
                     tabuMove => tabuMove.From
                 ).Contains(stateMove.To)
         );
 
         if (!validMoves.Any()) {
-            nextMove = null;
+            _nextMove = null;
             return;
         }
 
-        nextMove = validMoves.MinBy(Evaluate);
+        _nextMove = validMoves.MinBy(Evaluate);
     }
     
-    protected override List<StateMove> GetSolutionPathSolved() => Route;
+    protected override List<StateMove> GetSolutionPathSolved() => _route;
 }
 
 public class BacktrackingSolver(Heuristic<RHGameState> h, float rf = 0) : RHSolver(h, rf) {
-    public List<List<StateMove>> CurrentRoute { get; } = new ();
+    private List<List<StateMove>> _currentRoute = new ();
 
     public override void Start(RHGameState initial) {
         base.Start(initial);
@@ -181,29 +182,29 @@ public class BacktrackingSolver(Heuristic<RHGameState> h, float rf = 0) : RHSolv
 
     public override void Step() { 
         base.Step();
-        var options = CurrentRoute.Last();
+        var options = _currentRoute.Last();
         if (options.Count == 0){
-            CurrentRoute.RemoveAt(CurrentRoute.Count - 1);
+            _currentRoute.RemoveAt(_currentRoute.Count - 1);
             
-            if (CurrentRoute.Count == 0){
+            if (_currentRoute.Count == 0){
                 Status = SolverStatus.NoSolution;
                 return;
             }
 
             // There has to be a first, since we had an options after it
-            var edgeToRemove = CurrentRoute.Last().First();
+            var edgeToRemove = _currentRoute.Last().First();
             OnNewCurrent(edgeToRemove.From);
             OnPathChange(new PathChangeArgs {
                 onPath = false,
                 move = edgeToRemove
             });
-            CurrentRoute.Last().RemoveAt(0);
+            _currentRoute.Last().RemoveAt(0);
 
             return;
         }
 
         // add the state to the route, and discover it's neighbours
-        var bestMove = CurrentRoute.Last().First();
+        var bestMove = _currentRoute.Last().First();
         
         OnNewEdge(bestMove);
         OnPathChange(new PathChangeArgs {	
@@ -224,18 +225,18 @@ public class BacktrackingSolver(Heuristic<RHGameState> h, float rf = 0) : RHSolv
 
         var validMoves = stateMoves.Where(
             stateMove => 
-                !CurrentRoute.Select(
+                !_currentRoute.Select(
                     pathOptions => pathOptions.First().From
                 ).Contains(stateMove.To)
         ) // filter out states already in the current route
         .OrderBy(Evaluate)
         .ToList();
 
-        CurrentRoute.Add(validMoves);
+        _currentRoute.Add(validMoves);
     }
 
     protected override IEnumerable<StateMove> GetSolutionPathSolved() {
-        return CurrentRoute.Select(options => options.First());
+        return _currentRoute.Select(options => options.First());
     }
 }
 

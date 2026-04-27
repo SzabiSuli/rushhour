@@ -16,9 +16,9 @@ public class Edge {
     public const float springForce = 100;
 
     // Instance data
-    public Vertex From { get; set; }
-    public Vertex To { get; set; }
-    public StateMove MoveUsed { get; set; }
+    public Vertex From { get; init; }
+    public Vertex To { get; init; }
+    public StateMove MoveUsed { get; init; }
 
     // Static registry
     public static Dictionary<StateMove, Edge> Dict { get; } = new();
