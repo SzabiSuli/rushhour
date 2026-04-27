@@ -106,6 +106,13 @@ public partial class MainGameBoard : GameBoard
 		manualButton.ButtonGroup.Pressed += OnModeButtonPressed;
     }
 
+    public override void _Process(double delta) {
+        // For some reason this does not work when called in _Ready 
+		// or any of its parents' _Ready
+		// or any events like VisibilityChanged or TabChanged
+		RescaleToParent();
+    }
+
 	public void OnModeButtonPressed(BaseButton button) {
 		if (button == manualButton) {
 			ManualCurrent = AlgoCurrent;

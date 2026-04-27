@@ -23,10 +23,7 @@ public partial class GameBoard : Sprite2D
 
     public virtual RHGameState Current => _current;
 
-
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta) {
-        // TODO don't call this every frame
+    public override void _Ready() {
 		RescaleToParent();
 	}
 
