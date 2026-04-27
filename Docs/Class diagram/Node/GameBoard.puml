@@ -1,0 +1,114 @@
+@startuml
+class GameBoard {
+    + {static} <<readonly>> tileSize : Vector2
+    + {static} <<readonly>> spriteSize : Vector2
+    ' + <<const>> carScenePath : string = "res://scenes/board/car.tscn"
+    ' + <<const>> busScenePath : string = "res://scenes/board/bus.tscn"
+    ' + {static} CarCreator : PackedScene <<get>>
+    ' + {static} BusCreator : PackedScene <<get>>
+    ' - _current : RHGameState
+    + <<virtual>> Current : RHGameState <<get>>
+    ' + <<override>> _Process(delta:double) : void
+    + <<virtual>> Setup(initial:RHGameState) : void
+    + RemovePieces() : void
+    + BuildBoard(state:RHGameState) : void
+    ' # PutOnBoard(placedPiece:PlacedRHPiece, pieceIndex:int, state:RHGameState) : VehicleNode
+    + RescaleToParent() : void
+}
+class MainGameBoard <<singleton>> {
+    + manualButton : Button
+    + algoButton : Button
+    + followAlgoButton : CheckButton
+    ' - _mode : BoardMode
+    ' + Mode : BoardMode <<get>> <<set>>
+    ' - _algoCurrent : RHGameState?
+    + AlgoCurrent : RHGameState? <<get>> <<set>>
+    ' - _manualCurrent : RHGameState?
+    + ManualCurrent : RHGameState? <<get>> <<set>>
+    ' + {static} Instance : MainGameBoard <<get>>
+    ' + MainGameBoard()
+    ' + <<override>> Current : RHGameState <<get>>
+    ' ' + <<override>> _Ready() : void
+    ' + OnModeButtonPressed(button:BaseButton) : void
+    ' + OnVertexClicked(sender:object?, state:RHGameState) : void
+    ' + OnNewAlgoCurrent(sender:object?, state:RHGameState) : void
+    + MakeManualMove(move:Move) : void
+    ' + <<override>> Setup(initial:RHGameState) : void
+    + UpdateBoard() : void
+}
+enum BoardMode {
+    MANUAL,
+    ALGO
+}
+class Arrow {
+    + IsActive : bool <<get>> <<set>>
+    ' + Sprite : Sprite2D <<get>>
+    ' + CollisionShape : CollisionPolygon2D <<get>>
+    + direction : Direction
+    ' + <<override>> _Ready() : void
+    + Init(d:Direction, vehicleLength:int) : void
+    ' + <<override>> _Process(delta:double) : void
+    ' + OnInputEvent(viewport:Node, @event:InputEvent, shapeIdx:long) : void
+    + HandleClick() : void
+}
+class CarNode {
+    + <<override>> SetSprite(index:int) : void
+}
+class BusNode {
+    + <<override>> SetSprite(index:int) : void
+}
+class LevelsGrid <<singleton>> {
+    ' + <<const>> levelButtonScenePath : String = "res://scenes/ui/tabs/load_level_button.tscn"
+    ' + {static} LevelButtonCreator : PackedScene <<get>>
+    ' + <<override>> _Ready() : void
+}
+abstract class VehicleNode {
+    ' + <<const>> arrowScenePath : string = "res://scenes/board/arrow.tscn"
+    ' + {static} ArrowCreator : PackedScene <<get>>
+    ' # _placement : PlacedRHPiece
+    + Placement : PlacedRHPiece <<get>> <<set>>
+    + pieceIndex : int
+    ' + Init(pp:PlacedRHPiece, pieceIndex:int, state:RHGameState) : void
+    ' + forwardArrow : Arrow
+    ' + backwardArrow : Arrow
+    + CreateArrows() : void
+    + UpdateArrows(state:RHGameState) : void
+    + Move(relative:Direction) : void
+    + {abstract} SetSprite(index:int) : void
+}
+Sprite2D <|-down- GameBoard
+Sprite2D <|-down- VehicleNode
+GameBoard <|-- MainGameBoard
+Area2D <|-- Arrow
+VehicleNode <|-- CarNode
+VehicleNode <|-- BusNode
+GridContainer <|-left- LevelsGrid
+
+' GameBoard o-> "tileSize" Vector2
+' GameBoard o-> "spriteSize" Vector2
+' GameBoard o-> "CarCreator" PackedScene
+' GameBoard o-> "BusCreator" PackedScene
+' GameBoard o-> "_current" RHGameState
+' GameBoard --> "Current" RHGameState
+' MainGameBoard o-> "manualButton" Button
+' MainGameBoard o-> "algoButton" Button
+' MainGameBoard o-> "followAlgoButton" CheckButton
+' MainGameBoard o-> "_mode" BoardMode
+MainGameBoard -right->  BoardMode : + Mode
+' MainGameBoard --> "AlgoCurrent" RHGameState
+' MainGameBoard --> "ManualCurrent" RHGameState
+' MainGameBoard o-> "Instance" MainGameBoard
+' MainGameBoard --> "Current" RHGameState
+Arrow *-up- Sprite2D : + Sprite
+Arrow *-down- CollisionPolygon2D : + CollisionShape
+' Arrow --> "direction" Direction
+' LevelsGrid o-> "levelButtonScenePath" String
+' LevelsGrid o-> "LevelButtonCreator" PackedScene
+' VehicleNode o-> "ArrowCreator" PackedScene
+' VehicleNode o-> "_placement" PlacedRHPiece
+' VehicleNode --> "Placement" PlacedRHPiece
+VehicleNode *-right- Arrow : + forwardArrow
+VehicleNode *-right- Arrow : + backwardArrow
+LevelsGrid "0..1" o-- "0..*" GameBoard
+
+@enduml

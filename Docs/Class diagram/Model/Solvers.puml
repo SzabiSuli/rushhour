@@ -1,0 +1,51 @@
+@startuml
+abstract class RHSolver {
+    + <<virtual>> StepCount : int <<get>> <<protected set>> = 0
+    +  <<event>> NewCurrent : EventHandler<RHGameState>? 
+    +  <<event>> PathChange : EventHandler<PathChangeArgs>? 
+    +  <<event>> NewEdge : EventHandler<StateMove>? 
+    +  <<event>> Terminated : EventHandler<SolverStatus>? 
+    + RHSolver(heuristic:Heuristic<RHGameState>, randomFactor:float)
+    + Evaluate(move:StateMove) : float
+    + Evaluate(state:RHGameState) : float
+    + <<virtual>> Start(initial:RHGameState) : void
+    + <<virtual>> Extend(state:RHGameState) : bool
+    + Step(stepCount:int) : void
+    + <<virtual>> Step() : void
+    + GetSolutionPath() : IEnumerable<StateMove>
+}
+class TabuSolver {
+}
+class BacktrackingSolver {
+}
+class AcGraphSolver {
+}
+abstract class "Heuristic<RHGameState>"{
+    + {abstract} Evaluate(state:RHGameState) : int
+}
+enum SolverStatus {
+    NotStarted,
+    Running,
+    Solved,
+    NoSolution,
+    Terminated,
+    Discovering,
+    DiscoverEndAllFound,
+    DiscoverEndLimitReached
+}
+abstract class Discoverer {
+    + Discoverer(h: MonotoneHeuristic<RHGameState>, maxStates: int)
+}
+class BFSDiscoverer {
+}
+class DFSDiscoverer {
+}
+RHSolver *-- "Heuristic<RHGameState>" : + Heuristic
+RHSolver -right-> SolverStatus : + Status
+RHSolver <|-- TabuSolver
+RHSolver <|-- BacktrackingSolver
+RHSolver <|-- AcGraphSolver
+AcGraphSolver <|-- Discoverer
+Discoverer <|-- BFSDiscoverer
+Discoverer <|-- DFSDiscoverer
+@enduml

@@ -1,0 +1,127 @@
+@startuml
+class GraphScene <<singleton>> {
+    ' + {static} Instance : GraphScene <<get>>
+    ' - _vertexDrawer : VertexDrawer
+    ' - _edgeDrawer : EdgeDrawer
+    ' + GraphScene()
+    ' - PickRadiusPx : float <<get>>
+    ' - FramesToSkip : int <<get>>
+    ' - _skippedFrames : int = 0
+    ' + <<override>> _Ready() : void
+    ' + <<override>> _UnhandledInput(@event:InputEvent) : void
+    - PickVertex(screenPos:Vector2) : Vertex?
+    ' + <<override>> _PhysicsProcess(delta:double) : void
+    + Setup(initial:RHGameState) : void
+    + Clear() : void
+    + ClearPathHighligh() : void
+}
+class VertexDrawer {
+    ' + <<const>> MaxInstances : int = 20000
+    ' + <<const>> spriteSizePx : int = 256
+    ' + <<const>> spriteScale : float = 1f
+    ' + <<override>> _Ready() : void
+    + UpdateVisuals() : void
+}
+class Vertex {
+    + <<const>> repulsionForce : int = 1000
+    ' + <<const>> influenceRadius : int = 1000
+    ' + <<const>> linearDamp : float = 10.0f
+    ' + <<const>> maxSpeed : float = 100f
+    ' + <<const>> spawnDistanceFactor : float = 3
+    ' + GameState : RHGameState <<get>> <<set>>
+    + Position : Vector3 <<get>> <<set>>
+    + Velocity : Vector3 <<get>>
+    ' - _pendingForces : Vector3
+    ' - <<readonly>> _forcesLock : object
+    + {static} Dict : Dictionary<RHGameState, Vertex> <<get>>
+    + {static}  <<event>> VertexClicked : EventHandler<RHGameState>? 
+    ' - {static} _algoCurrent : Vertex? = null
+    ' + {static} AlgoCurrent : Vertex? <<get>>
+    ' + IsAlgoCurrent : bool <<get>>
+    ' - _connectedAlgoEdges : int = 0
+    ' + ConnectedAlgoEdges : int <<get>> <<set>>
+    ' - _effects : HashSet<VertexEffect>
+    ' + AddEffect(e:VertexEffect) : void
+    ' + RemoveEffect(e:VertexEffect) : void
+    ' + SetEffect(e:VertexEffect, active:bool) : void
+    ' + ClearEffects() : void
+    + Effect : VertexEffect? <<get>>
+    + Hidden : bool <<get>>
+    + GetColor() : Color
+    + GetScale() : float
+    + {static} FireVertexClicked(sender:object, state:RHGameState) : void
+    ' + Vertex(gameState:RHGameState)
+    + {static} GetOrCreate(state:RHGameState, parent:Vertex?) : Vertex
+    + ApplyPendingForce(force:Vector3) : void
+    + Integrate(delta:double) : void
+    ' + {static} OnNewCurrent(sender:object?, newCurrent:RHGameState) : void
+    ' + {static} OnPathChange(_:object?, args:PathChangeArgs) : void
+}
+enum VertexEffect {
+    ManualCurrent= 0,
+    Solved= 1,
+    Initial= 2,
+    AlgoCurrent= 3,
+    OnAlgoPath= 4
+}
+class Edge {
+    + <<const>> springLength : int = 1
+    ' + <<const>> optimalIntervalLowerBound : double
+    ' + <<const>> optimalIntervalUpperBound : double
+    + <<const>> springForce : float = 100
+    ' + From : Vertex <<get>> <<init>>
+    ' + To : Vertex <<get>> <<init>>
+    ' + MoveUsed : StateMove <<get>> <<init>>
+    + {static} Dict : Dictionary<StateMove, Edge> <<get>>
+    ' - _effects : HashSet<EdgeEffect>
+    ' + AddEffect(e:EdgeEffect) : void
+    ' + RemoveEffect(e:EdgeEffect) : void
+    ' + SetEffect(e:EdgeEffect, active:bool) : void
+    ' + ClearEffects() : void
+    + Effect : EdgeEffect? <<get>>
+    + Hidden : bool <<get>>
+    + GetColor() : Color
+    ' + Edge(from:Vertex, to:Vertex, moveUsed:StateMove)
+    + {static} GetOrCreate(move:StateMove) : Edge
+    + ApplySpringForce() : void
+    ' + {static} OnNewEdge(sender:object?, edge:StateMove) : void
+    ' + {static} OnPathChange(_:object?, args:PathChangeArgs) : void
+}
+enum EdgeEffect {
+    SolutionEdge= 0,
+    AlgoEdge= 1
+}
+class EdgeDrawer {
+    - _mesh : ImmediateMesh
+    ' + <<override>> _Ready() : void
+    + UpdateVisuals() : void
+}
+Node3D <|-down- GraphScene
+MultiMeshInstance3D <|-down-- VertexDrawer
+MultiMeshInstance3D <|-down-- EdgeDrawer
+
+' GraphScene o--> "Instance" GraphScene
+GraphScene *-down- VertexDrawer : - _vertexDrawer
+GraphScene *-down- EdgeDrawer : - _edgeDrawer
+Vertex o-- RHGameState : + GameState
+' Vertex --> "Position" Vector3
+' Vertex o-> "Velocity" Vector3
+' Vertex o-> "_pendingForces" Vector3
+' Vertex o-> "Dict<RHGameState,Vertex>" "Dictionary`2"
+' Vertex --> "AlgoCurrent" Vertex
+' Vertex o-> "_effects<VertexEffect>" "HashSet`1"
+Vertex --> VertexEffect
+' Edge -left-> "From" Vertex
+' Edge -left-> "To" Vertex
+Edge "0..*" o-left-- Vertex : "+ To"
+Edge "0..*" o-left-- Vertex : "+ From"
+Edge o-- StateMove : + MoveUsed
+' Edge o-> "Dict<StateMove,Edge>" "Dictionary`2"
+' Edge o-> "_effects<EdgeEffect>" "HashSet`1"
+Edge --> EdgeEffect
+' EdgeDrawer o-> "_mesh" ImmediateMesh
+EdgeDrawer o-- "0..*" Edge
+VertexDrawer o-- "0..*" Vertex
+
+
+@enduml

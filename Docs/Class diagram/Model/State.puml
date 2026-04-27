@@ -1,0 +1,66 @@
+@startuml
+class RHGameState {
+    ' - <<const>> maxPieces : int = 16
+    + BoardWidth : int <<get>> = 6
+    + BoardHeight : int <<get>> = 6
+    + ExitPosition : Vector2I <<get>> = (5, 2)
+    ' - <<readonly>> _hashCode : int
+    ' + RHGameState(placedPieces:PlacedRHPiece[])
+    + IsSolved() : bool
+    + <<override>> GetHashCode() : int
+    ' - CalculateHashCode() : int
+    + <<override>> Equals(obj:object?) : bool
+    + GetPossibleMoves() : IEnumerable<Move>
+    + GetPossibleStateMoves() : IEnumerable<StateMove>
+    + WithMove(move:Move) : RHGameState
+    ' + PrintState() : void
+}
+struct Move {
+    + PieceIndex : int <<get>> <<init>>
+}
+enum Direction {
+    Right,
+    Down,
+    Left,
+    Up
+}
+class StateMove {
+    ' - _hashCode : int
+    ' + StateMove(from:RHGameState, to:RHGameState, move:Move)
+    ' - CalculateHashCode() : int
+    + <<override>> GetHashCode() : int
+    + <<override>> Equals(obj:object?) : bool
+}
+class PlacedRHPiece {
+    + <<readonly>> Position : Vector2I
+    ' + PlacedRHPiece(piece:RushHourPiece, position:Vector2I, facingDirection:Direction)
+    + WithMove(dir:Direction) : PlacedRHPiece
+}
+abstract class RushHourPiece {
+    + {abstract} Width : int <<get>>
+    + {abstract} Length : int <<get>>
+    + {abstract} CanMoveLengthwise : bool <<get>> = true
+    + {abstract} CanMoveSideways : bool <<get>> = false
+}
+class Car {
+    + <<override>> Length : int <<get>> = 2
+    + <<override>> Width : int <<get>> = 1
+}
+class MainCar {
+}
+class Bus {
+    + <<override>> Length : int <<get>> = 3
+    + <<override>> Width : int <<get>> = 1
+}
+' Move this to the other side
+RHGameState "0..*" o-right- "1..16" PlacedRHPiece : + <<readonly>> PlacedPieces
+Move -> Direction : + Dir
+StateMove "0..*" o-- RHGameState : + To
+StateMove "0..*" o-up- RHGameState : + From
+StateMove *-right- Move : + Move
+PlacedRHPiece "0..*" o-- RushHourPiece : + Piece
+PlacedRHPiece --> Direction : + FacingDirection
+RushHourPiece <|-- Car
+Car <|-- MainCar
+RushHourPiece <|-- Bus
+@enduml

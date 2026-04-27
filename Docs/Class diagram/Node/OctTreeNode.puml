@@ -1,0 +1,20 @@
+@startuml
+class OctTreeNode {
+    + <<const>> theta : float = 1f
+    + BoundsMin : Vector3
+    + BoundsMax : Vector3
+    + Children : OctTreeNode?[]
+    + CenterOfMass : Vector3
+    + Count : int
+    + Body : Vertex?
+    + IsLeaf : bool <<get>>
+    - OctTreeNode(boundsMin:Vector3, boundsMax:Vector3)
+    + {static} Build(vertices:IEnumerable<Vertex>) : OctTreeNode?
+    - Insert(vertex:Vertex) : void
+    + GetOctant(position:Vector3) : int
+    + EnsureChild(octant:int) : void
+    + ComputeForce(target:Vertex) : Vector3
+    - SumChildForces(target:Vertex) : Vector3
+    - ComputeDirectForce(targetPos:Vector3) : Vector3
+}
+@enduml

@@ -1,0 +1,1105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?plantuml 1.2026.1?><svg
+   contentStyleType="text/css"
+   data-diagram-type="CLASS"
+   height="693px"
+   preserveAspectRatio="none"
+   style="width:818px;height:693px;background:#FFFFFF;"
+   version="1.1"
+   viewBox="0 0 818 693"
+   width="818px"
+   zoomAndPan="magnify"
+   id="svg44"
+   sodipodi:docname="Solvers.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview44"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="1.1457431"
+     inkscape:cx="361.33753"
+     inkscape:cy="467.81864"
+     inkscape:window-width="1920"
+     inkscape:window-height="1003"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="lnk12" />
+  <defs
+     id="defs1" />
+  <g
+     id="g44">
+    <!--class RHSolver-->
+    <g
+       class="entity"
+       data-qualified-name="RHSolver"
+       data-source-line="1"
+       id="ent0002">
+      <rect
+         fill="#F1F1F1"
+         height="295.8829"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="455.1124"
+         x="87"
+         y="7"
+         id="rect1" />
+      <ellipse
+         cx="282.7053"
+         cy="23"
+         fill="#A9DCDF"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse1"
+         ry="11"
+         rx="11" />
+      <path
+         d="M282.8147,18.3438 L281.6584,23.4219 L283.9865,23.4219 L282.8147,18.3438 Z M281.3303,16.1094 L284.3147,16.1094 L287.674,28.5 L285.2209,28.5 L284.4553,25.4375 L281.174,25.4375 L280.424,28.5 L277.9865,28.5 L281.3303,16.1094 Z "
+         fill="#000000"
+         id="path1" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         font-style="italic"
+         lengthAdjust="spacing"
+         textLength="55.2018"
+         x="303.2053"
+         y="28.432"
+         id="text1">RHSolver</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="88"
+         x2="541.1124"
+         y1="39"
+         y2="39"
+         id="line1" />
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g2">
+        <ellipse
+           cx="98"
+           cy="54.034"
+           fill="none"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse2"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="324.8688"
+         x="107"
+         y="57.9659"
+         id="text2">«virtual» StepCount : int «get» «protected set» = 0</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g3">
+        <ellipse
+           cx="98"
+           cy="73.1019"
+           fill="none"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse3"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="348.7666"
+         x="107"
+         y="77.0339"
+         id="text3">«event» NewCurrent : EventHandler&lt;RHGameState&gt;?</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g4">
+        <ellipse
+           cx="98"
+           cy="92.1698"
+           fill="none"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse4"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="368.0306"
+         x="107"
+         y="96.1018"
+         id="text4">«event» PathChange : EventHandler&lt;PathChangeArgs&gt;?</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g5">
+        <ellipse
+           cx="98"
+           cy="111.2377"
+           fill="none"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse5"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="309.0627"
+         x="107"
+         y="115.1697"
+         id="text5">«event» NewEdge : EventHandler&lt;StateMove&gt;?</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g6">
+        <ellipse
+           cx="98"
+           cy="130.3056"
+           fill="none"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse6"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="334.6967"
+         x="107"
+         y="134.2376"
+         id="text6">«event» Terminated : EventHandler&lt;SolverStatus&gt;?</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="88"
+         x2="541.1124"
+         y1="142.3396"
+         y2="142.3396"
+         id="line6" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g7">
+        <ellipse
+           cx="98"
+           cy="157.3735"
+           fill="#84BE84"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse7"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="429.1124"
+         x="107"
+         y="161.3055"
+         id="text7">RHSolver(heuristic:Heuristic&lt;RHGameState&gt;, randomFactor:float)</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g8">
+        <ellipse
+           cx="98"
+           cy="176.4415"
+           fill="#84BE84"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse8"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="215.0952"
+         x="107"
+         y="180.3734"
+         id="text8">Evaluate(move:StateMove) : float</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g9">
+        <ellipse
+           cx="98"
+           cy="195.5094"
+           fill="#84BE84"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse9"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="233.0291"
+         x="107"
+         y="199.4414"
+         id="text9">Evaluate(state:RHGameState) : float</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g10">
+        <ellipse
+           cx="98"
+           cy="214.5773"
+           fill="#84BE84"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse10"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="269.653"
+         x="107"
+         y="218.5093"
+         id="text10">«virtual» Start(initial:RHGameState) : void</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g11">
+        <ellipse
+           cx="98"
+           cy="233.6452"
+           fill="#84BE84"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse11"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="281.5389"
+         x="107"
+         y="237.5772"
+         id="text11">«virtual» Extend(state:RHGameState) : bool</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g12">
+        <ellipse
+           cx="98"
+           cy="252.7131"
+           fill="#84BE84"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse12"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="165.4934"
+         x="107"
+         y="256.6451"
+         id="text12">Step(stepCount:int) : void</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g13">
+        <ellipse
+           cx="98"
+           cy="271.781"
+           fill="#84BE84"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse13"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="136.0515"
+         x="107"
+         y="275.713"
+         id="text13">«virtual» Step() : void</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g14">
+        <ellipse
+           cx="98"
+           cy="290.849"
+           fill="#84BE84"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse14"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="297.1208"
+         x="107"
+         y="294.7809"
+         id="text14">GetSolutionPath() : IEnumerable&lt;StateMove&gt;</text>
+    </g>
+    <!--class TabuSolver-->
+    <g
+       class="entity"
+       data-qualified-name="TabuSolver"
+       data-source-line="16"
+       id="ent0003">
+      <rect
+         fill="#F1F1F1"
+         height="48"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="105.4577"
+         x="7"
+         y="391.5"
+         id="rect14" />
+      <ellipse
+         cx="22"
+         cy="407.5"
+         fill="#ADD1B2"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse15"
+         ry="11"
+         rx="11" />
+      <path
+         d="M24.9688,413.1406 Q24.3906,413.4375 23.75,413.5781 Q23.1094,413.7344 22.4063,413.7344 Q19.9063,413.7344 18.5781,412.0938 Q17.2656,410.4375 17.2656,407.3125 Q17.2656,404.1875 18.5781,402.5313 Q19.9063,400.875 22.4063,400.875 Q23.1094,400.875 23.75,401.0313 Q24.4063,401.1875 24.9688,401.4844 L24.9688,404.2031 Q24.3438,403.625 23.75,403.3594 Q23.1563,403.0781 22.5313,403.0781 Q21.1875,403.0781 20.5,404.1563 Q19.8125,405.2188 19.8125,407.3125 Q19.8125,409.4063 20.5,410.4844 Q21.1875,411.5469 22.5313,411.5469 Q23.1563,411.5469 23.75,411.2813 Q24.3438,411 24.9688,410.4219 L24.9688,413.1406 Z "
+         fill="#000000"
+         id="path15" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="73.4577"
+         x="36"
+         y="412.932"
+         id="text15">TabuSolver</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="8"
+         x2="111.4577"
+         y1="423.5"
+         y2="423.5"
+         id="line15" />
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="8"
+         x2="111.4577"
+         y1="431.5"
+         y2="431.5"
+         id="line16" />
+    </g>
+    <!--class BacktrackingSolver-->
+    <g
+       class="entity"
+       data-qualified-name="BacktrackingSolver"
+       data-source-line="18"
+       id="ent0004">
+      <rect
+         fill="#F1F1F1"
+         height="48"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="157.4675"
+         x="147"
+         y="391.5"
+         id="rect16" />
+      <ellipse
+         cx="162"
+         cy="407.5"
+         fill="#ADD1B2"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse16"
+         ry="11"
+         rx="11" />
+      <path
+         d="M164.9688,413.1406 Q164.3906,413.4375 163.75,413.5781 Q163.1094,413.7344 162.4063,413.7344 Q159.9063,413.7344 158.5781,412.0938 Q157.2656,410.4375 157.2656,407.3125 Q157.2656,404.1875 158.5781,402.5313 Q159.9063,400.875 162.4063,400.875 Q163.1094,400.875 163.75,401.0313 Q164.4063,401.1875 164.9688,401.4844 L164.9688,404.2031 Q164.3438,403.625 163.75,403.3594 Q163.1563,403.0781 162.5313,403.0781 Q161.1875,403.0781 160.5,404.1563 Q159.8125,405.2188 159.8125,407.3125 Q159.8125,409.4063 160.5,410.4844 Q161.1875,411.5469 162.5313,411.5469 Q163.1563,411.5469 163.75,411.2813 Q164.3438,411 164.9688,410.4219 L164.9688,413.1406 Z "
+         fill="#000000"
+         id="path16" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="125.4675"
+         x="176"
+         y="412.932"
+         id="text16">BacktrackingSolver</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="148"
+         x2="303.4675"
+         y1="423.5"
+         y2="423.5"
+         id="line17" />
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="148"
+         x2="303.4675"
+         y1="431.5"
+         y2="431.5"
+         id="line18" />
+    </g>
+    <!--class AcGraphSolver-->
+    <g
+       class="entity"
+       data-qualified-name="AcGraphSolver"
+       data-source-line="20"
+       id="ent0005">
+      <rect
+         fill="#F1F1F1"
+         height="48"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="129.3136"
+         x="339"
+         y="391.5"
+         id="rect18" />
+      <ellipse
+         cx="354"
+         cy="407.5"
+         fill="#ADD1B2"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse18"
+         ry="11"
+         rx="11" />
+      <path
+         d="M356.9688,413.1406 Q356.3906,413.4375 355.75,413.5781 Q355.1094,413.7344 354.4063,413.7344 Q351.9063,413.7344 350.5781,412.0938 Q349.2656,410.4375 349.2656,407.3125 Q349.2656,404.1875 350.5781,402.5313 Q351.9063,400.875 354.4063,400.875 Q355.1094,400.875 355.75,401.0313 Q356.4063,401.1875 356.9688,401.4844 L356.9688,404.2031 Q356.3438,403.625 355.75,403.3594 Q355.1563,403.0781 354.5313,403.0781 Q353.1875,403.0781 352.5,404.1563 Q351.8125,405.2188 351.8125,407.3125 Q351.8125,409.4063 352.5,410.4844 Q353.1875,411.5469 354.5313,411.5469 Q355.1563,411.5469 355.75,411.2813 Q356.3438,411 356.9688,410.4219 L356.9688,413.1406 Z "
+         fill="#000000"
+         id="path18" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="97.3136"
+         x="368"
+         y="412.932"
+         id="text18">AcGraphSolver</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="340"
+         x2="467.3136"
+         y1="423.5"
+         y2="423.5"
+         id="line19" />
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="340"
+         x2="467.3136"
+         y1="431.5"
+         y2="431.5"
+         id="line20" />
+    </g>
+    <!--class Heuristic<RHGameState>-->
+    <g
+       class="entity"
+       data-qualified-name="Heuristic.RHGameState."
+       data-source-line="22"
+       id="ent0006">
+      <rect
+         fill="#F1F1F1"
+         height="67.0679"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="233.7312"
+         x="503.5"
+         y="382"
+         id="rect20" />
+      <ellipse
+         cx="539.0847"
+         cy="398"
+         fill="#A9DCDF"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse20"
+         ry="11"
+         rx="11" />
+      <path
+         d="M539.1941,393.3438 L538.0378,398.4219 L540.366,398.4219 L539.1941,393.3438 Z M537.7097,391.1094 L540.6941,391.1094 L544.0535,403.5 L541.6003,403.5 L540.8347,400.4375 L537.5535,400.4375 L536.8035,403.5 L534.366,403.5 L537.7097,391.1094 Z "
+         fill="#000000"
+         id="path20" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         font-style="italic"
+         lengthAdjust="spacing"
+         textLength="155.9874"
+         x="557.6591"
+         y="403.432"
+         id="text20">Heuristic&lt;RHGameState&gt;</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="504.5"
+         x2="736.2312"
+         y1="414"
+         y2="414"
+         id="line21" />
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="504.5"
+         x2="736.2312"
+         y1="422"
+         y2="422"
+         id="line22" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g22">
+        <ellipse
+           cx="514.5"
+           cy="437.034"
+           fill="#84BE84"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse22"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         font-style="italic"
+         lengthAdjust="spacing"
+         textLength="207.7312"
+         x="523.5"
+         y="440.9659"
+         id="text22">Evaluate(state:RHGameState) : int</text>
+    </g>
+    <!--class SolverStatus-->
+    <g
+       class="entity"
+       data-qualified-name="SolverStatus"
+       data-source-line="25"
+       id="ent0007">
+      <rect
+         fill="#F1F1F1"
+         height="200.5433"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="182.6033"
+         x="629"
+         y="54.5"
+         id="rect22" />
+      <ellipse
+         cx="675.2698"
+         cy="70.5"
+         fill="#EB937F"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse23"
+         ry="11"
+         rx="11" />
+      <path
+         d="M679.3792,76.5 L671.6604,76.5 L671.6604,64.1094 L679.3792,64.1094 L679.3792,66.2656 L674.1136,66.2656 L674.1136,68.9375 L678.8792,68.9375 L678.8792,71.0938 L674.1136,71.0938 L674.1136,74.3438 L679.3792,74.3438 L679.3792,76.5 Z "
+         fill="#000000"
+         id="path23" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="81.5637"
+         x="695.7698"
+         y="75.932"
+         id="text23">SolverStatus</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="630"
+         x2="810.6033"
+         y1="86.5"
+         y2="86.5"
+         id="line23" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="75.8517"
+         x="635"
+         y="105.4659"
+         id="text24">NotStarted,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="59.2897"
+         x="635"
+         y="124.5339"
+         id="text25">Running,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="47.1378"
+         x="635"
+         y="143.6018"
+         id="text26">Solved,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="77.0697"
+         x="635"
+         y="162.6697"
+         id="text27">NoSolution,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="79.9817"
+         x="635"
+         y="181.7376"
+         id="text28">Terminated,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="81.1437"
+         x="635"
+         y="200.8055"
+         id="text29">Discovering,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="143.1354"
+         x="635"
+         y="219.8734"
+         id="text30">DiscoverEndAllFound,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="170.6033"
+         x="635"
+         y="238.9414"
+         id="text31">DiscoverEndLimitReached</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="630"
+         x2="810.6033"
+         y1="247.0433"
+         y2="247.0433"
+         id="line31" />
+    </g>
+    <!--class Discoverer-->
+    <g
+       class="entity"
+       data-qualified-name="Discoverer"
+       data-source-line="35"
+       id="ent0008">
+      <rect
+         fill="#F1F1F1"
+         height="67.0679"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="455.7844"
+         x="175.5"
+         y="510"
+         id="rect31" />
+      <ellipse
+         cx="366.7043"
+         cy="526"
+         fill="#A9DCDF"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse31"
+         ry="11"
+         rx="11" />
+      <path
+         d="M366.8137,521.3438 L365.6575,526.4219 L367.9856,526.4219 L366.8137,521.3438 Z M365.3293,519.1094 L368.3137,519.1094 L371.6731,531.5 L369.22,531.5 L368.4543,528.4375 L365.1731,528.4375 L364.4231,531.5 L361.9856,531.5 L365.3293,519.1094 Z "
+         fill="#000000"
+         id="path31" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         font-style="italic"
+         lengthAdjust="spacing"
+         textLength="64.8758"
+         x="387.2043"
+         y="531.432"
+         id="text32">Discoverer</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="176.5"
+         x2="630.2844"
+         y1="542"
+         y2="542"
+         id="line32" />
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="176.5"
+         x2="630.2844"
+         y1="550"
+         y2="550"
+         id="line33" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g33">
+        <ellipse
+           cx="186.5"
+           cy="565.034"
+           fill="#84BE84"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse33"
+           ry="3"
+           rx="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="429.7844"
+         x="195.5"
+         y="568.9659"
+         id="text33">Discoverer(h: MonotoneHeuristic&lt;RHGameState&gt;, maxStates: int)</text>
+    </g>
+    <!--class BFSDiscoverer-->
+    <g
+       class="entity"
+       data-qualified-name="BFSDiscoverer"
+       data-source-line="38"
+       id="ent0009">
+      <rect
+         fill="#F1F1F1"
+         height="48"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="126.2476"
+         x="259.5"
+         y="638"
+         id="rect33" />
+      <ellipse
+         cx="274.5"
+         cy="654"
+         fill="#ADD1B2"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse34"
+         ry="11"
+         rx="11" />
+      <path
+         d="M277.4688,659.6406 Q276.8906,659.9375 276.25,660.0781 Q275.6094,660.2344 274.9063,660.2344 Q272.4063,660.2344 271.0781,658.5938 Q269.7656,656.9375 269.7656,653.8125 Q269.7656,650.6875 271.0781,649.0313 Q272.4063,647.375 274.9063,647.375 Q275.6094,647.375 276.25,647.5313 Q276.9063,647.6875 277.4688,647.9844 L277.4688,650.7031 Q276.8438,650.125 276.25,649.8594 Q275.6563,649.5781 275.0313,649.5781 Q273.6875,649.5781 273,650.6563 Q272.3125,651.7188 272.3125,653.8125 Q272.3125,655.9063 273,656.9844 Q273.6875,658.0469 275.0313,658.0469 Q275.6563,658.0469 276.25,657.7813 Q276.8438,657.5 277.4688,656.9219 L277.4688,659.6406 Z "
+         fill="#000000"
+         id="path34" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="94.2476"
+         x="288.5"
+         y="659.432"
+         id="text34">BFSDiscoverer</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="260.5"
+         x2="384.7476"
+         y1="670"
+         y2="670"
+         id="line34" />
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="260.5"
+         x2="384.7476"
+         y1="678"
+         y2="678"
+         id="line35" />
+    </g>
+    <!--class DFSDiscoverer-->
+    <g
+       class="entity"
+       data-qualified-name="DFSDiscoverer"
+       data-source-line="40"
+       id="ent0010">
+      <rect
+         fill="#F1F1F1"
+         height="48"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="127.3676"
+         x="421"
+         y="638"
+         id="rect35" />
+      <ellipse
+         cx="436"
+         cy="654"
+         fill="#ADD1B2"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse35"
+         ry="11"
+         rx="11" />
+      <path
+         d="M438.9688,659.6406 Q438.3906,659.9375 437.75,660.0781 Q437.1094,660.2344 436.4063,660.2344 Q433.9063,660.2344 432.5781,658.5938 Q431.2656,656.9375 431.2656,653.8125 Q431.2656,650.6875 432.5781,649.0313 Q433.9063,647.375 436.4063,647.375 Q437.1094,647.375 437.75,647.5313 Q438.4063,647.6875 438.9688,647.9844 L438.9688,650.7031 Q438.3438,650.125 437.75,649.8594 Q437.1563,649.5781 436.5313,649.5781 Q435.1875,649.5781 434.5,650.6563 Q433.8125,651.7188 433.8125,653.8125 Q433.8125,655.9063 434.5,656.9844 Q435.1875,658.0469 436.5313,658.0469 Q437.1563,658.0469 437.75,657.7813 Q438.3438,657.5 438.9688,656.9219 L438.9688,659.6406 Z "
+         fill="#000000"
+         id="path35" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="95.3676"
+         x="450"
+         y="659.432"
+         id="text35">DFSDiscoverer</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="422"
+         x2="547.3676"
+         y1="670"
+         y2="670"
+         id="line36" />
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="422"
+         x2="547.3676"
+         y1="678"
+         y2="678"
+         id="line37" />
+    </g>
+    <!--reverse link RHSolver to Heuristic<RHGameState>-->
+    <g
+       class="link"
+       data-entity-1="ent0002"
+       data-entity-2="ent0006"
+       data-link-type="composition"
+       data-source-line="42"
+       id="lnk11">
+      <path
+         codeLine="42"
+         d="M498.1159,311.1151 C533.1459,340.7151 557.48,361.26 581.91,381.9"
+         fill="none"
+         id="RHSolver-backto-Heuristic&lt;RHGameState&gt;"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="#181818"
+         points="488.95,303.37,490.9513,310.2978,498.1159,311.1151,496.1146,304.1872,488.95,303.37"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon37" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g37"
+         transform="translate(35.949567,27.309328)">
+        <circle
+           cx="544.5"
+           cy="343.353"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse37"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="54.236099"
+         x="551.5"
+         y="347.897"
+         id="text37"
+         transform="translate(35.949567,27.309328)">Heuristic</text>
+    </g>
+    <!--link RHSolver to SolverStatus-->
+    <g
+       class="link"
+       data-entity-1="ent0002"
+       data-entity-2="ent0007"
+       data-link-type="dependency"
+       data-source-line="43"
+       id="lnk12">
+      <path
+         codeLine="43"
+         d="M542.13,155 C572.71,155 596.54,155 622.78,155"
+         fill="none"
+         id="RHSolver-to-SolverStatus"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="#181818"
+         points="628.78,155,619.78,151,623.78,155,619.78,159,628.78,155"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon38" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g38"
+         transform="translate(15.891869,0.61715995)">
+        <circle
+           cx="565.5"
+           cy="143.353"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse38"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="38.077"
+         x="572.5"
+         y="147.897"
+         id="text38"
+         transform="translate(15.891869,0.61715995)">Status</text>
+    </g>
+    <!--reverse link RHSolver to TabuSolver-->
+    <g
+       class="link"
+       data-entity-1="ent0002"
+       data-entity-2="ent0003"
+       data-link-type="extension"
+       data-source-line="44"
+       id="lnk13">
+      <path
+         codeLine="44"
+         d="M156.4797,316.185 C122.4797,350.655 102.85,370.55 82.24,391.45"
+         fill="none"
+         id="RHSolver-backto-TabuSolver"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="169.12,303.37,152.2081,311.9716,160.7514,320.3984,169.12,303.37"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon39" />
+    </g>
+    <!--reverse link RHSolver to BacktrackingSolver-->
+    <g
+       class="link"
+       data-entity-1="ent0002"
+       data-entity-2="ent0004"
+       data-link-type="extension"
+       data-source-line="45"
+       id="lnk14">
+      <path
+         codeLine="45"
+         d="M257.8993,320.3892 C246.0293,354.8592 240.63,370.55 233.44,391.45"
+         fill="none"
+         id="RHSolver-backto-BacktrackingSolver"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="263.76,303.37,252.2263,318.4356,263.5724,322.3427,263.76,303.37"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon40" />
+    </g>
+    <!--reverse link RHSolver to AcGraphSolver-->
+    <g
+       class="link"
+       data-entity-1="ent0002"
+       data-entity-2="ent0005"
+       data-link-type="extension"
+       data-source-line="46"
+       id="lnk15">
+      <path
+         codeLine="46"
+         d="M371.1007,320.3892 C382.9707,354.8592 388.37,370.55 395.56,391.45"
+         fill="none"
+         id="RHSolver-backto-AcGraphSolver"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="365.24,303.37,365.4276,322.3427,376.7737,318.4356,365.24,303.37"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon41" />
+    </g>
+    <!--reverse link AcGraphSolver to Discoverer-->
+    <g
+       class="link"
+       data-entity-1="ent0005"
+       data-entity-2="ent0008"
+       data-link-type="extension"
+       data-source-line="47"
+       id="lnk16">
+      <path
+         codeLine="47"
+         d="M403.5,457.61 C403.5,477.22 403.5,487.59 403.5,509.57"
+         fill="none"
+         id="AcGraphSolver-backto-Discoverer"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="403.5,439.61,397.5,457.61,409.5,457.61,403.5,439.61"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon42" />
+    </g>
+    <!--reverse link Discoverer to BFSDiscoverer-->
+    <g
+       class="link"
+       data-entity-1="ent0008"
+       data-entity-2="ent0009"
+       data-link-type="extension"
+       data-source-line="48"
+       id="lnk17">
+      <path
+         codeLine="48"
+         d="M370.4467,592.0404 C357.0667,611.2904 350.74,620.38 338.69,637.71"
+         fill="none"
+         id="Discoverer-backto-BFSDiscoverer"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="380.72,577.26,365.5199,588.6159,375.3735,595.4648,380.72,577.26"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon43" />
+    </g>
+    <!--reverse link Discoverer to DFSDiscoverer-->
+    <g
+       class="link"
+       data-entity-1="ent0008"
+       data-entity-2="ent0010"
+       data-link-type="extension"
+       data-source-line="49"
+       id="lnk18">
+      <path
+         codeLine="49"
+         d="M436.5533,592.0404 C449.9333,611.2904 456.26,620.38 468.31,637.71"
+         fill="none"
+         id="Discoverer-backto-DFSDiscoverer"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="426.28,577.26,431.6265,595.4648,441.4801,588.6159,426.28,577.26"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon44" />
+    </g>
+<?plantuml-src XLJRRjim37ttLmXzIjO6sBFXPSXI9ncm1aFI7s1ipXOgIu5CUmMw_ljenNUxcnyCYJo7b0wF3PUSB4Ga8WLvBaw7ir4bMl7c2NxkHH2Kqb81QhqMPyBhrXIQX2yaluCWGU9u45oj8Om8Ov6xo1VnkUPp4alKLV28lxU5jUZuOHKyW8uLsk1qs4E6PmB2zLSnPVu4IhSfw0J7p2wpiKa-I-QsOJnbkcvFffpl-8msangg6urvJf-ANVJwDRejKYoip4b6_g5P3Qxt82mNCjcEDJVM_wKCqB8k4fQW2WOjCZwMtnvmoKTmk34ihn1-h_eOEHmUM5f8BKc26fDA8-CPJlXAgEFvFXTZL4sfVC6WsXm-M-CVDHrubDyZiNm5IQEhWRhqzr0N6LguAEpDodltRaPzXalHMhK9VeFefNBpYzJ99Bc9zXQkQIyEG-_VpK_ihlaKtXhy-tz6m09mTUJpYxvRwc_gQCZD0kC7jpyLMlDvRnk7hnD7quXostUUlEqVPHwn9hObDu5GnnkbTZoCU9Bu8JD99uGenNWgGGFi_G2wq2BrnPFHXep6ZyoTmQjRvaw5PJUPtNbGkua_JkBj7-ZJQlNXI5ZaUz7cEixAoYIbrNgek-yyMYqxPF27otSc6YMcHXe11cRoXjPoWEvMNk-2j-BzEq-o0qN-0W00?>  </g>
+</svg>

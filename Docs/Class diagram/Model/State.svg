@@ -1,0 +1,1409 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?plantuml 1.2026.1?><svg
+   contentStyleType="text/css"
+   data-diagram-type="CLASS"
+   height="693px"
+   preserveAspectRatio="none"
+   style="width:1116px;height:693px;background:#FFFFFF;"
+   version="1.1"
+   viewBox="0 0 1116 693"
+   width="1116px"
+   zoomAndPan="magnify"
+   id="svg49"
+   sodipodi:docname="State.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview49"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="1.004329"
+     inkscape:cx="709.92672"
+     inkscape:cy="475.93966"
+     inkscape:window-width="1920"
+     inkscape:window-height="1003"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="lnk16" />
+  <defs
+     id="defs1" />
+  <g
+     id="g49">
+    <!--class RHGameState-->
+    <g
+       class="entity"
+       data-qualified-name="RHGameState"
+       data-source-line="1"
+       id="ent0002">
+      <rect
+         fill="#F1F1F1"
+         height="219.6113"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="369.3907"
+         x="7"
+         y="7"
+         id="rect1" />
+      <ellipse
+         cx="141.6165"
+         cy="23"
+         fill="#ADD1B2"
+         rx="11"
+         ry="11"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse1" />
+      <path
+         d="M144.5853,28.6406 Q144.0072,28.9375 143.3665,29.0781 Q142.7259,29.2344 142.0228,29.2344 Q139.5228,29.2344 138.1947,27.5938 Q136.8822,25.9375 136.8822,22.8125 Q136.8822,19.6875 138.1947,18.0313 Q139.5228,16.375 142.0228,16.375 Q142.7259,16.375 143.3665,16.5313 Q144.0228,16.6875 144.5853,16.9844 L144.5853,19.7031 Q143.9603,19.125 143.3665,18.8594 Q142.7728,18.5781 142.1478,18.5781 Q140.804,18.5781 140.1165,19.6563 Q139.429,20.7188 139.429,22.8125 Q139.429,24.9063 140.1165,25.9844 Q140.804,27.0469 142.1478,27.0469 Q142.7728,27.0469 143.3665,26.7813 Q143.9603,26.5 144.5853,25.9219 L144.5853,28.6406 Z "
+         fill="#000000"
+         id="path1" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="91.6577"
+         x="162.1165"
+         y="28.432"
+         id="text1">RHGameState</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="8"
+         x2="375.3907"
+         y1="39"
+         y2="39"
+         id="line1" />
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g2">
+        <ellipse
+           cx="18"
+           cy="54.034"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse2" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="169.8613"
+         x="27"
+         y="57.9659"
+         id="text2">BoardWidth : int «get» = 6</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g3">
+        <ellipse
+           cx="18"
+           cy="73.1019"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="175.1113"
+         x="27"
+         y="77.0339"
+         id="text3">BoardHeight : int «get» = 6</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="8"
+         x2="375.3907"
+         y1="85.1358"
+         y2="85.1358"
+         id="line3" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g4">
+        <ellipse
+           cx="18"
+           cy="100.1698"
+           fill="#84BE84"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse4" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="229.5571"
+         x="27"
+         y="104.1018"
+         id="text4">ExitPosition : Vector2I «get» = (5, 2)</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g5">
+        <ellipse
+           cx="18"
+           cy="119.2377"
+           fill="#84BE84"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse5" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="103.4316"
+         x="27"
+         y="123.1697"
+         id="text5">IsSolved() : bool</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g6">
+        <ellipse
+           cx="18"
+           cy="138.3056"
+           fill="#84BE84"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse6" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="200.3532"
+         x="27"
+         y="142.2376"
+         id="text6">«override» GetHashCode() : int</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g7">
+        <ellipse
+           cx="18"
+           cy="157.3735"
+           fill="#84BE84"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse7" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="235.7451"
+         x="27"
+         y="161.3055"
+         id="text7">«override» Equals(obj:object?) : bool</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g8">
+        <ellipse
+           cx="18"
+           cy="176.4415"
+           fill="#84BE84"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse8" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="276.3029"
+         x="27"
+         y="180.3734"
+         id="text8">GetPossibleMoves() : IEnumerable&lt;Move&gt;</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g9">
+        <ellipse
+           cx="18"
+           cy="195.5094"
+           fill="#84BE84"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse9" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="343.3907"
+         x="27"
+         y="199.4414"
+         id="text9">GetPossibleStateMoves() : IEnumerable&lt;StateMove&gt;</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g10">
+        <ellipse
+           cx="18"
+           cy="214.5773"
+           fill="#84BE84"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse10" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="254.099"
+         x="27"
+         y="218.5093"
+         id="text10">WithMove(move:Move) : RHGameState</text>
+    </g>
+    <!--class Move-->
+    <g
+       class="entity"
+       data-qualified-name="Move"
+       data-source-line="17"
+       id="ent0003">
+      <rect
+         fill="#F1F1F1"
+         height="67.0679"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="204.5273"
+         x="380"
+         y="334.5"
+         id="rect10" />
+      <ellipse
+         cx="459.9257"
+         cy="350.5"
+         fill="#F1F1F1"
+         rx="11"
+         ry="11"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse11" />
+      <path
+         d="M459.4101,351.0625 Q457.5507,350.3594 456.8945,349.5938 Q456.2539,348.8125 456.2539,347.5 Q456.2539,345.8125 457.332,344.8438 Q458.4101,343.875 460.2851,343.875 Q461.1445,343.875 461.9882,344.0781 Q462.8476,344.2656 463.6914,344.6563 L463.6914,347.0469 Q462.9101,346.4844 462.082,346.2031 Q461.2695,345.9063 460.4726,345.9063 Q459.5976,345.9063 459.1132,346.2656 Q458.6445,346.625 458.6445,347.2813 Q458.6445,347.7969 458.9882,348.1406 Q459.332,348.4688 460.4257,348.875 L461.4882,349.2813 Q462.9726,349.8281 463.6757,350.7344 Q464.3945,351.6406 464.3945,353.0156 Q464.3945,354.8906 463.2851,355.8125 Q462.1757,356.7344 459.9257,356.7344 Q459.0039,356.7344 458.082,356.5156 Q457.1601,356.2969 456.3007,355.875 L456.3007,353.3438 Q457.2695,354.0313 458.1914,354.375 Q459.1132,354.7188 460.0039,354.7188 Q460.9101,354.7188 461.4101,354.3125 Q461.9101,353.8906 461.9101,353.1563 Q461.9101,352.5938 461.5664,352.1875 Q461.2382,351.7656 460.6132,351.5156 L459.4101,351.0625 Z "
+         fill="#000000"
+         id="path11" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="36.1759"
+         x="480.4257"
+         y="355.932"
+         id="text11">Move</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="381"
+         x2="583.5273"
+         y1="366.5"
+         y2="366.5"
+         id="line11" />
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g12">
+        <ellipse
+           cx="391"
+           cy="381.534"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse12" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="178.5273"
+         x="400"
+         y="385.4659"
+         id="text12">PieceIndex : int «get» «init»</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="381"
+         x2="583.5273"
+         y1="393.5679"
+         y2="393.5679"
+         id="line12" />
+    </g>
+    <!--class Direction-->
+    <g
+       class="entity"
+       data-qualified-name="Direction"
+       data-source-line="20"
+       id="ent0004">
+      <rect
+         fill="#F1F1F1"
+         height="124.2717"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="92.0178"
+         x="651.5"
+         y="306"
+         id="rect12" />
+      <ellipse
+         cx="666.5"
+         cy="322"
+         fill="#EB937F"
+         rx="11"
+         ry="11"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse13" />
+      <path
+         d="M670.6094,328 L662.8906,328 L662.8906,315.6094 L670.6094,315.6094 L670.6094,317.7656 L665.3438,317.7656 L665.3438,320.4375 L670.1094,320.4375 L670.1094,322.5938 L665.3438,322.5938 L665.3438,325.8438 L670.6094,325.8438 L670.6094,328 Z "
+         fill="#000000"
+         id="path13" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="60.0178"
+         x="680.5"
+         y="327.432"
+         id="text13">Direction</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="652.5"
+         x2="742.5178"
+         y1="338"
+         y2="338"
+         id="line13" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="38.3878"
+         x="657.5"
+         y="356.9659"
+         id="text14">Right,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="42.0978"
+         x="657.5"
+         y="376.0339"
+         id="text15">Down,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="28.8539"
+         x="657.5"
+         y="395.1018"
+         id="text16">Left,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="18.8439"
+         x="657.5"
+         y="414.1697"
+         id="text17">Up</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="652.5"
+         x2="742.5178"
+         y1="422.2717"
+         y2="422.2717"
+         id="line17" />
+    </g>
+    <!--class StateMove-->
+    <g
+       class="entity"
+       data-qualified-name="StateMove"
+       data-source-line="26"
+       id="ent0005">
+      <rect
+         fill="#F1F1F1"
+         height="86.1358"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="261.7451"
+         x="36.5"
+         y="325"
+         id="rect17" />
+      <ellipse
+         cx="128.2627"
+         cy="341"
+         fill="#ADD1B2"
+         rx="11"
+         ry="11"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse17" />
+      <path
+         d="M131.2314,346.6406 Q130.6533,346.9375 130.0127,347.0781 Q129.3721,347.2344 128.6689,347.2344 Q126.1689,347.2344 124.8408,345.5938 Q123.5283,343.9375 123.5283,340.8125 Q123.5283,337.6875 124.8408,336.0313 Q126.1689,334.375 128.6689,334.375 Q129.3721,334.375 130.0127,334.5313 Q130.6689,334.6875 131.2314,334.9844 L131.2314,337.7031 Q130.6064,337.125 130.0127,336.8594 Q129.4189,336.5781 128.7939,336.5781 Q127.4502,336.5781 126.7627,337.6563 Q126.0752,338.7188 126.0752,340.8125 Q126.0752,342.9063 126.7627,343.9844 Q127.4502,345.0469 128.7939,345.0469 Q129.4189,345.0469 130.0127,344.7813 Q130.6064,344.5 131.2314,343.9219 L131.2314,346.6406 Z "
+         fill="#000000"
+         id="path17" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="69.7197"
+         x="148.7627"
+         y="346.432"
+         id="text18">StateMove</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="37.5"
+         x2="297.2451"
+         y1="357"
+         y2="357"
+         id="line18" />
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="37.5"
+         x2="297.2451"
+         y1="365"
+         y2="365"
+         id="line19" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g19">
+        <ellipse
+           cx="47.5"
+           cy="380.034"
+           fill="#84BE84"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse19" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="200.3532"
+         x="56.5"
+         y="383.9659"
+         id="text19">«override» GetHashCode() : int</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g20">
+        <ellipse
+           cx="47.5"
+           cy="399.1019"
+           fill="#84BE84"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse20" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="235.7451"
+         x="56.5"
+         y="403.0339"
+         id="text20">«override» Equals(obj:object?) : bool</text>
+    </g>
+    <!--class PlacedRHPiece-->
+    <g
+       class="entity"
+       data-qualified-name="PlacedRHPiece"
+       data-source-line="33"
+       id="ent0006">
+      <rect
+         fill="#F1F1F1"
+         height="86.1358"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="290.5569"
+         x="573"
+         y="74"
+         id="rect20" />
+      <ellipse
+         cx="665.6097"
+         cy="90"
+         fill="#ADD1B2"
+         rx="11"
+         ry="11"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse21" />
+      <path
+         d="M668.5784,95.6406 Q668.0003,95.9375 667.3597,96.0781 Q666.719,96.2344 666.0159,96.2344 Q663.5159,96.2344 662.1878,94.5938 Q660.8753,92.9375 660.8753,89.8125 Q660.8753,86.6875 662.1878,85.0313 Q663.5159,83.375 666.0159,83.375 Q666.719,83.375 667.3597,83.5313 Q668.0159,83.6875 668.5784,83.9844 L668.5784,86.7031 Q667.9534,86.125 667.3597,85.8594 Q666.7659,85.5781 666.1409,85.5781 Q664.7972,85.5781 664.1097,86.6563 Q663.4222,87.7188 663.4222,89.8125 Q663.4222,91.9063 664.1097,92.9844 Q664.7972,94.0469 666.1409,94.0469 Q666.7659,94.0469 667.3597,93.7813 Q667.9534,93.5 668.5784,92.9219 L668.5784,95.6406 Z "
+         fill="#000000"
+         id="path21" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="96.8376"
+         x="686.1097"
+         y="95.432"
+         id="text21">PlacedRHPiece</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="574"
+         x2="862.5569"
+         y1="106"
+         y2="106"
+         id="line21" />
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g22">
+        <ellipse
+           cx="584"
+           cy="121.034"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse22" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="195.0613"
+         x="593"
+         y="124.9659"
+         id="text22">«readonly» Position : Vector2I</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="574"
+         x2="862.5569"
+         y1="133.0679"
+         y2="133.0679"
+         id="line22" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g23">
+        <ellipse
+           cx="584"
+           cy="148.1019"
+           fill="#84BE84"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse23" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="264.5569"
+         x="593"
+         y="152.0339"
+         id="text23">WithMove(dir:Direction) : PlacedRHPiece</text>
+    </g>
+    <!--class RushHourPiece-->
+    <g
+       class="entity"
+       data-qualified-name="RushHourPiece"
+       data-source-line="38"
+       id="ent0007">
+      <rect
+         fill="#F1F1F1"
+         height="124.2717"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="268.5491"
+         x="779"
+         y="306"
+         id="rect23" />
+      <ellipse
+         cx="862.4117"
+         cy="322"
+         fill="#A9DCDF"
+         rx="11"
+         ry="11"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse24" />
+      <path
+         d="M862.5211,317.3438 L861.3648,322.4219 L863.693,322.4219 L862.5211,317.3438 Z M861.0367,315.1094 L864.0211,315.1094 L867.3805,327.5 L864.9273,327.5 L864.1617,324.4375 L860.8805,324.4375 L860.1305,327.5 L857.693,327.5 L861.0367,315.1094 Z "
+         fill="#000000"
+         id="path24" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         font-style="italic"
+         lengthAdjust="spacing"
+         textLength="93.2257"
+         x="882.9117"
+         y="327.432"
+         id="text24">RushHourPiece</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="780"
+         x2="1046.5491"
+         y1="338"
+         y2="338"
+         id="line24" />
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g25">
+        <ellipse
+           cx="790"
+           cy="353.034"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse25" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         font-style="italic"
+         lengthAdjust="spacing"
+         textLength="100.4216"
+         x="799"
+         y="356.9659"
+         id="text25">Width : int «get»</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g26">
+        <ellipse
+           cx="790"
+           cy="372.1019"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse26" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         font-style="italic"
+         lengthAdjust="spacing"
+         textLength="106.6096"
+         x="799"
+         y="376.0339"
+         id="text26">Length : int «get»</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g27">
+        <ellipse
+           cx="790"
+           cy="391.1698"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse27" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         font-style="italic"
+         lengthAdjust="spacing"
+         textLength="242.5491"
+         x="799"
+         y="395.1018"
+         id="text27">CanMoveLengthwise : bool «get» = true</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g28">
+        <ellipse
+           cx="790"
+           cy="410.2377"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse28" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         font-style="italic"
+         lengthAdjust="spacing"
+         textLength="233.3091"
+         x="799"
+         y="414.1697"
+         id="text28">CanMoveSideways : bool «get» = false</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="780"
+         x2="1046.5491"
+         y1="422.2717"
+         y2="422.2717"
+         id="line28" />
+    </g>
+    <!--class Car-->
+    <g
+       class="entity"
+       data-qualified-name="Car"
+       data-source-line="44"
+       id="ent0008">
+      <rect
+         fill="#F1F1F1"
+         height="86.1358"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="236.3492"
+         x="602.5"
+         y="491"
+         id="rect28" />
+      <ellipse
+         cx="705.1826"
+         cy="507"
+         fill="#ADD1B2"
+         rx="11"
+         ry="11"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse29" />
+      <path
+         d="M708.1514,512.6406 Q707.5733,512.9375 706.9326,513.0781 Q706.292,513.2344 705.5889,513.2344 Q703.0889,513.2344 701.7608,511.5938 Q700.4483,509.9375 700.4483,506.8125 Q700.4483,503.6875 701.7608,502.0313 Q703.0889,500.375 705.5889,500.375 Q706.292,500.375 706.9326,500.5313 Q707.5889,500.6875 708.1514,500.9844 L708.1514,503.7031 Q707.5264,503.125 706.9326,502.8594 Q706.3389,502.5781 705.7139,502.5781 Q704.3701,502.5781 703.6826,503.6563 Q702.9951,504.7188 702.9951,506.8125 Q702.9951,508.9063 703.6826,509.9844 Q704.3701,511.0469 705.7139,511.0469 Q706.3389,511.0469 706.9326,510.7813 Q707.5264,510.5 708.1514,509.9219 L708.1514,512.6406 Z "
+         fill="#000000"
+         id="path29" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="22.4839"
+         x="725.6826"
+         y="512.432"
+         id="text29">Car</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="603.5"
+         x2="837.8492"
+         y1="523"
+         y2="523"
+         id="line29" />
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g30">
+        <ellipse
+           cx="613.5"
+           cy="538.034"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse30" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="210.3492"
+         x="622.5"
+         y="541.9659"
+         id="text30">«override» Length : int «get» = 2</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g31">
+        <ellipse
+           cx="613.5"
+           cy="557.1019"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse31" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="203.0972"
+         x="622.5"
+         y="561.0339"
+         id="text31">«override» Width : int «get» = 1</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="603.5"
+         x2="837.8492"
+         y1="569.1358"
+         y2="569.1358"
+         id="line31" />
+    </g>
+    <!--class MainCar-->
+    <g
+       class="entity"
+       data-qualified-name="MainCar"
+       data-source-line="48"
+       id="ent0009">
+      <rect
+         fill="#F1F1F1"
+         height="48"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="87.2998"
+         x="677"
+         y="638"
+         id="rect31" />
+      <ellipse
+         cx="692"
+         cy="654"
+         fill="#ADD1B2"
+         rx="11"
+         ry="11"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse32" />
+      <path
+         d="M694.9688,659.6406 Q694.3906,659.9375 693.75,660.0781 Q693.1094,660.2344 692.4063,660.2344 Q689.9063,660.2344 688.5781,658.5938 Q687.2656,656.9375 687.2656,653.8125 Q687.2656,650.6875 688.5781,649.0313 Q689.9063,647.375 692.4063,647.375 Q693.1094,647.375 693.75,647.5313 Q694.4063,647.6875 694.9688,647.9844 L694.9688,650.7031 Q694.3438,650.125 693.75,649.8594 Q693.1563,649.5781 692.5313,649.5781 Q691.1875,649.5781 690.5,650.6563 Q689.8125,651.7188 689.8125,653.8125 Q689.8125,655.9063 690.5,656.9844 Q691.1875,658.0469 692.5313,658.0469 Q693.1563,658.0469 693.75,657.7813 Q694.3438,657.5 694.9688,656.9219 L694.9688,659.6406 Z "
+         fill="#000000"
+         id="path32" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="55.2998"
+         x="706"
+         y="659.432"
+         id="text32">MainCar</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="678"
+         x2="763.2998"
+         y1="670"
+         y2="670"
+         id="line32" />
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="678"
+         x2="763.2998"
+         y1="678"
+         y2="678"
+         id="line33" />
+    </g>
+    <!--class Bus-->
+    <g
+       class="entity"
+       data-qualified-name="Bus"
+       data-source-line="50"
+       id="ent0010">
+      <rect
+         fill="#F1F1F1"
+         height="86.1358"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5;"
+         width="236.3492"
+         x="873.5"
+         y="491"
+         id="rect33" />
+      <ellipse
+         cx="975.1956"
+         cy="507"
+         fill="#ADD1B2"
+         rx="11"
+         ry="11"
+         style="stroke:#181818;stroke-width:1;"
+         id="ellipse33" />
+      <path
+         d="M978.1644,512.6406 Q977.5863,512.9375 976.9456,513.0781 Q976.305,513.2344 975.6019,513.2344 Q973.1019,513.2344 971.7738,511.5938 Q970.4613,509.9375 970.4613,506.8125 Q970.4613,503.6875 971.7738,502.0313 Q973.1019,500.375 975.6019,500.375 Q976.305,500.375 976.9456,500.5313 Q977.6019,500.6875 978.1644,500.9844 L978.1644,503.7031 Q977.5394,503.125 976.9456,502.8594 Q976.3519,502.5781 975.7269,502.5781 Q974.3831,502.5781 973.6956,503.6563 Q973.0081,504.7188 973.0081,506.8125 Q973.0081,508.9063 973.6956,509.9844 Q974.3831,511.0469 975.7269,511.0469 Q976.3519,511.0469 976.9456,510.7813 Q977.5394,510.5 978.1644,509.9219 L978.1644,512.6406 Z "
+         fill="#000000"
+         id="path33" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="24.4579"
+         x="995.6956"
+         y="512.432"
+         id="text33">Bus</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="874.5"
+         x2="1108.8492"
+         y1="523"
+         y2="523"
+         id="line34" />
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g34">
+        <ellipse
+           cx="884.5"
+           cy="538.034"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse34" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="210.3492"
+         x="893.5"
+         y="541.9659"
+         id="text34">«override» Length : int «get» = 3</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g35">
+        <ellipse
+           cx="884.5"
+           cy="557.1019"
+           fill="none"
+           rx="3"
+           ry="3"
+           style="stroke:#038048;stroke-width:1;"
+           id="ellipse35" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14"
+         lengthAdjust="spacing"
+         textLength="203.0972"
+         x="893.5"
+         y="561.0339"
+         id="text35">«override» Width : int «get» = 1</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5;"
+         x1="874.5"
+         x2="1108.8492"
+         y1="569.1358"
+         y2="569.1358"
+         id="line35" />
+    </g>
+    <!--reverse link RHGameState to PlacedRHPiece-->
+    <g
+       class="link"
+       data-entity-1="ent0002"
+       data-entity-2="ent0006"
+       data-link-type="aggregation"
+       data-source-line="55"
+       id="lnk11">
+      <path
+         codeLine="55"
+         d="M388.19,117 C452.57,117 511.87,117 572.66,117"
+         fill="none"
+         id="RHGameState-backto-PlacedRHPiece"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="376.19,117,382.19,121,388.19,117,382.19,113,376.19,117"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon35" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g36">
+        <circle
+           cx="414.28525"
+           cy="105.70502"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse36"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="148.9151"
+         x="406.5"
+         y="109.897"
+         id="text36"
+         transform="translate(14.785237,0.35202945)">«readonly» PlacedPieces</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13"
+         lengthAdjust="spacing"
+         textLength="21.567"
+         x="384.4283"
+         y="131.2787"
+         id="text37">0..*</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13"
+         lengthAdjust="spacing"
+         textLength="29.276"
+         x="535.9109"
+         y="131.3225"
+         id="text38">1..16</text>
+    </g>
+    <!--link Move to Direction-->
+    <g
+       class="link"
+       data-entity-1="ent0003"
+       data-entity-2="ent0004"
+       data-link-type="dependency"
+       data-source-line="56"
+       id="lnk12">
+      <path
+         codeLine="56"
+         d="M585.28,368 C608.49,368 626,368 645.46,368"
+         fill="none"
+         id="Move-to-Direction"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="#181818"
+         points="651.46,368,642.46,364,646.46,368,642.46,372,651.46,368"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon38" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g38"
+         transform="translate(13.905163,0.70405891)">
+        <circle
+           cx="608.25"
+           cy="356.353"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse38"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="18.212999"
+         x="615.25"
+         y="360.897"
+         id="text39"
+         transform="translate(13.905163,0.70405891)">Dir</text>
+    </g>
+    <!--reverse link StateMove to RHGameState-->
+    <g
+       class="link"
+       data-entity-1="ent0005"
+       data-entity-2="ent0002"
+       data-link-type="aggregation"
+       data-source-line="57"
+       id="lnk13">
+      <path
+         codeLine="57"
+         d="M172.7001,313.0252 C175.2901,286.1252 177.64,261.84 180.97,227.22"
+         fill="none"
+         id="StateMove-backto-RHGameState"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="171.55,324.97,176.1066,319.381,172.7001,313.0252,168.1434,318.6143,171.55,324.97"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon39" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g39"
+         transform="translate(5.2804418,-32.03468)">
+        <circle
+           cx="184.5"
+           cy="267.353"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse39"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="15.093"
+         x="191.5"
+         y="271.897"
+         id="text40"
+         transform="translate(5.2804418,-32.03468)">To</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13"
+         lengthAdjust="spacing"
+         textLength="21.567"
+         x="149.512"
+         y="313.0593"
+         id="text41">0..*</text>
+    </g>
+    <!--link RHGameState to StateMove-->
+    <g
+       class="link"
+       data-entity-1="ent0002"
+       data-entity-2="ent0005"
+       data-link-type="aggregation"
+       data-source-line="58"
+       id="lnk15">
+      <path
+         codeLine="58"
+         d="M132.56,227.08 C128.92,237 125.8,247.05 123.5,257 C118.14,280.14 120.8673,294.247 131.7373,314.327"
+         fill="none"
+         id="RHGameState-to-StateMove"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="137.45,324.88,138.1113,317.6993,131.7373,314.327,131.076,321.5077,137.45,324.88"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon41" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g41">
+        <circle
+           cx="85.496315"
+           cy="234.96629"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse41"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="32.136002"
+         x="136.5"
+         y="271.897"
+         id="text42"
+         transform="translate(-44.003682,-32.38671)">From</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13"
+         lengthAdjust="spacing"
+         textLength="21.567"
+         x="109.802"
+         y="313.2747"
+         id="text43">0..*</text>
+    </g>
+    <!--reverse link StateMove to Move-->
+    <g
+       class="link"
+       data-entity-1="ent0005"
+       data-entity-2="ent0003"
+       data-link-type="composition"
+       data-source-line="59"
+       id="lnk16">
+      <path
+         codeLine="59"
+         d="M310.81,368 C337.82,368 353.89,368 379.71,368"
+         fill="none"
+         id="StateMove-backto-Move"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="#181818"
+         points="298.81,368,304.81,372,310.81,368,304.81,364,298.81,368"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon43" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g43"
+         transform="translate(16.281362,2.9922504)">
+        <circle
+           cx="321.75"
+           cy="356.353"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse43"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="33.591999"
+         x="328.75"
+         y="360.897"
+         id="text44"
+         transform="translate(16.281362,2.9922504)">Move</text>
+    </g>
+    <!--reverse link PlacedRHPiece to RushHourPiece-->
+    <g
+       class="link"
+       data-entity-1="ent0006"
+       data-entity-2="ent0007"
+       data-link-type="aggregation"
+       data-source-line="60"
+       id="lnk17">
+      <path
+         codeLine="60"
+         d="M758.9782,169.6881 C790.2682,209.6481 830.19,260.63 865.61,305.85"
+         fill="none"
+         id="PlacedRHPiece-backto-RushHourPiece"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="751.58,160.24,752.1297,167.4301,758.9782,169.6881,758.4285,162.498,751.58,160.24"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon44" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g44">
+        <circle
+           cx="868.3819"
+           cy="289.17883"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse44"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="32.123001"
+         x="852.5"
+         y="271.897"
+         id="text45"
+         transform="translate(22.881915,21.825826)">Piece</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13"
+         lengthAdjust="spacing"
+         textLength="21.567"
+         x="734.1149"
+         y="182.1034"
+         id="text46">0..*</text>
+    </g>
+    <!--link PlacedRHPiece to Direction-->
+    <g
+       class="link"
+       data-entity-1="ent0006"
+       data-entity-2="ent0004"
+       data-link-type="dependency"
+       data-source-line="61"
+       id="lnk18">
+      <path
+         codeLine="61"
+         d="M714.94,160.24 C711.57,200.2 706.9737,254.6512 703.1637,299.8712"
+         fill="none"
+         id="PlacedRHPiece-to-Direction"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="#181818"
+         points="702.66,305.85,707.4015,297.2176,703.0798,300.8677,699.4297,296.5459,702.66,305.85"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon46" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g46"
+         transform="translate(-115.28965,17.073429)">
+        <circle
+           cx="713.5"
+           cy="267.353"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse46"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="95.394096"
+         x="720.5"
+         y="271.897"
+         id="text47"
+         transform="translate(-115.28965,17.073429)">FacingDirection</text>
+    </g>
+    <!--reverse link RushHourPiece to Car-->
+    <g
+       class="link"
+       data-entity-1="ent0007"
+       data-entity-2="ent0008"
+       data-link-type="extension"
+       data-source-line="62"
+       id="lnk19">
+      <path
+         codeLine="62"
+         d="M827.9118,441.7238 C804.1218,461.9338 791.91,472.32 770.16,490.8"
+         fill="none"
+         id="RushHourPiece-backto-Car"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="841.63,430.07,824.0272,437.1511,831.7964,446.2965,841.63,430.07"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon47" />
+    </g>
+    <!--reverse link Car to MainCar-->
+    <g
+       class="link"
+       data-entity-1="ent0008"
+       data-entity-2="ent0009"
+       data-link-type="extension"
+       data-source-line="63"
+       id="lnk20">
+      <path
+         codeLine="63"
+         d="M720.5,595.31 C720.5,615.47 720.5,620.81 720.5,637.71"
+         fill="none"
+         id="Car-backto-MainCar"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="720.5,577.31,714.5,595.31,726.5,595.31,720.5,577.31"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon48" />
+    </g>
+    <!--reverse link RushHourPiece to Bus-->
+    <g
+       class="link"
+       data-entity-1="ent0007"
+       data-entity-2="ent0010"
+       data-link-type="extension"
+       data-source-line="64"
+       id="lnk21">
+      <path
+         codeLine="64"
+         d="M950.2763,446.3227 C959.8963,466.5327 962.64,472.32 971.43,490.8"
+         fill="none"
+         id="RushHourPiece-backto-Bus"
+         style="stroke:#181818;stroke-width:1;" />
+      <polygon
+         fill="none"
+         points="942.54,430.07,944.8587,448.9014,955.6939,443.7439,942.54,430.07"
+         style="stroke:#181818;stroke-width:1;"
+         id="polygon49" />
+    </g>
+<?plantuml-src dLLRRzem67tFhx1uQMW96apjGvGogPGMf5P2iAqFqpIPn11FmMQsKwYw_lTzTYuu5xHrI0JRESVdknoRCC5IeiNq7c_9Kc55qAk3u7E6F1G48MTIZKPeYmzpIa8YaOyeK-WQ3QuCx0BTS2oY9ngfE7yN11kYETUe0faIkedLISpaGDMSIweePm3wIaB5nN1c8TtB7XfshU04mH5doGky_H5Z6OzvHBBzSz25dPUxIt18eYmDVsucYwcPVllUpQEOoILFdadaTc6Z5UT9lXu4_9a8GIC2OlT4JNCvWpiAUcYCap1DGAuLKTjeyYl5YNJvwgSFNyZuKqqMbA0caguIyWWyQJQRJLYw9GB3Og1NHqsmIRYTKRugQ4zKnNhkRk7Xwv6cM8KhYpaNa4TMImrvvZHotXofH1egf8cvTG2fgpfZ4JdK-Xq4b54O08z0JEYM2aXRjpoZBhH7UcPuo_Si6psGTRxsPGV4q3YspCFowoaNb5XtBVZMjtBh8SMhysCL_g-dfypnxwqlCgnOj2njnVOj1-ROBPlkxlJJNwGodl9KcBKUskLqlo3tq1g7b6tAjlZbg5ktIqI5zHOYg0X25dW5ri1WZIoTYdQPpck1UaCjTqWJz43Ovk-eCMOwnWoyfvBajRLk4t0jEKbSGfFs-4KsQMle6YbRDCR2QepLthOmWJrimxRVdODIv15JbWaLApUfV9Vin_V9dcM7MSLKml60Nu8uF0IIm7JiluhEXtx_l8Eu9_IvzL1dqEyFhZerw_eDsretiMEql95r5MWyp9pZ4IzrlCe_bGP-vcsuTDT4ti7Pjx3dHT1cfW5wu5H3juKh_lMBMwv6y1gPt5LFb5FT9_ZjwGj6EBh3PfAtkmq7VVy3?>  </g>
+</svg>
