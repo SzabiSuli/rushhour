@@ -27,6 +27,12 @@ public partial class GraphScene : Node3D {
     // we allow unit sized vertieces have a larger detection radius
     private float PickRadiusPx => VertexDrawer.spriteScale * VertexDrawer.spriteSizePx * Camera3d.Instance.ZoomFactor;
 
+    // Use frame skips to keep ui responsive:
+    // until 1000 vertices use no frame skips
+    // from 1000 to 8000 lineary go up to 5 frame skips
+    private int FramesToSkip => Math.Clamp((Vertex.Dict.Count - 1000) * 5 / 7000, 0, 5);
+    private int _skippedFrames = 0;
+
     public override void _Ready() {
         RenderingServer.SetDefaultClearColor(Colors.Black);
 
@@ -73,6 +79,14 @@ public partial class GraphScene : Node3D {
     }
 
     public override void _PhysicsProcess(double delta) {
+        // skip a physics frame if too many vertices are present, to keep the ui responsible
+        if (_skippedFrames < FramesToSkip) {
+            _skippedFrames++;
+            return;
+        }
+
+        _skippedFrames = 0;
+
         // Stage 1: OctTree Build
         OctTreeNode? tree = OctTreeNode.Build(Vertex.Dict.Values);
 
