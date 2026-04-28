@@ -1,6 +1,7 @@
 namespace rushhour.src.Nodes.Board;
 
 using Godot;
+using System;
 using rushhour.src.Model;
 
 public abstract partial class VehicleNode : Sprite2D {
@@ -28,8 +29,8 @@ public abstract partial class VehicleNode : Sprite2D {
 		this.pieceIndex = pieceIndex;
 	}
 
-	public Arrow forwardArrow = null!;
-	public Arrow backwardArrow = null!;
+	public Arrow? forwardArrow = null;
+	public Arrow? backwardArrow = null;
 
 	public void CreateArrows() {
 		forwardArrow = ArrowCreator.Instantiate<Arrow>();
@@ -41,6 +42,10 @@ public abstract partial class VehicleNode : Sprite2D {
 	}
 
 	public void UpdateArrows(RHGameState state) {
+		if (backwardArrow == null || forwardArrow == null) {
+			throw new Exception("Update arrows should only be called on a VehicleNode belonging to MainGameBoard!");
+		}
+		
 		var fwArrowPos = Placement.Position + Placement.FacingDirection.GetVector();
 		fwArrowPos.Deconstruct(out int fwX, out int fwY);
 		var bwArrowPos = Placement.Position - Placement.FacingDirection.GetVector() * Placement.Piece.Length;

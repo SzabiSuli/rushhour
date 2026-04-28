@@ -53,7 +53,7 @@ class Bus {
     + <<override>> Width : int <<get>> = 1
 }
 ' Move this to the other side
-RHGameState "0..*" o-right- "1..16" PlacedRHPiece : + <<readonly>> PlacedPieces
+RHGameState "1..*" o-right- "1..16" PlacedRHPiece : + <<readonly>> PlacedPieces
 Move -> Direction : + Dir
 StateMove "0..*" o-- RHGameState : + To
 StateMove "0..*" o-up- RHGameState : + From

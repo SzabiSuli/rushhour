@@ -12,6 +12,9 @@
    id="svg59"
    sodipodi:docname="GameBoard.svg"
    inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   inkscape:export-filename="../../elteikthesis/images/view_gameboard.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -25,11 +28,11 @@
      inkscape:pageopacity="0"
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#505050"
-     inkscape:zoom="1.9101124"
-     inkscape:cx="489.5"
-     inkscape:cy="156.01176"
-     inkscape:window-width="1920"
-     inkscape:window-height="1003"
+     inkscape:zoom="3.8202248"
+     inkscape:cx="570.2544"
+     inkscape:cy="258.09999"
+     inkscape:window-width="1745"
+     inkscape:window-height="905"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -1523,7 +1526,8 @@
        data-entity-2="ent0005"
        data-link-type="composition"
        data-source-line="109"
-       id="lnk26">
+       id="lnk26"
+       transform="translate(-0.5235294,-17.27647)">
       <g
          data-visibility-modifier="PUBLIC_METHOD"
          id="g56"
@@ -1601,6 +1605,19 @@
          style="stroke:#181818;stroke-width:1"
          id="polygon57-7"
          transform="translate(0.77491943,57.777401)" />
+      <path
+         codeLine="110"
+         d="m 505.89551,272.93622 h 94.78587"
+         fill="none"
+         id="VehicleNode-backto-Arrow-1-6-6"
+         style="stroke:#181818;stroke-width:1.0141"
+         sodipodi:nodetypes="cc" />
+      <polygon
+         fill="#181818"
+         points="896.25,237.5 902.25,241.5 908.25,237.5 902.25,233.5 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon57-7-7"
+         transform="translate(-402.35449,35.436216)" />
     </g>
     <!--reverse link LevelsGrid to GameBoard-->
     <g
@@ -1641,6 +1658,36 @@
          y="135.0901"
          id="text59"
          transform="translate(-5.2352941,4.7117647)">0..*</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="21.84"
+         x="318.94641"
+         y="90.139999"
+         id="text58-6"
+         transform="translate(699.68717,198.5497)">0..1</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="21.84"
+         x="318.94641"
+         y="90.139999"
+         id="text58-5"
+         transform="translate(699.5107,141.14971)">0..1</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="29.275999"
+         x="535.91089"
+         y="131.32249"
+         id="text38-6"
+         transform="translate(33.770345,118.74539)">0..16</text>
     </g>
 <?plantuml-src fLVVK-Cs47xFNw7nFP03JDfxzAHSGwx3CKF0GtgyCeej4XL5yaXo0kNutxkI7LksvIHjUS7nVhlQNNtxmmd3Ig5hl2PN0iiKlGyG_9sXTwMnfia76eybmQdWxEto4cdAo9p-JL247acYXVoo5wuoIRLFuGHKnkD4SAK1bc0vJmWdCTOh02ejAL-Ytr0WYOf68sLaQhGm_eq0Uw5LmWEFdKMkZhO3s9QTAeGfbbC80fm58p5ENaXgpS99ImBdT3MkSdMCHeYUabnAmZN07hwRfC_10YbpE1vlgDGvPX3Ar8VhE30UYmsHagO4L9vYAHAYr30bJECe5Vc2aSzWOIDewZbYJdIU3Icdcc8MESUqT1x86aw9AG7ZmvRiAgSijSGPcboGNZCdw1EASttF2t36S49IQpEAxVF3T_lh76NctmrFoMj4kJv7NhkFP4KJHkv4IYelLO8P-LF4s2IkTlHZa5YApp3bDSt7OmNSO4GB3gdOaNwDEUJcAjVm6lIBXrA6sLBu9S-2CR6TkFBfYYGl3iZU_HgyDRh6WTdEStEDivPWTy_6ooPzZ1DUQdmjVPdq0lgD5b7lDJlR0-anx9J73PGdvec9iNqBJJutfCFFVfuVKnhTudY0hlGsR77o3Drpa_3Yfc9e4ugamuNz5LrXLGeyMez4Ql8wPTJK-b0HuAkCnE8lw75VUpZRid17jivb_KiJ9bKlfBYL6OGvD2KQcQVEIOqq75lpFx8KNfRNK5SIuVdQeMbHDhF9tO_9xRbzdjnUtrSLDv5IRAlQkb6JHDED8S522DRBchcT6O0g7hvywx1a2lL65HLyliAPGLOlOi7UbeAtTCvGIYLabThI_BPxxkcY7gA0yv2nOHfLkkTeKtIWMyANUcKwrVx47sxE1IjkU9RhFpQ64HjAjfcGEZ9TxXpzJipRg0O0HqpyD-bhn0HVjZp-ZddAY2LejnV2XBkhBx3BaIBrm9Eo2tSCmC3xVmPk8Hgcha73sugRSvqPS56AxdoV--TxJaSQBzI82Pm-MTMdegBxvlrjRVwukR-NC1y3E5nBd6XKXEhCAczqs9J9qNkBHVT5OYlkc1W-eISxWjT58ssCuF9AupwvjtBFdBaD2d3bbNUsThBiFytvHdKy2xc551Hj9Ig2hOGBYDKlXOPXCaBicyu6KtIwKdQmwPfMAmd3ff7LtQ25UjyHuED0ATGTxcUOYYqFwptS8tDt7cU4_Wp3vjmSJ23SGZ4iq-1IqBuk6q1NK1Rsm5JcL70DXeaq8aQUTUYKxM1mudmrYF0I1RkFWw1QzJkG-eDW3wZUlmENmbrWlNOV0ExMxg2nTRkmq1xiHpLt5clGNHI3tJReHTPhutvSUuaC6ZkaLyKkb86pJpOneQJBbGQWCx6ZSjli6BJnE_l8_XnOT6CdF29dkoqmQD7LQznhjgZjqp3FmdexYAgTeP8NzUBP2gBEzW2d5rhsr6fF29mruSGTLZOItpmAod7aWNVdIvkkRXbQ5RUH7mJNhJneTV8cs8OOzs5Tv6d97RJhfitcUmZRwCK39nt1BnSNlmRWTMWVJmEduVq3?>  </g>
 </svg>

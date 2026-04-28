@@ -1,0 +1,2156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?plantuml 1.2026.1?><svg
+   contentStyleType="text/css"
+   data-diagram-type="CLASS"
+   height="991.8396"
+   preserveAspectRatio="none"
+   version="1.1"
+   viewBox="0 0 1275.4983 991.8396"
+   width="1275.4983"
+   zoomAndPan="magnify"
+   id="svg64"
+   sodipodi:docname="StateGraphAndOctTree.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   inkscape:export-filename="../../elteikthesis/images/view_stategraph.png"
+   inkscape:export-xdpi="95.88015"
+   inkscape:export-ydpi="95.88015"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview64"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="0.48969784"
+     inkscape:cx="52.072927"
+     inkscape:cy="547.27626"
+     inkscape:window-width="1745"
+     inkscape:window-height="905"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g64"
+     inkscape:lockguides="true" />
+  <defs
+     id="defs1" />
+  <g
+     id="g64"
+     transform="translate(464.72262,-6.75)">
+    <!--class GraphScene-->
+    <g
+       class="entity"
+       data-qualified-name="GraphScene"
+       data-source-line="1"
+       id="ent0002">
+      <rect
+         fill="#f1f1f1"
+         height="137.6837"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="284.03299"
+         x="180"
+         y="116"
+         id="rect1" />
+      <circle
+         cx="277.79669"
+         cy="138.70599"
+         fill="#add1b2"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse1"
+         r="11" />
+      <path
+         d="m 280.7654,144.3466 q -0.5781,0.2969 -1.2187,0.4375 -0.6407,0.1563 -1.3438,0.1563 -2.5,0 -3.8281,-1.6406 -1.3125,-1.6563 -1.3125,-4.7813 0,-3.125 1.3125,-4.7812 1.3281,-1.6563 3.8281,-1.6563 0.7031,0 1.3438,0.1563 0.6562,0.1562 1.2187,0.4531 v 2.7187 q -0.625,-0.5781 -1.2187,-0.8437 -0.5938,-0.2813 -1.2188,-0.2813 -1.3437,0 -2.0312,1.0782 -0.6875,1.0625 -0.6875,3.1562 0,2.0938 0.6875,3.1719 0.6875,1.0625 2.0312,1.0625 0.625,0 1.2188,-0.2656 0.5937,-0.2813 1.2187,-0.8594 z"
+         fill="#000000"
+         id="path1" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="12px"
+         font-style="italic"
+         lengthAdjust="spacing"
+         textLength="60.3964"
+         x="308.0683"
+         y="133.82809"
+         id="text1">«singleton»</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="79.939697"
+         x="298.29669"
+         y="152.31"
+         id="text2">GraphScene</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="181"
+         x2="463.03299"
+         y1="161.412"
+         y2="161.412"
+         id="line2" />
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="181"
+         x2="463.03299"
+         y1="169.412"
+         y2="169.412"
+         id="line3" />
+      <g
+         data-visibility-modifier="PRIVATE_METHOD"
+         id="g3">
+        <rect
+           fill="#f24d5c"
+           height="6"
+           style="stroke:#c82930;stroke-width:1"
+           width="6"
+           x="188"
+           y="181.446"
+           id="rect3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="258.03299"
+         x="200"
+         y="188.37801"
+         id="text3">PickVertex(screenPos:Vector2) : Vertex?</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g4">
+        <circle
+           cx="191"
+           cy="203.5139"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse3"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="216.55119"
+         x="200"
+         y="207.44591"
+         id="text4">Setup(initial:RHGameState) : void</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g5">
+        <circle
+           cx="191"
+           cy="222.5818"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse4"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="81.227699"
+         x="200"
+         y="226.51379"
+         id="text5">Clear() : void</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g6">
+        <circle
+           cx="191"
+           cy="241.6497"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse5"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="166.9913"
+         x="200"
+         y="245.5817"
+         id="text6">ClearPathHighligh() : void</text>
+    </g>
+    <!--class VertexDrawer-->
+    <g
+       class="entity"
+       data-qualified-name="VertexDrawer"
+       data-source-line="17"
+       id="ent0003">
+      <rect
+         fill="#f1f1f1"
+         height="67.067902"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="167.03551"
+         x="205.5"
+         y="342.5"
+         id="rect6" />
+      <circle
+         cx="240.3287"
+         cy="358.5"
+         fill="#add1b2"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse6"
+         r="11" />
+      <path
+         d="m 243.2975,364.1406 q -0.5782,0.2969 -1.2188,0.4375 -0.6406,0.1563 -1.3437,0.1563 -2.5,0 -3.8282,-1.6406 -1.3125,-1.6563 -1.3125,-4.7813 0,-3.125 1.3125,-4.7812 1.3282,-1.6563 3.8282,-1.6563 0.7031,0 1.3437,0.1563 0.6563,0.1562 1.2188,0.4531 v 2.7187 q -0.625,-0.5781 -1.2188,-0.8437 -0.5937,-0.2813 -1.2187,-0.2813 -1.3438,0 -2.0313,1.0782 -0.6875,1.0625 -0.6875,3.1562 0,2.0938 0.6875,3.1719 0.6875,1.0625 2.0313,1.0625 0.625,0 1.2187,-0.2656 0.5938,-0.2813 1.2188,-0.8594 z"
+         fill="#000000"
+         id="path6" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="90.971603"
+         x="258.73511"
+         y="363.93201"
+         id="text7">VertexDrawer</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="206.5"
+         x2="371.53549"
+         y1="374.5"
+         y2="374.5"
+         id="line7" />
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="206.5"
+         x2="371.53549"
+         y1="382.5"
+         y2="382.5"
+         id="line8" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g8">
+        <circle
+           cx="216.5"
+           cy="397.534"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse8"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="141.03551"
+         x="225.5"
+         y="401.46591"
+         id="text8">UpdateVisuals() : void</text>
+    </g>
+    <!--class Vertex-->
+    <g
+       class="entity"
+       data-qualified-name="Vertex"
+       data-source-line="24"
+       id="ent0004">
+      <rect
+         fill="#f1f1f1"
+         height="295.8829"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="412.02051"
+         x="7"
+         y="480"
+         id="rect8" />
+      <circle
+         cx="187.5433"
+         cy="496"
+         fill="#add1b2"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse9"
+         r="11" />
+      <path
+         d="m 190.5121,501.6406 q -0.5781,0.2969 -1.2188,0.4375 -0.6406,0.1563 -1.3437,0.1563 -2.5,0 -3.8281,-1.6406 -1.3125,-1.6563 -1.3125,-4.7813 0,-3.125 1.3125,-4.7812 1.3281,-1.6563 3.8281,-1.6563 0.7031,0 1.3437,0.1563 0.6563,0.1562 1.2188,0.4531 v 2.7187 q -0.625,-0.5781 -1.2188,-0.8437 -0.5937,-0.2813 -1.2187,-0.2813 -1.3438,0 -2.0313,1.0782 -0.6875,1.0625 -0.6875,3.1562 0,2.0938 0.6875,3.1719 0.6875,1.0625 2.0313,1.0625 0.625,0 1.2187,-0.2656 0.5938,-0.2813 1.2188,-0.8594 z"
+         fill="#000000"
+         id="path9" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="42.4338"
+         x="208.0433"
+         y="501.43201"
+         id="text9">Vertex</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="8"
+         x2="418.02051"
+         y1="512"
+         y2="512"
+         id="line9" />
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g10">
+        <circle
+           cx="18"
+           cy="527.034"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse10"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="227.28909"
+         x="27"
+         y="530.96588"
+         id="text10">«const» repulsionForce : int = 1000</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g11">
+        <circle
+           cx="18"
+           cy="546.10193"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse11"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="191.4073"
+         x="27"
+         y="550.03387"
+         id="text11">Position : Vector3 «get» «set»</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g12">
+        <circle
+           cx="18"
+           cy="565.1698"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse12"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="151.71741"
+         x="27"
+         y="569.10181"
+         id="text12">Velocity : Vector3 «get»</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g13">
+        <circle
+           cx="18"
+           cy="584.23767"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse13"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         text-decoration="underline"
+         textLength="300.7048"
+         x="27"
+         y="588.16968"
+         id="text13"
+         style="text-decoration:underline;text-decoration-line:underline">Dict : Dictionary&lt;RHGameState, Vertex&gt; «get»</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g14">
+        <circle
+           cx="18"
+           cy="603.3056"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse14"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         text-decoration="underline"
+         textLength="357.76859"
+         x="27"
+         y="607.23761"
+         id="text14"
+         style="text-decoration:underline;text-decoration-line:underline">«event» VertexClicked : EventHandler&lt;RHGameState&gt;?</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g15">
+        <circle
+           cx="18"
+           cy="622.37347"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse15"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="173.1653"
+         x="27"
+         y="626.30548"
+         id="text15">Effect : VertexEffect? «get»</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g16">
+        <circle
+           cx="18"
+           cy="641.44153"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse16"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="127.3995"
+         x="27"
+         y="645.37341"
+         id="text16">Hidden : bool «get»</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="8"
+         x2="418.02051"
+         y1="653.4754"
+         y2="653.4754"
+         id="line16" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g17">
+        <circle
+           cx="18"
+           cy="668.5094"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse17"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="112.9376"
+         x="27"
+         y="672.44141"
+         id="text17">GetColor() : Color</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g18">
+        <circle
+           cx="18"
+           cy="687.57727"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse18"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="106.1476"
+         x="27"
+         y="691.50928"
+         id="text18">GetScale() : float</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g19">
+        <circle
+           cx="18"
+           cy="706.6452"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse19"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         text-decoration="underline"
+         textLength="386.02051"
+         x="27"
+         y="710.57721"
+         id="text19"
+         style="text-decoration:underline;text-decoration-line:underline">FireVertexClicked(sender:object, state:RHGameState) : void</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g20">
+        <circle
+           cx="18"
+           cy="725.71307"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse20"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         text-decoration="underline"
+         textLength="376.52859"
+         x="27"
+         y="729.64508"
+         id="text20"
+         style="text-decoration:underline;text-decoration-line:underline">GetOrCreate(state:RHGameState, parent:Vertex?) : Vertex</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g21">
+        <circle
+           cx="18"
+           cy="744.78101"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse21"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="262.55499"
+         x="27"
+         y="748.71301"
+         id="text21">ApplyPendingForce(force:Vector3) : void</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g22">
+        <circle
+           cx="18"
+           cy="763.849"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse22"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="191.4073"
+         x="27"
+         y="767.78088"
+         id="text22">Integrate(delta:double) : void</text>
+    </g>
+    <!--class VertexEffect-->
+    <g
+       class="entity"
+       data-qualified-name="VertexEffect"
+       data-source-line="59"
+       id="ent0005">
+      <rect
+         fill="#f1f1f1"
+         height="143.3396"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="135.39549"
+         x="94.5"
+         y="855"
+         id="rect22" />
+      <circle
+         cx="120.2441"
+         cy="871"
+         fill="#eb937f"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse23"
+         r="11" />
+      <path
+         d="m 124.3535,877 h -7.7188 v -12.3906 h 7.7188 v 2.1562 h -5.2656 v 2.6719 h 4.7656 v 2.1563 h -4.7656 v 3.25 h 5.2656 z"
+         fill="#000000"
+         id="path23" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="79.519699"
+         x="136.6317"
+         y="876.43201"
+         id="text23">VertexEffect</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="95.5"
+         x2="228.89549"
+         y1="887"
+         y2="887"
+         id="line23" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="123.3955"
+         x="100.5"
+         y="905.96588"
+         id="text24">ManualCurrent= 0,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="66.793701"
+         x="100.5"
+         y="925.03387"
+         id="text25">Solved= 1,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="60.549801"
+         x="100.5"
+         y="944.10181"
+         id="text26">Initial= 2,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="103.7116"
+         x="100.5"
+         y="963.16968"
+         id="text27">AlgoCurrent= 3,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="98.909599"
+         x="100.5"
+         y="982.23761"
+         id="text28">OnAlgoPath= 4</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="95.5"
+         x2="228.89549"
+         y1="990.3396"
+         y2="990.3396"
+         id="line28" />
+    </g>
+    <!--class Edge-->
+    <g
+       class="entity"
+       data-qualified-name="Edge"
+       data-source-line="66"
+       id="ent0006">
+      <rect
+         fill="#f1f1f1"
+         height="200.5433"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="295.23291"
+         x="499.5"
+         y="527.5"
+         id="rect28" />
+      <circle
+         cx="626.4165"
+         cy="543.5"
+         fill="#add1b2"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse28"
+         r="11" />
+      <path
+         d="m 629.3853,549.1406 q -0.5781,0.2969 -1.2188,0.4375 -0.6406,0.1563 -1.3437,0.1563 -2.5,0 -3.8281,-1.6406 -1.3125,-1.6563 -1.3125,-4.7813 0,-3.125 1.3125,-4.7812 1.3281,-1.6563 3.8281,-1.6563 0.7031,0 1.3437,0.1563 0.6563,0.1562 1.2188,0.4531 v 2.7187 q -0.625,-0.5781 -1.2188,-0.8437 -0.5937,-0.2813 -1.2187,-0.2813 -1.3438,0 -2.0313,1.0782 -0.6875,1.0625 -0.6875,3.1562 0,2.0938 0.6875,3.1719 0.6875,1.0625 2.0313,1.0625 0.625,0 1.2187,-0.2656 0.5938,-0.2813 1.2188,-0.8594 z"
+         fill="#000000"
+         id="path28" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="32.899899"
+         x="646.9165"
+         y="548.93201"
+         id="text29">Edge</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="500.5"
+         x2="793.73291"
+         y1="559.5"
+         y2="559.5"
+         id="line29" />
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g29">
+        <circle
+           cx="510.5"
+           cy="574.534"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse29"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="193.3112"
+         x="519.5"
+         y="578.46588"
+         id="text30">«const» springLength : int = 1</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g30">
+        <circle
+           cx="510.5"
+           cy="593.60193"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse30"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="211.74921"
+         x="519.5"
+         y="597.53387"
+         id="text31">«const» springForce : float = 100</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g31">
+        <circle
+           cx="510.5"
+           cy="612.6698"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse31"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         text-decoration="underline"
+         textLength="269.23291"
+         x="519.5"
+         y="616.60181"
+         id="text32"
+         style="text-decoration:underline;text-decoration-line:underline">Dict : Dictionary&lt;StateMove, Edge&gt; «get»</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g32">
+        <circle
+           cx="510.5"
+           cy="631.73767"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse32"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="163.6313"
+         x="519.5"
+         y="635.66968"
+         id="text33">Effect : EdgeEffect? «get»</text>
+      <g
+         data-visibility-modifier="PUBLIC_FIELD"
+         id="g33">
+        <circle
+           cx="510.5"
+           cy="650.8056"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse33"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="127.3995"
+         x="519.5"
+         y="654.73761"
+         id="text34">Hidden : bool «get»</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="500.5"
+         x2="793.73291"
+         y1="662.8396"
+         y2="662.8396"
+         id="line34" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g34">
+        <circle
+           cx="510.5"
+           cy="677.87347"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse34"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="112.9376"
+         x="519.5"
+         y="681.80548"
+         id="text35">GetColor() : Color</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g35">
+        <circle
+           cx="510.5"
+           cy="696.94153"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse35"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         text-decoration="underline"
+         textLength="245.5591"
+         x="519.5"
+         y="700.87341"
+         id="text36"
+         style="text-decoration:underline;text-decoration-line:underline">GetOrCreate(move:StateMove) : Edge</text>
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g36">
+        <circle
+           cx="510.5"
+           cy="716.0094"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse36"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="163.2394"
+         x="519.5"
+         y="719.94141"
+         id="text37">ApplySpringForce() : void</text>
+    </g>
+    <!--class EdgeEffect-->
+    <g
+       class="entity"
+       data-qualified-name="EdgeEffect"
+       data-source-line="89"
+       id="ent0007">
+      <rect
+         fill="#f1f1f1"
+         height="86.135803"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="122.5156"
+         x="487.5"
+         y="883.5"
+         id="rect37" />
+      <circle
+         cx="511.7384"
+         cy="899.5"
+         fill="#eb937f"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse37"
+         r="11" />
+      <path
+         d="m 515.8478,905.5 h -7.7187 v -12.3906 h 7.7187 v 2.1562 h -5.2656 v 2.6719 h 4.7656 v 2.1563 h -4.7656 v 3.25 h 5.2656 z"
+         fill="#000000"
+         id="path37" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="69.985703"
+         x="527.79138"
+         y="904.93201"
+         id="text38">EdgeEffect</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="488.5"
+         x2="609.01562"
+         y1="915.5"
+         y2="915.5"
+         id="line38" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="110.5156"
+         x="493.5"
+         y="934.46588"
+         id="text39">SolutionEdge= 0,</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="82.193703"
+         x="493.5"
+         y="953.53387"
+         id="text40">AlgoEdge= 1</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="488.5"
+         x2="609.01562"
+         y1="961.6358"
+         y2="961.6358"
+         id="line40" />
+    </g>
+    <!--class EdgeDrawer-->
+    <g
+       class="entity"
+       data-qualified-name="EdgeDrawer"
+       data-source-line="93"
+       id="ent0008">
+      <rect
+         fill="#f1f1f1"
+         height="86.135803"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="187.3914"
+         x="527.5"
+         y="333"
+         id="rect40" />
+      <circle
+         cx="576.22681"
+         cy="349"
+         fill="#add1b2"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse40"
+         r="11" />
+      <path
+         d="m 579.1956,354.6406 q -0.5781,0.2969 -1.2188,0.4375 -0.6406,0.1563 -1.3437,0.1563 -2.5,0 -3.8281,-1.6406 -1.3125,-1.6563 -1.3125,-4.7813 0,-3.125 1.3125,-4.7812 1.3281,-1.6563 3.8281,-1.6563 0.7031,0 1.3437,0.1563 0.6563,0.1562 1.2188,0.4531 v 2.7187 q -0.625,-0.5781 -1.2188,-0.8437 -0.5937,-0.2813 -1.2187,-0.2813 -1.3438,0 -2.0313,1.0782 -0.6875,1.0625 -0.6875,3.1562 0,2.0938 0.6875,3.1719 0.6875,1.0625 2.0313,1.0625 0.625,0 1.2187,-0.2656 0.5938,-0.2813 1.2188,-0.8594 z"
+         fill="#000000"
+         id="path40" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="81.437698"
+         x="596.72681"
+         y="354.43201"
+         id="text41">EdgeDrawer</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="528.5"
+         x2="713.89142"
+         y1="365"
+         y2="365"
+         id="line41" />
+      <g
+         data-visibility-modifier="PRIVATE_FIELD"
+         id="g41">
+        <rect
+           fill="none"
+           height="6"
+           style="stroke:#c82930;stroke-width:1"
+           width="6"
+           x="535.5"
+           y="377.034"
+           id="rect41" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="161.3914"
+         x="547.5"
+         y="383.96591"
+         id="text42">_mesh : ImmediateMesh</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="528.5"
+         x2="713.89142"
+         y1="392.0679"
+         y2="392.0679"
+         id="line42" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g42">
+        <circle
+           cx="538.5"
+           cy="407.1019"
+           fill="#84be84"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse42"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="141.03551"
+         x="547.5"
+         y="411.03391"
+         id="text43">UpdateVisuals() : void</text>
+    </g>
+    <!--class Node3D-->
+    <g
+       class="entity"
+       data-qualified-name="Node3D"
+       data-source-line="98"
+       id="ent0009">
+      <rect
+         fill="#f1f1f1"
+         height="48"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="85.843803"
+         x="279"
+         y="7"
+         id="rect43" />
+      <circle
+         cx="294"
+         cy="23"
+         fill="#add1b2"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse43"
+         r="11" />
+      <path
+         d="m 296.9688,28.6406 q -0.5782,0.2969 -1.2188,0.4375 -0.6406,0.1563 -1.3437,0.1563 -2.5,0 -3.8282,-1.6406 -1.3125,-1.6563 -1.3125,-4.7813 0,-3.125 1.3125,-4.7812 1.3282,-1.6563 3.8282,-1.6563 0.7031,0 1.3437,0.1563 0.6563,0.1562 1.2188,0.4531 v 2.7187 q -0.625,-0.5781 -1.2188,-0.8437 -0.5937,-0.2813 -1.2187,-0.2813 -1.3438,0 -2.0313,1.0782 -0.6875,1.0625 -0.6875,3.1562 0,2.0938 0.6875,3.1719 0.6875,1.0625 2.0313,1.0625 0.625,0 1.2187,-0.2656 0.5938,-0.2813 1.2188,-0.8594 z"
+         fill="#000000"
+         id="path43" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="53.8438"
+         x="308"
+         y="28.431999"
+         id="text44">Node3D</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="280"
+         x2="363.84381"
+         y1="39"
+         y2="39"
+         id="line44" />
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="280"
+         x2="363.84381"
+         y1="47"
+         y2="47"
+         id="line45" />
+    </g>
+    <!--class MultiMeshInstance3D-->
+    <g
+       class="entity"
+       data-qualified-name="MultiMeshInstance3D"
+       data-source-line="99"
+       id="ent0011">
+      <rect
+         fill="#f1f1f1"
+         height="48"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="176.0874"
+         x="498"
+         y="7"
+         id="rect45" />
+      <circle
+         cx="513"
+         cy="23"
+         fill="#add1b2"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse45"
+         r="11" />
+      <path
+         d="m 515.9688,28.6406 q -0.5782,0.2969 -1.2188,0.4375 -0.6406,0.1563 -1.3437,0.1563 -2.5,0 -3.8282,-1.6406 -1.3125,-1.6563 -1.3125,-4.7813 0,-3.125 1.3125,-4.7812 1.3282,-1.6563 3.8282,-1.6563 0.7031,0 1.3437,0.1563 0.6563,0.1562 1.2188,0.4531 v 2.7187 q -0.625,-0.5781 -1.2188,-0.8437 -0.5937,-0.2813 -1.2187,-0.2813 -1.3438,0 -2.0313,1.0782 -0.6875,1.0625 -0.6875,3.1562 0,2.0938 0.6875,3.1719 0.6875,1.0625 2.0313,1.0625 0.625,0 1.2187,-0.2656 0.5938,-0.2813 1.2188,-0.8594 z"
+         fill="#000000"
+         id="path45" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="144.0874"
+         x="527"
+         y="28.431999"
+         id="text45">MultiMeshInstance3D</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="499"
+         x2="673.0874"
+         y1="39"
+         y2="39"
+         id="line46" />
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="499"
+         x2="673.0874"
+         y1="47"
+         y2="47"
+         id="line47" />
+    </g>
+    <!--class RHGameState-->
+    <g
+       class="entity"
+       data-qualified-name="RHGameState"
+       data-source-line="105"
+       id="ent0016">
+      <rect
+         fill="#f1f1f1"
+         height="48"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="123.6577"
+         x="265"
+         y="902.5"
+         id="rect47" />
+      <circle
+         cx="280"
+         cy="918.5"
+         fill="#add1b2"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse47"
+         r="11" />
+      <path
+         d="m 282.9688,924.1406 q -0.5782,0.2969 -1.2188,0.4375 -0.6406,0.1563 -1.3437,0.1563 -2.5,0 -3.8282,-1.6406 -1.3125,-1.6563 -1.3125,-4.7813 0,-3.125 1.3125,-4.7812 1.3282,-1.6563 3.8282,-1.6563 0.7031,0 1.3437,0.1563 0.6563,0.1562 1.2188,0.4531 v 2.7187 q -0.625,-0.5781 -1.2188,-0.8437 -0.5937,-0.2813 -1.2187,-0.2813 -1.3438,0 -2.0313,1.0782 -0.6875,1.0625 -0.6875,3.1562 0,2.0938 0.6875,3.1719 0.6875,1.0625 2.0313,1.0625 0.625,0 1.2187,-0.2656 0.5938,-0.2813 1.2188,-0.8594 z"
+         fill="#000000"
+         id="path47" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="91.6577"
+         x="294"
+         y="923.93201"
+         id="text47">RHGameState</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="266"
+         x2="387.65771"
+         y1="934.5"
+         y2="934.5"
+         id="line48" />
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="266"
+         x2="387.65771"
+         y1="942.5"
+         y2="942.5"
+         id="line49" />
+    </g>
+    <!--class StateMove-->
+    <g
+       class="entity"
+       data-qualified-name="StateMove"
+       data-source-line="117"
+       id="ent0023">
+      <rect
+         fill="#f1f1f1"
+         height="48"
+         rx="2.5"
+         ry="2.5"
+         style="stroke:#181818;stroke-width:0.5"
+         width="101.7197"
+         x="646"
+         y="902.5"
+         id="rect49" />
+      <circle
+         cx="661"
+         cy="918.5"
+         fill="#add1b2"
+         style="stroke:#181818;stroke-width:1"
+         id="ellipse49"
+         r="11" />
+      <path
+         d="m 663.9688,924.1406 q -0.5782,0.2969 -1.2188,0.4375 -0.6406,0.1563 -1.3437,0.1563 -2.5,0 -3.8282,-1.6406 -1.3125,-1.6563 -1.3125,-4.7813 0,-3.125 1.3125,-4.7812 1.3282,-1.6563 3.8282,-1.6563 0.7031,0 1.3437,0.1563 0.6563,0.1562 1.2188,0.4531 v 2.7187 q -0.625,-0.5781 -1.2188,-0.8437 -0.5937,-0.2813 -1.2187,-0.2813 -1.3438,0 -2.0313,1.0782 -0.6875,1.0625 -0.6875,3.1562 0,2.0938 0.6875,3.1719 0.6875,1.0625 2.0313,1.0625 0.625,0 1.2187,-0.2656 0.5938,-0.2813 1.2188,-0.8594 z"
+         fill="#000000"
+         id="path49" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="14px"
+         lengthAdjust="spacing"
+         textLength="69.719704"
+         x="675"
+         y="923.93201"
+         id="text49">StateMove</text>
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="647"
+         x2="746.71973"
+         y1="934.5"
+         y2="934.5"
+         id="line50" />
+      <line
+         style="stroke:#181818;stroke-width:0.5"
+         x1="647"
+         x2="746.71973"
+         y1="942.5"
+         y2="942.5"
+         id="line51" />
+    </g>
+    <!--reverse link Node3D to GraphScene-->
+    <g
+       class="link"
+       data-entity-1="ent0009"
+       data-entity-2="ent0002"
+       data-link-type="extension"
+       data-source-line="98"
+       id="lnk10">
+      <path
+         codeLine="98"
+         d="m 322,73.09 c 0,16.27 0,20.98 0,42.81"
+         fill="none"
+         id="Node3D-backto-GraphScene"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="none"
+         points="322,55.09 316,73.09 328,73.09 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon51" />
+      <path
+         codeLine="98"
+         d="m 253.78192,266.8359 c 0,28.49347 0,36.74204 0,74.9727"
+         fill="none"
+         id="Node3D-backto-GraphScene-6"
+         style="stroke:#181818;stroke-width:1.32336" />
+      <path
+         codeLine="98"
+         d="m 555.59272,73.776091 c 0,77.775429 0,100.290629 0,204.644499"
+         fill="none"
+         id="Node3D-backto-GraphScene-3"
+         style="stroke:#181818;stroke-width:2.18639" />
+      <polygon
+         fill="none"
+         points="316,73.09 328,73.09 322,55.09 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon51-5"
+         transform="translate(233.59272,0.68609076)" />
+      <path
+         codeLine="98"
+         d="m 556.09567,277.63221 c -77.77543,0 -100.29063,0 -204.6445,0"
+         fill="none"
+         id="Node3D-backto-GraphScene-3-2"
+         style="stroke:#181818;stroke-width:2.18639" />
+      <path
+         codeLine="98"
+         d="m 352.61502,277.24963 c 0,24.80704 0,31.98843 0,65.27284"
+         fill="none"
+         id="Node3D-backto-GraphScene-1"
+         style="stroke:#181818;stroke-width:1.23479" />
+    </g>
+    <!--reverse link MultiMeshInstance3D to VertexDrawer-->
+    <!--reverse link MultiMeshInstance3D to EdgeDrawer-->
+    <g
+       class="link"
+       data-entity-1="ent0011"
+       data-entity-2="ent0008"
+       data-link-type="extension"
+       data-source-line="100"
+       id="lnk13">
+      <path
+         codeLine="100"
+         d="m 590.1775,72.947 c 5.81,56.93 19.0825,186.993 26.5325,260.023"
+         fill="none"
+         id="MultiMeshInstance3D-backto-EdgeDrawer"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="none"
+         points="588.35,55.04 584.2085,73.5562 596.1465,72.3378 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon53" />
+    </g>
+    <!--reverse link GraphScene to VertexDrawer-->
+    <g
+       class="link"
+       data-entity-1="ent0002"
+       data-entity-2="ent0003"
+       data-link-type="composition"
+       data-source-line="103"
+       id="lnk14">
+      <g
+         data-visibility-modifier="PRIVATE_METHOD"
+         id="g54"
+         transform="translate(-145.49789,37.778399)">
+        <rect
+           fill="none"
+           height="6"
+           style="stroke:#c82930;stroke-width:1"
+           width="6"
+           x="289"
+           y="291.353"
+           id="rect54" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="89.050003"
+         x="299"
+         y="298.897"
+         id="text54"
+         transform="translate(-145.49789,37.778399)">_vertexDrawer</text>
+      <polygon
+         fill="#181818"
+         points="902.25,233.5 896.25,237.5 902.25,241.5 908.25,237.5 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon57-7"
+         transform="rotate(90,566.61429,-75.261994)" />
+      <path
+         codeLine="98"
+         d="m -345.19207,808.13461 c 0,28.49347 0,36.74204 0,74.9727"
+         fill="none"
+         id="Node3D-backto-GraphScene-6-3"
+         style="stroke:#181818;stroke-width:1.32336" />
+      <path
+         codeLine="98"
+         d="m -230.05113,795.49755 0.1805,88.27185"
+         fill="none"
+         id="Node3D-backto-GraphScene-6-3-8"
+         style="stroke:#181818;stroke-width:1.45635"
+         sodipodi:nodetypes="cc" />
+      <path
+         codeLine="98"
+         d="m -345.60086,883.7651 116.26826,0.0257"
+         fill="none"
+         id="Node3D-backto-GraphScene-6-3-8-0"
+         style="stroke:#181818;stroke-width:1.46541"
+         sodipodi:nodetypes="cc" />
+      <polygon
+         fill="#181818"
+         points="908.25,237.5 902.25,233.5 896.25,237.5 902.25,241.5 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon57-7-0"
+         transform="rotate(90,-3.5220589,-104.09963)" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g16-6"
+         transform="translate(-663.9446,639.01533)">
+        <circle
+           cx="443"
+           cy="165.353"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse15-3"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="51.688"
+         x="450"
+         y="169.897"
+         id="text16-8"
+         transform="translate(-663.9446,639.01533)">Children</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="21.84"
+         x="405.1069"
+         y="212.34711"
+         id="text17-6"
+         transform="translate(-663.50424,596.80311)">0..8</text>
+    </g>
+    <!--reverse link GraphScene to EdgeDrawer-->
+    <g
+       class="link"
+       data-entity-1="ent0002"
+       data-entity-2="ent0008"
+       data-link-type="composition"
+       data-source-line="104"
+       id="lnk15">
+      <path
+         codeLine="104"
+         d="M 434.1255,260.8094 C 458.8355,277.0094 475.23,287.5 500,303 c 15.75,9.85 32.81,20.2 49.02,29.89"
+         fill="none"
+         id="GraphScene-backto-EdgeDrawer"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="#181818"
+         points="434.1255,260.8094 431.3009,254.1745 424.09,254.23 426.9147,260.8649 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon55" />
+      <g
+         data-visibility-modifier="PRIVATE_METHOD"
+         id="g55">
+        <rect
+           fill="none"
+           height="6"
+           style="stroke:#c82930;stroke-width:1"
+           width="6"
+           x="435.61151"
+           y="323.00516"
+           id="rect55" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="81.497002"
+         x="513"
+         y="298.897"
+         id="text55"
+         transform="translate(-67.388495,31.652172)">_edgeDrawer</text>
+    </g>
+    <!--reverse link Vertex to RHGameState-->
+    <g
+       class="link"
+       data-entity-1="ent0004"
+       data-entity-2="ent0016"
+       data-link-type="aggregation"
+       data-source-line="105"
+       id="lnk17">
+      <path
+         codeLine="105"
+         d="m 273.9748,787.5813 c 18.77,48.84 33.2952,86.5887 44.0152,114.4787"
+         fill="none"
+         id="Vertex-backto-RHGameState"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="none"
+         points="273.9748,787.5813 275.5562,780.5457 269.67,776.38 268.0887,783.4156 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon56" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g56"
+         transform="translate(31.141653,75.046279)">
+        <circle
+           cx="293"
+           cy="816.35303"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse56"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="67.391998"
+         x="300"
+         y="820.89697"
+         id="text56"
+         transform="translate(31.141653,75.046279)">GameState</text>
+    </g>
+    <!--link Vertex to VertexEffect-->
+    <g
+       class="link"
+       data-entity-1="ent0004"
+       data-entity-2="ent0005"
+       data-link-type="dependency"
+       data-source-line="112"
+       id="lnk18">
+      <path
+         codeLine="112"
+         d="m 187.65,776.38 c -4.7,27.33 -8.3941,48.7766 -12.4641,72.4666"
+         fill="none"
+         id="Vertex-to-VertexEffect"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="#181818"
+         points="175.0166,849.8322 171.7517,845.2127 174.17,854.76 179.6361,846.5672 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon57" />
+    </g>
+    <!--link Vertex to Edge-->
+    <g
+       class="link"
+       data-entity-1="ent0004"
+       data-entity-2="ent0006"
+       data-link-type="aggregation"
+       data-source-line="115"
+       id="lnk20"
+       transform="translate(-7.2198276,10.46875)">
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g58">
+        <circle
+           cx="433.42242"
+           cy="669.87134"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse58"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="15.093"
+         x="457.75"
+         y="645.89697"
+         id="text58"
+         transform="translate(-17.327586,28.518319)">To</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="21.566999"
+         x="470.05679"
+         y="645.56201"
+         id="text59"
+         transform="translate(11.912716,23.825431)">0..*</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="21.566999"
+         x="470.05679"
+         y="645.56201"
+         id="text59-4"
+         transform="translate(-480.27568,12.103277)">0..1</text>
+    </g>
+    <!--link Vertex to Edge-->
+    <g
+       class="link"
+       data-entity-1="ent0004"
+       data-entity-2="ent0006"
+       data-link-type="aggregation"
+       data-source-line="116"
+       id="lnk22"
+       transform="translate(0,-48)">
+      <path
+         codeLine="116"
+         d="m 419.2,628 c 27.01,0 42.24,0 68.02,0"
+         fill="none"
+         id="Vertex-to-Edge-1"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="none"
+         points="487.22,628 493.22,632 499.22,628 493.22,624 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon59" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g59"
+         transform="translate(-18.049569,3.6099138)">
+        <circle
+           cx="442.25"
+           cy="616.35303"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse59"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="32.136002"
+         x="449.25"
+         y="620.89697"
+         id="text60"
+         transform="translate(-18.049569,3.6099138)">From</text>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="21.566999"
+         x="470.06729"
+         y="624.48871"
+         id="text61"
+         transform="translate(5.7758621,-4.3318966)">0..*</text>
+      <path
+         codeLine="116"
+         d="m 418.19504,736.24856 c 27.01,0 42.24,0 68.02,0"
+         fill="none"
+         id="Vertex-to-Edge-1-7"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="none"
+         points="499.22,628 493.22,624 487.22,628 493.22,632 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon59-0"
+         transform="translate(-1.0049569,108.24856)" />
+      <path
+         codeLine="116"
+         d="m 6.5506978,701.81214 c -27.0099998,0 -42.2399998,0 -68.0199998,0"
+         fill="none"
+         id="Vertex-to-Edge-1-7-2"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="none"
+         points="499.22,628 493.22,624 487.22,628 493.22,632 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon59-0-6"
+         transform="matrix(-1,0,0,1,425.7507,73.812138)" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g59-5"
+         transform="translate(-477.24823,73.066299)">
+        <circle
+           cx="442.25"
+           cy="616.35303"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse59-0"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="32.136002"
+         x="449.25"
+         y="620.89697"
+         id="text60-4"
+         transform="translate(-477.24823,73.066299)">Body</text>
+      <g
+         class="entity"
+         data-qualified-name="OctTreeNode"
+         data-source-line="1"
+         id="ent0002-7"
+         transform="translate(-471.62829,521.33519)">
+        <rect
+           fill="#f1f1f1"
+           height="314.95081"
+           rx="2.5"
+           ry="2.5"
+           style="stroke:#181818;stroke-width:0.5"
+           width="389.9566"
+           x="7"
+           y="7"
+           id="rect1-1" />
+        <circle
+           cx="153.8875"
+           cy="23"
+           fill="#add1b2"
+           style="stroke:#181818;stroke-width:1"
+           id="ellipse1-7"
+           r="11" />
+        <path
+           d="m 156.8562,28.6406 q -0.5781,0.2969 -1.2187,0.4375 -0.6407,0.1563 -1.3438,0.1563 -2.5,0 -3.8281,-1.6406 -1.3125,-1.6563 -1.3125,-4.7813 0,-3.125 1.3125,-4.7812 1.3281,-1.6563 3.8281,-1.6563 0.7031,0 1.3438,0.1563 0.6562,0.1562 1.2187,0.4531 v 2.7187 q -0.625,-0.5781 -1.2187,-0.8437 -0.5938,-0.2813 -1.2188,-0.2813 -1.3437,0 -2.0312,1.0782 -0.6875,1.0625 -0.6875,3.1562 0,2.0938 0.6875,3.1719 0.6875,1.0625 2.0312,1.0625 0.625,0 1.2188,-0.2656 0.5937,-0.2813 1.2187,-0.8594 z"
+           fill="#000000"
+           id="path1-2" />
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="87.681702"
+           x="174.3875"
+           y="28.431999"
+           id="text1-7">OctTreeNode</text>
+        <line
+           style="stroke:#181818;stroke-width:0.5"
+           x1="8"
+           x2="395.9566"
+           y1="39"
+           y2="39"
+           id="line1" />
+        <g
+           data-visibility-modifier="PUBLIC_FIELD"
+           id="g2">
+          <circle
+             cx="18"
+             cy="54.034"
+             fill="none"
+             style="stroke:#038048;stroke-width:1"
+             id="ellipse2"
+             r="3" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="156.9534"
+           x="27"
+           y="57.9659"
+           id="text2-2">«const» theta : float = 1f</text>
+        <g
+           data-visibility-modifier="PUBLIC_FIELD"
+           id="g3-2">
+          <circle
+             cx="18"
+             cy="73.101898"
+             fill="none"
+             style="stroke:#038048;stroke-width:1"
+             id="ellipse3-6"
+             r="3" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="136.5135"
+           x="27"
+           y="77.033897"
+           id="text3-1">BoundsMin : Vector3</text>
+        <g
+           data-visibility-modifier="PUBLIC_FIELD"
+           id="g4-0">
+          <circle
+             cx="18"
+             cy="92.1698"
+             fill="none"
+             style="stroke:#038048;stroke-width:1"
+             id="ellipse4-6"
+             r="3" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="139.50951"
+           x="27"
+           y="96.101799"
+           id="text4-1">BoundsMax : Vector3</text>
+        <g
+           data-visibility-modifier="PUBLIC_FIELD"
+           id="g5-5">
+          <circle
+             cx="18"
+             cy="111.2377"
+             fill="none"
+             style="stroke:#038048;stroke-width:1"
+             id="ellipse5-9"
+             r="3" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="155.2034"
+           x="27"
+           y="115.1697"
+           id="text5-4">CenterOfMass : Vector3</text>
+        <g
+           data-visibility-modifier="PUBLIC_FIELD"
+           id="g6-9">
+          <circle
+             cx="18"
+             cy="130.3056"
+             fill="none"
+             style="stroke:#038048;stroke-width:1"
+             id="ellipse6-0"
+             r="3" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="68.025703"
+           x="27"
+           y="134.23759"
+           id="text6-9">Count : int</text>
+        <g
+           data-visibility-modifier="PUBLIC_FIELD"
+           id="g7">
+          <circle
+             cx="18"
+             cy="149.3735"
+             fill="none"
+             style="stroke:#038048;stroke-width:1"
+             id="ellipse7"
+             r="3" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="118.9996"
+           x="27"
+           y="153.3055"
+           id="text7-1">IsLeaf : bool «get»</text>
+        <line
+           style="stroke:#181818;stroke-width:0.5"
+           x1="8"
+           x2="395.9566"
+           y1="161.4075"
+           y2="161.4075"
+           id="line7-7" />
+        <g
+           data-visibility-modifier="PRIVATE_METHOD"
+           id="g8-7">
+          <rect
+             fill="#f24d5c"
+             height="6"
+             style="stroke:#c82930;stroke-width:1"
+             width="6"
+             x="15"
+             y="173.4415"
+             id="rect7" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="363.9566"
+           x="27"
+           y="180.3734"
+           id="text8-1">OctTreeNode(boundsMin:Vector3, boundsMax:Vector3)</text>
+        <g
+           data-visibility-modifier="PUBLIC_METHOD"
+           id="g9">
+          <circle
+             cx="18"
+             cy="195.5094"
+             fill="#84be84"
+             style="stroke:#038048;stroke-width:1"
+             id="ellipse8-1"
+             r="3" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           text-decoration="underline"
+           textLength="344.32861"
+           x="27"
+           y="199.44141"
+           id="text9-5"
+           style="text-decoration:underline;text-decoration-line:underline">Build(vertices:IEnumerable&lt;Vertex&gt;) : OctTreeNode?</text>
+        <g
+           data-visibility-modifier="PRIVATE_METHOD"
+           id="g10-9">
+          <rect
+             fill="#f24d5c"
+             height="6"
+             style="stroke:#c82930;stroke-width:1"
+             width="6"
+             x="15"
+             y="211.5773"
+             id="rect9" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="173.40331"
+           x="27"
+           y="218.50929"
+           id="text10-7">Insert(vertex:Vertex) : void</text>
+        <g
+           data-visibility-modifier="PUBLIC_METHOD"
+           id="g11-7">
+          <circle
+             cx="18"
+             cy="233.6452"
+             fill="#84be84"
+             style="stroke:#038048;stroke-width:1"
+             id="ellipse10-6"
+             r="3" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="211.4272"
+           x="27"
+           y="237.57719"
+           id="text11-7">GetOctant(position:Vector3) : int</text>
+        <g
+           data-visibility-modifier="PUBLIC_METHOD"
+           id="g12-3">
+          <circle
+             cx="18"
+             cy="252.7131"
+             fill="#84be84"
+             style="stroke:#038048;stroke-width:1"
+             id="ellipse11-6"
+             r="3" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="188.9153"
+           x="27"
+           y="256.64511"
+           id="text12-5">EnsureChild(octant:int) : void</text>
+        <g
+           data-visibility-modifier="PUBLIC_METHOD"
+           id="g13-6">
+          <circle
+             cx="18"
+             cy="271.78101"
+             fill="#84be84"
+             style="stroke:#038048;stroke-width:1"
+             id="ellipse12-3"
+             r="3" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="252.951"
+           x="27"
+           y="275.71301"
+           id="text13-9">ComputeForce(target:Vertex) : Vector3</text>
+        <g
+           data-visibility-modifier="PRIVATE_METHOD"
+           id="g14-4">
+          <rect
+             fill="#f24d5c"
+             height="6"
+             style="stroke:#c82930;stroke-width:1"
+             width="6"
+             x="15"
+             y="287.849"
+             id="rect13" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="261.79901"
+           x="27"
+           y="294.78091"
+           id="text14-8">SumChildForces(target:Vertex) : Vector3</text>
+        <g
+           data-visibility-modifier="PRIVATE_METHOD"
+           id="g15-1">
+          <rect
+             fill="#f24d5c"
+             height="6"
+             style="stroke:#c82930;stroke-width:1"
+             width="6"
+             x="15"
+             y="306.9169"
+             id="rect14" />
+        </g>
+        <text
+           fill="#000000"
+           font-family="sans-serif"
+           font-size="14px"
+           lengthAdjust="spacing"
+           textLength="323.77679"
+           x="27"
+           y="313.84891"
+           id="text15-2">ComputeDirectForce(targetPos:Vector3) : Vector3</text>
+      </g>
+    </g>
+    <!--reverse link Edge to StateMove-->
+    <g
+       class="link"
+       data-entity-1="ent0006"
+       data-entity-2="ent0023"
+       data-link-type="aggregation"
+       data-source-line="117"
+       id="lnk24"
+       transform="translate(38.265086,37.543103)">
+      <path
+         codeLine="117"
+         d="m 631.01385,703.21079 c 10.44,61.91 21.0346,124.7271 27.2846,161.8271"
+         fill="none"
+         id="Edge-backto-StateMove"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="none"
+         points="663.79,728.56 660.8434,735.1416 665.7854,740.3929 668.732,733.8113 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon61"
+         transform="translate(-34.771551,-37.182111)" />
+      <g
+         data-visibility-modifier="PUBLIC_METHOD"
+         id="g61"
+         transform="translate(-17.804956,37.182113)">
+        <circle
+           cx="685"
+           cy="816.35303"
+           fill="none"
+           style="stroke:#038048;stroke-width:1"
+           id="ellipse61"
+           r="3" />
+      </g>
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="64.649002"
+         x="692"
+         y="820.89697"
+         id="text62"
+         transform="translate(-17.804956,37.182113)">MoveUsed</text>
+    </g>
+    <!--link Edge to EdgeEffect-->
+    <g
+       class="link"
+       data-entity-1="ent0006"
+       data-entity-2="ent0007"
+       data-link-type="dependency"
+       data-source-line="120"
+       id="lnk25">
+      <path
+         codeLine="120"
+         d="m 614.09,728.56 c -17.4,52.65 -35.9671,108.8331 -49.2371,148.9831"
+         fill="none"
+         id="Edge-to-EdgeEffect"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="#181818"
+         points="564.5391,878.4926 561.9964,873.4394 562.97,883.24 569.5923,875.9499 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon62" />
+    </g>
+    <!--reverse link EdgeDrawer to Edge-->
+    <g
+       class="link"
+       data-entity-1="ent0008"
+       data-entity-2="ent0006"
+       data-link-type="aggregation"
+       data-source-line="122"
+       id="lnk26">
+      <path
+         codeLine="122"
+         d="m 626.6203,431.0657 c 3.08,29.64 6.0997,58.6543 10.0297,96.3843"
+         fill="none"
+         id="EdgeDrawer-backto-Edge"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="none"
+         points="626.6203,431.0657 629.9787,424.6844 625.38,419.13 622.0216,425.5113 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon63" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="21.566999"
+         x="614.00177"
+         y="515.70343"
+         id="text63"
+         transform="translate(-5.615708,7.6577836)">0..*</text>
+    </g>
+    <!--reverse link VertexDrawer to Vertex-->
+    <g
+       class="link"
+       data-entity-1="ent0003"
+       data-entity-2="ent0004"
+       data-link-type="aggregation"
+       data-source-line="123"
+       id="lnk27">
+      <path
+         codeLine="123"
+         d="m 275.5719,421.1619 c -5.69,18.73 -9.7919,32.2281 -17.8019,58.5581"
+         fill="none"
+         id="VertexDrawer-backto-Vertex"
+         style="stroke:#181818;stroke-width:1" />
+      <polygon
+         fill="none"
+         points="275.5719,421.1619 281.1432,416.5836 279.06,409.68 273.4887,414.2582 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon64" />
+      <text
+         fill="#000000"
+         font-family="sans-serif"
+         font-size="13px"
+         lengthAdjust="spacing"
+         textLength="21.566999"
+         x="238.6591"
+         y="468.06561"
+         id="text64">0..*</text>
+    </g>
+<?plantuml-src hLVVKziu47xFN-79IzsITA3qxY6JXkC2bCn0co65LwhQcqI78daaEv3hzN-_rG_BKk907yWCWwNzjBjQxNuhPOmebNoMf5ZECk2G38UAyWM3Kl3HAFdPIV3t9Zb8VggIb3JxbKmuVl4Caa6yR07bQEJW_UH-3RA4fpD97a4Yz2uODY385-0XvtxWZJO6qhT-rPHc3pSafvMQFk6oEHEatB5_8SaAr3SnUw05WYZVXTmhb1MGMwW3VKeElVNXKE0k9Cq18t5_0oJVf6yHjnOqtmEwvKl2SmRvX1TLcVu5Q-3bm0pEzMUqt6x5HYPLcGJWKw46Tv2LGdvuwwDsiiVOTBbHD5DJAJ9GAis1bMIGY-e7WyZEGJA3iYfIocb92HlSN7x67S_mFBTnOmP4fcsJKr8kB-bYoV2l0VpgP2P_mjCDScOup0Hc2_fwJPxgl6aY_U4GVorWLKXQmep-2-Q07VYFF_T3CyB0fyAdv6Z--sTuaDmMEKRYZggACBLlRsvNeMq9HSKK5Vn2I5CErj6ZzarHFcSLuFvjwhu4PvHZrC_8gWZtTVZ-SDu2Nf6dMG6GHz1Mf2h88p-ZzYGkY4wqOD5nKtXrWg0qI9UwXZHB-5ewI31hCRC4DnchTHxl0Tu14najDxl0fYeBu3aoa0cgQe0UC1nAF4N1sKQVwDp0haJsW53nuny4ErkUiCveLg9G_qCVYTmCWntrtFcE8aU2rJXlYXYDMUIOOT6QM9kAlZJrBaETevF4U-lrt1Es4EDAIbpJL3O6dLUCxRBiQIiw3jP1Cb4nxeSGR3UYUFWSumAv1ckMRIExyJvGsqbQyfxFSO66NHArH8ePMZVFpNpZv6cUswaK1Y5YXqflO8N5-djODDSAx2MOr7GD0nsAdLM6oYnGRTE0dVR1jiEJhRIuf7aEl2tIM3DGZWKJbZ_DLoCm36K4fjQsa-o2IeYoArLO1I07DgDxYGR2Nk9-OqhBj9553OZ0s_RGewzoZ7LKGhgZkfSKHEUJY-j9quYScjEYO9jfKAQfgKBNk8wtuZhX9IoajhItGKMP_vL_WKUNqd4OJde9zw9dWn4equrhZ4rv0UbzeuV8XHeqebCS1iGFl5f5QU3O_vfmx17E0IoUdfcT2RQ672dN3YUsosB7ikEWGf5XxTnNhcUr_K_9HzzfTDMrz1dTu_ZY2lYYN3PjeuNSHL7I5M4wu79Ds9N0RlotgBZcAXlrbnVTueseRT6kGtNN2pgELtyXnSfdJS0W-WOIqDStyHkWQ-I4MsK8rnos7hUZd-LylxPduZpQfSbTFjF0vzYiaR_4PSyWGoPhOA_0OusoLs0nRLKhJETuj8uPUaaf_EVA7TF01_fPrj7m0EhS3GbcrcHP-W9R6CUsgKA_BM8BhquHJOHTsI8LL3hXjC3pGzrGTT66fHvTbp7_y16YwtkoMa5EjTiuVfLxx1UHm_5PClolduj7tWzULPthYfLK6wflvm6k7p_QdeS6ZxVEc_1XAFhzKTAjrtH3um7gdNFjBdurRhqZsrQSXq_8w4dPSSo27aHts45ulqLd7SpuMTzak_xQwUL2o-iBx3vvV7lTXzAq55r2tHsqQqMMiRv_w6uv5tIIRjsHjymx3ejlOgZMCThtesudq1YYK9FfFtq6yrBhqXmUc8c5tuGN6K7tyFtxTrrqmW3gSyHGTpNBTry66MiMfi-hOVf1q09gDveWDgnkIBqbWCq27vo0rkFGs3qYja4u3Ix3h1vTgDsjEer0_NghXjEYd0w4BdwT_m40?>    <g
+       class="link"
+       data-entity-1="ent0006"
+       data-entity-2="ent0007"
+       data-link-type="dependency"
+       data-source-line="120"
+       id="lnk25-6"
+       transform="rotate(31.641451,906.50542,-622.8217)">
+      <path
+         codeLine="120"
+         d="m 704.68794,437.66677 c -17.4,52.65 -126.56504,399.72633 -139.83504,439.87633"
+         fill="none"
+         id="Edge-to-EdgeEffect-7"
+         style="stroke:#181818;stroke-width:1"
+         sodipodi:nodetypes="cc" />
+      <polygon
+         fill="#181818"
+         points="562.97,883.24 569.5923,875.9499 564.5391,878.4926 561.9964,873.4394 "
+         style="stroke:#181818;stroke-width:1"
+         id="polygon62-5" />
+    </g>
+  </g>
+</svg>

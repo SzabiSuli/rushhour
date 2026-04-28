@@ -3,10 +3,10 @@ class OctTreeNode {
     + <<const>> theta : float = 1f
     + BoundsMin : Vector3
     + BoundsMax : Vector3
-    + Children : OctTreeNode?[]
+    ' + Children : OctTreeNode?[]
     + CenterOfMass : Vector3
     + Count : int
-    + Body : Vertex?
+    ' + Body : Vertex?
     + IsLeaf : bool <<get>>
     - OctTreeNode(boundsMin:Vector3, boundsMax:Vector3)
     + {static} Build(vertices:IEnumerable<Vertex>) : OctTreeNode?
@@ -17,4 +17,8 @@ class OctTreeNode {
     - SumChildForces(target:Vertex) : Vector3
     - ComputeDirectForce(targetPos:Vector3) : Vector3
 }
+
+OctTreeNode *-- "0..8" OctTreeNode : + Children
+OctTreeNode o-right- "0..1" Vertex : + Body
+
 @enduml

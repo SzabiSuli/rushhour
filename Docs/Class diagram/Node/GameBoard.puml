@@ -107,8 +107,9 @@ Arrow *-down- CollisionPolygon2D : + CollisionShape
 ' VehicleNode o-> "ArrowCreator" PackedScene
 ' VehicleNode o-> "_placement" PlacedRHPiece
 ' VehicleNode --> "Placement" PlacedRHPiece
-VehicleNode *-right- Arrow : + forwardArrow
-VehicleNode *-right- Arrow : + backwardArrow
+VehicleNode *-right- "0..1" Arrow : + forwardArrow
+VehicleNode *-right- "0..1" Arrow : + backwardArrow
 LevelsGrid "0..1" o-- "0..*" GameBoard
+GameBoard *-right- "0..16" VehicleNode
 
 @enduml
