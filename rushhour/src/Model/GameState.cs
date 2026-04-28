@@ -5,19 +5,8 @@ using System.Text;
 using System.Linq;
 using Godot;
 
-public abstract class GameState {
-    // public List<Piece> Pieces { get; protected set;}
-    // public abstract int BoardWidth { get; protected set;}
-    // public abstract int BoardHeight { get; protected set;}
-
-    // public GameState(List<Piece> pieces, int width, int height){
-    //     Pieces = pieces;
-    //     BoardWidth = width;
-    //     BoardHeight = height;
-    // }
-
-    // public abstract bool IsSolved();
-}
+// For generalisation
+public abstract class GameState {}
 
 // Immutable object
 public class RHGameState : GameState {
@@ -26,7 +15,6 @@ public class RHGameState : GameState {
     private const int maxPieces = 16;
     public int BoardWidth => 6;
     public int BoardHeight => 6;
-    // public PlacedRHPiece MainCar {get; protected set;}
     private readonly int[,] _boardGrid;
     public int this[int x, int y] => _boardGrid[x, y];
     public Vector2I ExitPosition => new Vector2I(BoardWidth - 1, 2);
@@ -51,7 +39,6 @@ public class RHGameState : GameState {
             }
         }
         // verify pieces and fill board reference grid
-        // foreach (var placedPiece in placedPieces){
         for (int i = 0; i < placedPieces.Length; i++){
             var placedPiece = placedPieces[i];
             int x = placedPiece.Position.X;
@@ -92,7 +79,6 @@ public class RHGameState : GameState {
         int hash = 17;
         for (int i = 0; i < PlacedPieces.Count; i++){
             PlacedRHPiece piece = PlacedPieces[i];
-            // hash = hash * 31 + i.GetHashCode();
             hash = hash * 31 + piece.Position.GetHashCode();
         }
         return hash;

@@ -9,8 +9,6 @@ public partial class GameBoard : Sprite2D
     public static readonly Vector2 tileSize = new Vector2(24,24);
     public static readonly Vector2 spriteSize = tileSize * 8;
 
-
-    // TODO make these exported?
     public const string carScenePath = "res://scenes/board/car.tscn";
     public const string busScenePath = "res://scenes/board/bus.tscn";
 

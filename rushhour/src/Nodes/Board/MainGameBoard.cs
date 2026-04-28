@@ -34,7 +34,7 @@ public partial class MainGameBoard : GameBoard
 		}
 	}
 
-    // TODO change this if we want to run multiple algorithms at once
+    // change this if we want to run multiple algorithms at once
     // which might be a bit out of scope for this project
     private RHGameState? _algoCurrent;
     public RHGameState? AlgoCurrent {
@@ -126,7 +126,6 @@ public partial class MainGameBoard : GameBoard
 	public void OnVertexClicked(object? sender, RHGameState state) => ManualCurrent = state;
 	public void OnNewAlgoCurrent(object? sender, RHGameState state) => AlgoCurrent = state;
 	
-	// TODO manual move from algo mode does not work
 	public void MakeManualMove(Move move) {
 		StateMove stateMove = new StateMove(Current, Current.WithMove(move), move);
 		// Create vertex first, 

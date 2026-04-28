@@ -159,8 +159,6 @@ public partial class AlgoPlayer : VBoxContainer {
             throw new Exception("Can't restart with no level loaded");
         }
 
-        // TODO maybe filter by active edges,
-        // add a field to those.
         GraphScene.Instance.ClearPathHighligh();
 
         UnSubFromSolver();

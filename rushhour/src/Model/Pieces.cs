@@ -34,12 +34,6 @@ public class PlacedRHPiece {
     }
 }
 public abstract class Piece {
-    // public int Id { get; set; }
-    
-    /// Position of the front of the car
-    // public Vector2I Position { get; set; }
-    // public Direction FacingDirection { get; set; }
-
     public abstract int Width { get; }
     public abstract int Length { get; }
 
