@@ -10,7 +10,6 @@ public class GameBoard : Sprite2D
     public static readonly Vector2 spriteSize = tileSize * 8;
 
 
-    // TODO make these exported?
     public const string carScenePath = "res://scenes/board/car.tscn";
     public const string busScenePath = "res://scenes/board/bus.tscn";
 
@@ -26,7 +25,6 @@ public class GameBoard : Sprite2D
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
-        // TODO don't call this every frame
 		RescaleToParent();
 	}
 
@@ -127,7 +125,6 @@ public class MainGameBoard : GameBoard
 		}
 	}
 
-    // TODO change this if we want to run multiple algorithms at once
     // which might be a bit out of scope for this project
     private RHGameState? _algoCurrent;
     public RHGameState? AlgoCurrent {
@@ -212,7 +209,6 @@ public class MainGameBoard : GameBoard
 	public void OnVertexClicked(object? sender, RHGameState state) => ManualCurrent = state;
 	public void OnNewAlgoCurrent(object? sender, RHGameState state) => AlgoCurrent = state;
 	
-	// TODO manual move from algo mode does not work
 	public void MakeManualMove(Move move) {
 		StateMove stateMove = new StateMove(Current, Current.WithMove(move), move);
 		// Create vertex first, 
