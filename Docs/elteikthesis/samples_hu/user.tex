@@ -5,7 +5,7 @@ Ez a fejezet az alkalmazás teljes leírását nyújtja a felhasználó számár
 
 \section{A probléma meghatározása}
 
-A Rush Hour rejtvény~\cite{rushhour_puzzle} egy tologatós játék, amelyet egy $6 \times 6$-os négyzetrácsos táblán játszanak. A tábla több féle járművet tartalmazhat: $1 \times 2$ mezőt elfoglaló \textbf{autókat} és $1 \times 3$ mezőt elfoglaló \textbf{buszokat}. Minden jármű csak a előre és hátra a hosszabbik tengelye mentén mozoghat, és nem tudják egymást odébb tolni. A cél a kijelölt (piros színű) \textbf{főautó} vízszintes elcsúsztatása, amíg az el nem éri a tábla jobb szélén található kijáratot (3. sor, a tábla jobb oldalán).
+A Rush Hour rejtvény~\cite{rushhour_puzzle} egy tologatós játék, amelyet egy $6 \times 6$-os négyzetrácsos táblán játszanak. A tábla több féle járművet tartalmazhat: $1 \times 2$ mezőt elfoglaló \textbf{autókat} és $1 \times 3$ mezőt elfoglaló \textbf{buszokat}. Minden jármű csak előre és hátra, a hosszabbik tengelye mentén mozoghat, és nem tudják egymást elmozdítani. A cél a kijelölt (piros színű) \textbf{főautó} vízszintes elcsúsztatása, amíg az el nem éri a tábla jobb szélén található kijáratot (3. sor, a tábla jobb oldalán).
 
 A rejtvény akkor tekinthető \textbf{megoldottnak}, ha a főautó orra közvetlenül a kijáratnál helyezkedik el. A játék állapottere az összes a kezdőállapotból elérhető konfigurációból áll, az állapotok közötti átmenetek pedig egy-egy jármű egy mezővel való elmozdításának felelnek meg a megengedett irányban.
 
@@ -18,29 +18,31 @@ Az alkalmazás két egymáshoz kapcsolódó kihívásra fókuszál:
 
 \section{A módszerek áttekintése}
 
-Az alkalmazás három keresőalgoritmust valósít meg, amelyek mindegyike heurisztikus vezérlési startégiát alkalmaz konfigurálható heurisztikus függvényekkel:
+Az alkalmazás három keresőalgoritmust valósít meg, amelyek mindegyike heurisztikus vezérlési stratégiát alkalmaz konfigurálható heurisztikus függvényekkel:
 
 \begin{description}
     \item[Tabu keresés] Egy nemmódosítható lokális keresési módszer, amely egy heurisztika alapján választja ki a legjobb szomszédos állapotot, miközben memóriát tart fenn a legutóbb meglátogatott állapotokról (\emph{tabu lista}), hogy elkerülje a köröket.
     \item[Visszalépéses (Backtracking) keresés] Módosítható stratégiájú keresés, amely heurisztika által vezérelt sorrendben tárja fel az állapotokat a köröket elkerülve, zsákutca esetén visszalép, véges állapotgráfra garantálja a leállást.
-    \item[A\textsuperscript{C} gráfkeresés] Módosítható statégiájú gráfkeresés, amely az $f(n) = g(n) + h(n)$ kiértékelő függvényt használja, ahol $g(n)$ a mélység (a kezdőállapottól megtett lépések száma), $h(n)$ pedig a heurisztikus érték. Megengedhető és monoton heurisztikákkal ez az algoritmus megtalálja az optimális megoldást.
+    \item[A\textsuperscript{C} gráfkeresés] Módosítható stratégiájú gráfkeresés, amely az $f(n) = g(n) + h(n)$ kiértékelő függvényt használja, ahol $g(n)$ a mélység (a kezdőállapottól megtett lépések száma), $h(n)$ pedig a heurisztikus érték. Megengedhető és monoton heurisztikákkal ez az algoritmus megtalálja az optimális megoldást.
 \end{description}
 
-Négy heurisztikus függvény áll rendelkezésre, amelyek mindegyike nemnegatív, megengedhető és monoton:
+Négy heurisztikus függvény áll rendelkezésre, amelyek mindegyike nemnegatív, megengedhető és monoton~\cite{gregorics_grafker_heuristic}:
 \begin{compactitem}
-    \item \textbf{Null heurisztika} ($h = 0$): nem ad útmutatást; a „brute-force” viselkedés megfigyelésére hasznos.
+    \item \textbf{Null heurisztika} ($h = 0$): nem ad útmutatást; a \enquote{brute-force} viselkedés megfigyelésére hasznos.
     \item \textbf{Távolság heurisztika}: a kijuttatandó autó távolsága a kijárattól (tartománya: 0--4).
     \item \textbf{Távolság + blokkolás heurisztika}: a távolság, plusz egy költség minden egyes, a főautó és a kijárat között lévő foglalt mezőért.
-    \item \textbf{Legkevesebb lépés heurisztika}: Egy mégerősebb alsó becslést ad a megoldásig szükséges lépésekre: a távolság, plusz minden a fúautó útjába álló járművek elmozdításához szükséges minimális lépésszám, hogy már ne legyen útban.
+    \item \textbf{Legkevesebb lépés heurisztika}: Még erősebb alsó becslést ad a megoldásig szükséges lépésekre: a távolság, plusz a főautó útjába álló járművek elmozdításához szükséges minimális lépésszámot.
 \end{compactitem}
 
-A 3D-s állapotgráf elrendezéséhez erőalapú megközelítést alkalmazunk: az élek rugókként működnek, amelyek adott távolság felé húzzák a szomszédos állapotokat, míg minden csúcspár egymásra a távolságuk négyzetével fordítottan arányos taszítóerőt fejtenek ki egymásra. A számításigényes $O(V^2)$ komplexitású taszítást a Barnes–Hut algoritmus~\cite{barneshut1986}\cite{barneshut_princeton} nyolcasfa (octree) térbeli adatszerkezet implementálásával approximáljuk, és ezzel az idő komplexitását le tudjuk csökkenteni $O(V \log V)$-re.
+A megengedhetőség azt jelenti, hogy a heurisztika sosem becsüli túl a tényleges minimális költséget, a monotonitás pedig azt, hogy egy lépés legfeljebb 1-gyel változtathatja meg a heurisztika értékét. Ezek a tulajdonságok biztosítják, hogy az A$^C$ gráfkeresés optimális megoldást találjon~\cite{gregorics_grafker_heuristic}.
+
+A 3D-s állapotgráf elrendezéséhez erőalapú megközelítést alkalmazunk: az élek rugókként működnek, amelyek adott távolság felé húzzák a szomszédos állapotokat, míg minden csúcspár egymásra a távolságuk négyzetével fordítottan arányos taszítóerőt fejtenek ki egymásra. A számításigényes $O(V^2)$ komplexitású taszítást a Barnes–Hut algoritmus~\cite{barneshut1986} nyolcasfa (octree) térbeli adatszerkezet implementálásával approximáljuk, és ezzel az idő komplexitását le tudjuk csökkenteni $O(V \log V)$-re.
 
 
 \section{Rendszerkövetelmények}
 
-Az alkalmazás önállóan futtatható fájlként érhető el windowson és linuxon, és nem igényel további szoftvertelepítést.
-Van lehetőség a projektet a godot editorből futtatni és exportálni futtatható fájl formátumba egyéb platformokra.
+Az alkalmazás önállóan futtatható fájlként érhető el Windowson és Linuxon, és nem igényel további szoftvertelepítést.
+Van lehetőség a projektet a Godot editorből futtatni és exportálni futtatható fájl formátumba egyéb platformokra.
 Ajánlott minimum képernyőfelbontás: $1280 \times 720$
 
 \begin{table}[H]
@@ -53,7 +55,7 @@ Ajánlott minimum képernyőfelbontás: $1280 \times 720$
         \hline
         \emph{Linux} & Futtassa közvetlenül a mellékelt \texttt{rushhour.x86\_64} fájlt. \\
         \hline
-        \emph{macOS / egyéb} & Töltse le és csomagolja ki a \texttt{rushhour.zip} fájlt és nyissa meg (Import project) a kicsomagolt \texttt{project.godot} fájlt a Godot 4.6 Mono szerkesztővel, majd jobb felüli gombbal futtassa. \\
+        \emph{MacOS / egyéb} & Töltse le és csomagolja ki a \texttt{rushhour.zip} fájlt és nyissa meg (Import project) a kicsomagolt \texttt{project.godot} fájlt a Godot 4.6 Mono szerkesztővel, majd jobb felüli gombbal futtassa. \\
         \hline
     \end{tabular}
     \caption{Támogatott platformok és futtatási utasításaik}
@@ -62,8 +64,8 @@ Ajánlott minimum képernyőfelbontás: $1280 \times 720$
 
 A projekt szerkesztőben való megnyitásához szükséges előfeltételek:
 \begin{compactitem}
-    \item Godot 4.6 Mono (C\#) szerkesztő le van töltve.~\cite{godot_engine}
-    \item .NET SDK 9.0 vagy újabb verzió telepítve van.~\cite{dotnet10}
+    \item Godot 4.6 Mono (C\#) szerkesztő letöltésre került.~\cite{godot_engine}
+    \item .NET SDK 9.0 vagy újabb verzió telepítve van.~\cite{dotnet9}
 \end{compactitem}
 
 \begin{figure}[H]
@@ -88,7 +90,7 @@ A projekt szerkesztőben való megnyitásához szükséges előfeltételek:
 \end{figure}
 
 
-Az forrásból való fordításhoz, ha az előfeltételek adottak, a projekt megnyitása után bal felül Project > Export opciónál található, hozzá kell adni egy exportálási konfigurációt a kiválasztott platformra, majd le kell tölteni még egy exportálási könyvtárat amit fel fog ajánlani a szerkesztő.
+A forrásból való fordításhoz, ha az előfeltételek adottak, a projekt megnyitása után bal felül Project > Export opciónál található, hozzá kell adni egy exportálási konfigurációt a kiválasztott platformra, majd le kell tölteni még egy exportálási könyvtárat amit fel fog ajánlani a szerkesztő.
 
 \begin{figure}[H]
     \centering
@@ -134,7 +136,7 @@ Az forrásból való fordításhoz, ha az előfeltételek adottak, a projekt meg
 Az alkalmazás ablaka két fő területre oszlik:
 \begin{compactitem}
     \item \textbf{Bal oldali panel}: a 3D-s állapotgráf vizualizációs színtere. 
-    \item \textbf{Jobb oldali panel}: Az konfigurációs és vezérési opciók 3 fülre osztva
+    \item \textbf{Jobb oldali panel}: A konfigurációs és vezérlési opciók 3 fülre osztva.
 \end{compactitem}
 
 
@@ -145,7 +147,7 @@ Az alkalmazás ablaka két fő területre oszlik:
     \label{fig:app-preview}
 \end{figure}
 
-A Bal oldali panelen belül található:
+A bal oldali panelen belül található:
 
 \begin{compactitem}
     \item Bal alul az állapotgráffal való interakciónak az irányításai
@@ -162,7 +164,7 @@ A Jobb oldali panel fülekre osztva:
 \begin{compactitem}
 		\item \textbf{Feladvány választó fül}: Kattintással lehet választani az előnézettel felsorolt feladványok közül. 
 		\item \textbf{Keresőalgoritmus beállítások fül}: Indítható az állapotok felfedezése, beállítható, hogy milyen keresőalgoritmust, milyen heurisztikát szeretnénk alkalmazni a kiválasztott feladványra.
-		\item \textbf{Játék tábla fül}: Tartalmazza a játék tábláját és a manuális és algoritmus mód választó gombokat, az algoritmust vezérlő: megállítás, folytatás, léptetés, újraindítás gombokat, egy csúszkát a az algoritmus léptetési sebességéhez és kapcsolókat az állapotgráf megjelenéséhez kapcsolódóan.
+		\item \textbf{Játéktábla fül}: Tartalmazza a játék tábláját és a manuális és algoritmus mód választó gombokat, az algoritmust vezérlő: megállítás, folytatás, léptetés, újraindítás gombokat, egy csúszkát az algoritmus léptetési sebességéhez és kapcsolókat az állapotgráf megjelenéséhez kapcsolódóan.
 	\end{compactitem}
 \section{Szint betöltése}
 
@@ -182,11 +184,11 @@ A rejtvény manuálisan is játszható a játéktáblával való közvetlen inte
 \begin{enumerate}
     \item Minden mozgatható jármű mellett piros nyíl indikátorok jelennek meg, mutatva a lehetséges mozgási irányokat.
     \item Kattintson egy nyílra a megfelelő jármű egy mezővel való eltolásához.
-    \item Minden kézi lépés egy új állapotot, valamint egy hozzá tartozó csúcsot és élet hoz létre a 3D-s gráfon, lehetővé téve a felhasználó számára az állapotgráf interaktív felépítését.
+    \item Minden kézi lépés egy új állapotot, valamint egy hozzá tartozó csúcsot és élt hoz létre a 3D-s gráfon, lehetővé téve a felhasználó számára az állapotgráf interaktív felépítését.
 \end{enumerate}
 
 
-A manuális módba bármikor át lehet kapcsolni a \textbf{Manual} gombra nyomással, vagy egy már felfedezett állapotnak a megjelenített csúcsára kattintani, és ekkor a tábla a kiválasztott állapotot megjeleníti és manuális módban lesz a tábla, mindkét esetben, ha ekkor épp fut kereső algoritmus akkor az a háttérben fog tovább futni.
+A manuális módba bármikor át lehet kapcsolni a \textbf{Manual} gombra nyomással, vagy egy már felfedezett állapot csúcsára kattintással. Mindkét esetben a tábla a kiválasztott állapotot jeleníti meg és manuális módba vált. Ha ekkor épp fut keresőalgoritmus, az a háttérben tovább fut.
 \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.32\textwidth}
@@ -241,7 +243,7 @@ A szint betöltése és a megoldó konfigurálás és alkalmazás (Apply gomb) u
     \item[Lejátszás/Szünet] Az algoritmus folyamatos futtatásának indítása vagy megállítása.
     \item[Léptetés (Step)] Az algoritmus egyetlen lépésének végrehajtása, ami hasznos a részletes megfigyeléshez.
     \item[Újraindítás] Az algoritmus visszaállítása a kezdőállapotba a jelenlegi beállítások megtartásával.
-    \item[Sebességcsúszka] Az algoritmus lépései közötti késleltetés beállítása. A csúszka jobbra tolásával a sebesség nő; a maximum állásban az algoritmus a lehető leggyorsabban fut, képkockánként több szász lépést is végrehajthat.
+    \item[Sebességcsúszka] Az algoritmus lépései közötti késleltetés beállítása. A csúszka jobbra tolásával a sebesség nő; a maximum állásban az algoritmus a lehető leggyorsabban fut, képkockánként több száz lépést is végrehajthat.
 \end{description}
 
 \begin{figure}[H]
@@ -264,7 +266,7 @@ Amikor az algoritmus megoldást talál, a megoldási útvonal zölddel kiemelve 
 
 \section{Állapotok felfedezése}
 
-A keresőalgoritmusokon kívül az alkalmazás \textbf{BFS} (szélességi keresés) és \textbf{DFS} (mélységi keresés) felfedező módokat is kínál, amelyek a Solver settings fülről érhetők el. Ezek a módok anélkül tárják fel az állapotteret, hogy megoldást keresnének, minden elérhető állapotot és élet hozzáadva az állapotgráfhoz:
+A keresőalgoritmusokon kívül az alkalmazás \textbf{BFS} (szélességi keresés) és \textbf{DFS} (mélységi keresés) felfedező módokat is kínál, amelyek a Solver settings fülről érhetők el. Ezek a módok anélkül tárják fel az állapotteret, hogy megoldást keresnének, minden elérhető állapotot és élt hozzáadva az állapotgráfhoz:
 
 \begin{compactitem}
     \item Beállítható egy \textbf{maximális állapotszám} a felfedezett állapotok korlátozására. Ez ajánlott a nehezebb feladványoknál, ahol az állapottér több ezer elemet is tartalmazhat, mivel a túl sok csúcs átláthatatlanná teheti az állapotgráfot, lelassíthatja a fizikai szimulációt.
@@ -280,7 +282,7 @@ Az alkalmazás bal oldalán található 3D-s térben jeleníti meg az állapotgr
 
 \begin{description}
     \item[Kamera forgatása] Tartsa lenyomva a jobb egérgombot és húzza az egeret a gráf körüli keringéshez.
-    \item[Kamera mozgatása] Használja a \texttt{W}, \texttt{A}, \texttt{S}, \texttt{D} billentyűket a kamera aktuális irányához képesti eltolásához. {Shift} nyomva tartásával a mozgás gyorsabb.
+    \item[Kamera mozgatása] Használja a \texttt{W}, \texttt{A}, \texttt{S}, \texttt{D} billentyűket a kamera aktuális irányához képesti eltolásához. \texttt{Shift} nyomva tartásával a mozgás gyorsabb.
     \item[Zoom] Használja az egérgörgőt a közelítéshez és távolításhoz.
     \item[Csúcsra kattintás] Kattintson a bal egérgombbal egy csúcsra az adott állapotba ugráshoz: a játéktábla Kézi módba vált és a kiválasztott állapotot mutatja.
     \item[Csúcsok/élek elrejtése] Egy kapcsológombbal minden csúcs és él szinte teljesen átlátszóvá tehető. Ez hasznos lehet a vizuális zaj csökkentésére nagy gráfok felfedezésekor.
@@ -337,5 +339,5 @@ A 3D-s gráf csúcsai és élei színkódoltak a szerepük szemléltetésére:
     \label{fig:color-states}
 \end{figure}
 
-Egy állapot csúcsára egyszerre több tulajdonság is vonatkozhat, például épp kiválaszott és algoritmus memóriájában tárolt állapot, ekkor a táblázatban felsorolt sorrend szerint a legelső tulajdonságnak a megjelenítése élvez prioritást.
-Az első négy tulajdonság (kézi aktuális, megoldott, kezdő, algoritmus aktuális), nem csak színben másak, de kétszeres méretben is nagyobbként jelennek meg. Az algoritmus memóriájában tárolt csúcsok másfélszeres méretben vannak megjelenítve.
+Egy állapot csúcsára egyszerre több tulajdonság is vonatkozhat, például épp kiválasztott és algoritmus memóriájában tárolt állapot. Ekkor a táblázatban felsorolt sorrend szerint a legelső tulajdonság megjelenítése élvez prioritást.
+Az első négy tulajdonság (kézi aktuális, megoldott, kezdő, algoritmus aktuális) nem csak színben mások, de kétszeres méretben jelennek meg. Az algoritmus memóriájában tárolt csúcsok másfélszeres méretben vannak megjelenítve.
