@@ -13,7 +13,7 @@ A feladat egy olyan interaktív alkalmazás fejlesztése, amely:
 \begin{compactenum}
 \item Modellezi a Rush Hour tologatós rejtvényt~\cite{rushhour_puzzle} egy immutábilis állapot-átmenet rendszerként egy $6\times6$-os táblán, $1\times2$-es autókkal és $1\times3$-as buszokkal.
 \item Implementál három konfigurálható keresőalgoritmust (tabu keresés, visszalépéses keresés, A$^C$ gráfkeresés) négy heurisztikus függvénnyel.
-\item Vizualizálja a feltárt állapotgráfot 3D-ben, erő-alapú elrendezést (force-directed layout) és Barnes–Hut optimalizációt~\cite{barneshut1986} használva.
+\item Vizualizálja a feltárt állapotgráfot 3D-ben, erőalapú elrendezést (force-directed layout) és Barnes–Hut optimalizációt~\cite{barneshut1986} használva.
 \item Lehetővé teszi a kézi játékot és az állapotok interaktív vizsgálatát a gráfcsúcsokra való kattintással.
 \end{compactenum}
 
@@ -84,79 +84,104 @@ Kilépni a programból & A program fut & Bezárom a program ablakát & A program
 Az alkalmazás a \textbf{Modell--Nézet (Model--View)} architektúrát követi:
 
 \begin{description}
-\item[Modell réteg] (\texttt{src/Model/}) Tiszta C\# osztályokat tartalmaz a játékállapot reprezentációjára, a lépésgenerálásra, a heurisztikus kiértékelésre és a keresőalgoritmusokra. A modell nem függ a Godot motortól, egyedül a Godot-ban definiált \texttt{Vector2I} struktúrát használja a, hogy ne kelljen később konvertálni azt.
+\item[Modell réteg] (\texttt{src/Model/}) Tiszta C\# osztályokat tartalmaz a játékállapot reprezentációjára, a lépésgenerálásra, a heurisztikus kiértékelésre és a keresőalgoritmusokra. A modell nem függ a Godot motortól, egyedül a Godot-ban definiált \texttt{Vector2I} struktúrát használja, hogy ne kelljen később konvertálni azt.
 \item[Nézet réteg] (\texttt{src/Nodes/}) Olyan Godot node scripteket tartalmaz, amelyek a motor alaposztályaiból származnak (\texttt{Control}, \texttt{RigidBody3D}, \texttt{MeshInstance3D}, stb.). Ezek az osztályok kezelik a kirajzolást, a fizikai szimulációt, a felhasználói felületet és bevitelt. Feliratkoznak a modell eseményeire (\texttt{NewEdge}, \texttt{PathChange}, \texttt{NewCurrent}, \texttt{Terminated}), hogy reagáljanak az algoritmus előrehaladására.
 \end{description}
 
-A modell és a nézet közötti kommunikáció az absztrakt \texttt{Solver} alaposztályon definiált C\# eseményeken (events) keresztül valósul meg. A nézet feliratkozik ezekre az eseményekre, és létrehozza vagy frissíti a megfelelő vizuális elemeket (csúcsok, élek, kiemelések).
+A modell és a nézet közötti kommunikáció az absztrakt \texttt{RHSolver} alaposztályon definiált C\# eseményeken (events) keresztül valósul meg. A nézet feliratkozik ezekre az eseményekre, és létrehozza vagy frissíti a megfelelő vizuális elemeket (csúcsok, élek, kiemelések).
 
 \subsection{Modell}
 \label{sec:model}
 
-A modell osztálydiagramja a \ref{fig:model-class}. ábrán látható.
-
-% TODO redo this
+A modell fontosabb részeinek az osztálydiagramja a \ref{fig:model-state-class}. és \ref{fig:model-solvers-class}. ábrán látható.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth]{model_class_diagram}
-\caption{A Modell réteg osztálydiagramja}
-\label{fig:model-class}
+\includegraphics[width=1.0\textwidth]{model_state}
+\caption{Az állapot ábrázolás osztálydiagramja}
+\label{fig:model-state-class}
 \end{figure}
 
-A legfontosabb modellosztályok:
+Az állapotok és bábuk mind módosíthatatlan osztályok.
+
 
 \begin{description}
-\item[\texttt{RHGameState}] Egy táblakonfiguráció módosíthatatlan reprezentációja, a módosíthatatlanságot az \texttt{init;} kulcsszóval biztosítjuk. Az elhelyezett járműveket \texttt{PlacedRHPiece} objektumok tömbjét tárolja,  ezekből pedig generál egy $6\times6$-os egész értékű mátrixot tárol a gyors mező eléréshez. Biztosítja a \texttt{GetPossibleMoves()}, \texttt{WithMove()}, \texttt{IsSolved()} metódusokat, valamint érték-alapú egyenlőségvizsgálatot amit hash kódokkal van felgyorsítva. Mivel nem módosítható az adatszerkezet, ezért csak inicializáláskor egyszer kiszámolja a hash kódját az állásra, és később mindig ezt adja vissza.
+\item[\texttt{RHGameState}] Egy táblakonfiguráció módosíthatatlan reprezentációja, a módosíthatatlanságot az \texttt{init;} kulcsszóval és a \textit{readonly} adat struktúrákkal biztosítjuk. Az elhelyezett járműveket \texttt{PlacedRHPiece} objektumok tömbjét tárolja, ezekből pedig generál egy $6\times6$-os egész értékű mátrixot tárol a gyors mező eléréshez. Biztosítja a \texttt{GetPossibleMoves()}, \texttt{WithMove()}, \texttt{IsSolved()} metódusokat, valamint érték-alapú egyenlőségvizsgálatot amit hash kódokkal van felgyorsítva. Mivel nem módosítható az adatszerkezet, ezért elég csak inicializáláskor egyszer kiszámolni a hash kódját az állásra, és később mindig ezt adja vissza.
 
 \item[\texttt{PlacedRHPiece}] Összekapcsol egy \texttt{RushHourPiece}-t (Car, MainCar vagy Bus) egy táblapozícióval és iránnyal. A \texttt{WithMove()} metódus egy új példányt ad vissza frissített pozícióval.
 
 \item[\texttt{Move} / \texttt{StateMove}] A \texttt{Move} egy önmagában nem sok információt hordozó struktúra (járműindex + irány). A \texttt{StateMove} egy teljes átmenetet rögzít: forrásállapot, célállapot és az előbb említett lépést. Mivel a modellünkben minden lépésnek meg lehet tenni a fordítottját is, ezért egyenlőségvizsgálatnál nem teszünk különbséget a fordított lépéssel: $(A \to B) = (B \to A)$, így irányítatlan gráfot alkotunk a modellünkhöz.
-
-\item[\texttt{Heuristic} hierarchia] Absztrakt osztályhierarchia, amely a típusrendszeren keresztül kényszeríti ki a heurisztika tulajdonságait: \texttt{Heuristic} $\supset$ \texttt{NonNegativeHeuristic} $\supset$ \texttt{AdmissibleHeuristic} $\supset$ \texttt{MonotoneHeuristic}. Az A$^C$ gráfkereső fordítási időben megköveteli a \texttt{MonotoneHeuristic} típust.
-
-\item[\texttt{Solver} hierarchia] Az absztrakt \texttt{Solver} alaposztály definiálja az eseményvezérelt interfészt és a közös logikát. Konkrét alosztályok:
-\begin{compactitem}
-\item \texttt{TabuSolver}: fenntart egy listát a legutóbbi állapotokról; kiválasztja a legjobb nem-tabu szomszédot.
-\item \texttt{BacktrackingSolver}: rendezett opciólisták vermét tartja fenn; visszalép zsákutcák esetén.
-\item \texttt{AcGraphSolver}: $f = g + h$ szerint rendezett \texttt{PriorityQueue}-t használ; egy szótárban követi a felfedezett állapotokat.
-\item \texttt{BFSDiscoverer} / \texttt{DFSDiscoverer}: a \texttt{Discoverer} (a gráfkeresést veszi alapul ezért a \texttt{AcGraphSolver}-ből öröklődik) osztály nem ellenőrzi és terminál megoldott állapot kiterjesztése esetén, a szélességi és mélységi felfedező alosztályai a kiértékelő függvényt definiálják felül.
-\end{compactitem}
-
-\item[\texttt{Levels}] Statikus osztály, amely a szinteket leíró sztringeket és egy feldolgozó metódust tartalmaz, amely \texttt{RHGameState} példányokká alakítja azokat. Ezzel könnyen leírható egy pálya, ahelyett, hogy az objektumok pozíció struktúráját kéne megadni.
 \end{description}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{model_solvers}
+\caption{A keresőalgoritmusok osztálydiagramja}
+\label{fig:model-solvers-class}
+\end{figure}
+
+
+\begin{description}
+    \item[\texttt{RHSolver} hierarchia] Az absztrakt \texttt{RHSolver} alaposztály definiálja az eseményvezérelt interfészt és a közös logikát. Konkrét alosztályok:
+    \begin{compactitem}
+        \item \texttt{TabuSolver}: fenntart egy listát a legutóbbi állapotokról; kiválasztja a legjobb nem-tabu szomszédot.
+        \item \texttt{BacktrackingSolver}: rendezett opciólisták vermét tartja fenn; visszalép zsákutcák esetén.
+        \item \texttt{AcGraphSolver}: $f = g + h$ szerint rendezett \texttt{PriorityQueue}-t használ; egy szótárban követi a felfedezett állapotokat.
+        \item \texttt{BFSDiscoverer} / \texttt{DFSDiscoverer}: a \texttt{Discoverer} (a gráfkeresést veszi alapul ezért a \texttt{AcGraphSolver}-ből öröklődik) osztály nem ellenőrzi és terminál megoldott állapot kiterjesztése esetén, a szélességi és mélységi felfedező alosztályai a kiértékelő függvényt definiálják felül.
+    \end{compactitem}
+    
+    \item[\texttt{Heuristic} hierarchia] Absztrakt osztályhierarchia, amely a típusrendszeren keresztül kényszeríti ki a heurisztika tulajdonságait: \texttt{Heuristic} $\supset$ \texttt{NonNegativeHeuristic} $\supset$ \texttt{AdmissibleHeuristic} $\supset$ \texttt{MonotoneHeuristic}. Az A$^C$ gráfkereső fordítási időben megköveteli a \texttt{MonotoneHeuristic} típust.
+\end{description}
+
+Még érdemes megemlíteni a modellhez tartozó \texttt{Levels} Statikus osztályt, amely a szinteket leíró sztringeket és egy feldolgozó metódust tartalmaz, amely \texttt{RHGameState} példányokká alakítja azokat. Ezzel könnyen leírható egy pálya anélkül, hogy az objektumok pozíció struktúráját kéne megadni. A szintek hivatalos videójáték feladványaiból lettek válogatva.~\cite{rushhour_video_game}
 
 
 \subsection{Nézet}
 \label{sec:view}
 
-A nézet osztálydiagramja a \ref{fig:node-class}. ábrán látható.
+A nézet kiemelt részének osztálydiagramja a \ref{fig:view-gameboard-class}. és \ref{fig:view-stategraph-class}. ábrákon látható.
 
-
-% TODO rework this
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{node_class_diagram}
-\caption{A Nézet (Node) réteg osztálydiagramja}
-\label{fig:node-class}
+\includegraphics[width=1.0\textwidth]{view_gameboard}
+\caption{Az játéktábla megjelenítéséhez használt osztályok osztálydiagramja}
+\label{fig:view-gameboard-class}
 \end{figure}
 
-Főbb nézetkomponensek:
-
 \begin{description}
-\item[\texttt{GameBoard}] Egy \texttt{RHGameState} megjelítéséért felelős objektum a feladványok előnézetei ezt használják.
-\item[\texttt{MainGameBoard}] A \texttt{GameBoard}-ból öröklődik, a játék tábla fülön kitüntett játéktábla objektum. Kezeli a Kézi/Algoritmus mód váltását, a táblaállapot megjelenítését és a járművek nyilaiért felel. Feliratkozik a csúcskattintási eseményekre a manuális navigációhoz.
-\item[\texttt{VehicleNode} / \texttt{CarNode} / \texttt{BusNode}] 2D sprite-ok, amik a járműveket reprezentálják, egy GameBoard objektumhoz tartoznak. Ha a \texttt{MainGameBoard} hoz tartozik, akkor \texttt{Arrow} léptető nyíl objektumok  tartoznak hozzá a kézi mozgatáshoz.
-\item[\texttt{GraphScene}] A 3D gyökér-node, amely a csúcsokat és éleket tárolja. Minden fizikai képkockában újjáépíti a Barnes–Hut nyolcasfát.
-\item[\texttt{Vertex}] Egy \texttt{RigidBody3D}, amely egy állapotot jelöl a 3D gráfban. Prioritás-alapú effekt-rendszert tart fenn a színhez és mérethez. Minden fizikai képkockában taszítóerőket alkalmaz a nyolcasfán keresztül. A teljesítmény érdekében használja a Godot beépített fizikai „alvás” (sleep) funkcióját.
-\item[\texttt{Edge}] Egy \texttt{MeshInstance3D}, amely vonalat húz két csúcs között \texttt{ImmediateMesh} használatával. Rugóerőket alkalmaz minden fizikai képkockában. Kihagyja a vonal újrarajzolását, ha mindkét végpont „alszik”.
-% TODO make it not static
-\item[\texttt{OctTree}] Statikus osztály, amely implementálja a Barnes–Hut nyolcasfát az $O(V \log V)$ bonyolultságú taszítóerő-közelítéshez. Minden fizikai képkockában újraépül.
-\item[\texttt{Camera3d}] Ortogonális projekciójú 3D kamera WASD mozgással, jobb egérgombos forgatással és egérgörgős zoommal.
-\item[\texttt{AlgoPlayer}] Vezérli az algoritmus futásának időzítését, feliratkozik/leiratkozik a solver eseményeiről, kezeli a lejátszást/szünetet/léptetést/újraindítást.
-\item[\texttt{SolverSettingsTab}] Felhasználói felület az algoritmus- és heurisztika-választáshoz, tabu mérethez, véletlenszerűséghez és a BFS/DFS felfedezéshez.
+    \item[\texttt{GameBoard}] Egy \texttt{RHGameState} megjelítéséért felelős objektum a szintbetöltés fülön a feladványok előnézetei ezt használják. Az játéktábla fülön egy \texttt{MainGameBoard} alosztály van példányosítva, ami ezeli a Kézi/Algoritmus mód váltását, a táblaállapot megjelenítését és a járművek nyilaiért felel. Feliratkozik a csúcskattintási eseményekre a manuális navigációhoz.
+    \item[\texttt{VehicleNode} / \texttt{CarNode} / \texttt{BusNode}] 2D sprite-ok, amik a járműveket reprezentálják, egy GameBoard objektumhoz tartoznak (A Godot scene tree gyerek/szülő elérő metódusokon keresztül tudunk hivatkozni a kompozíció tagjaira). Ha a \texttt{MainGameBoard} hoz tartozik, akkor \texttt{Arrow} léptető nyíl objektumok  tartoznak hozzá a kézi mozgatáshoz. A nyilak csak egyszer vannak példányosítva, és ha nem lehet a nyíl által mezőre lépni, akkor az \texttt{IsActive} mező alapján ki lesz kapcsolva a láthatósága és interakciója.
 \end{description}
 
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{view_stategraph}
+\caption{Az állapotgráf megjelenítéséhez használt osztályok osztálydiagramja, a nyolcasfa megvalósítása a projekthez szabva}
+\label{fig:view-stategraph-class}
+\end{figure}
+
+
+
+
+\begin{description}
+    \item[\texttt{GraphScene}] A 3D gyökér-node, amely futtatja a szimulációt, meghívja a kirajzolást, és kezeli a nehéz számítással járó lassulást. Minden fizikai képkockában újjáépíti a Barnes–Hut nyolcasfát a csúcsok aktuális helyzete szerint. Minden fizikai képkockánál minden él és csúcs erőkiszámítását futtatja párhutamosan, majd a csúcsok elmozdulását is párhuzamosítva kiszámítja. A csúcsok kattintásához lefuttat egy ray castot a kamera aktuális állása szerint.
+    \item[\texttt{Vertex}] Egy állapotot jelöl, egy körként van megjelnítve az állapotgráfon. Szálbiztos adatstruktúrát biztosít a rá gyakorolt erők akkumlálására. Prioritás-alapú effekt-rendszert tart fenn a színhez és mérethez. A felépített nyolcasfán kereszül approximálja a rá ható erőt.
+    \item[\texttt{Edge}] Egy lépést jelöl, egy vonalként van megjelenítve az állapotgráfon. Az \texttt{ApplySpringForce} metódussal lehet a csúcsaira hozzáadni a rugóerőt. Lekérdezhető a színe a beállított effektusa alapján.
+    % find a source that demonstrates godot MultiMeshInstance3D usage
+    \item[\texttt{VertexDrawer, EdgeDrawer}] A renderelésért felelős osztályok, ahelyett, hogy minden csúcs él, külön lenne \texttt{Sprite3D} vagy \texttt{ImmediateMesh} objektum lenne, összegyűjtjük a komponenseket egy-egy tömbbe és azt felhasználva egyszerre rajzoljuk ki az összes csúcsot, élt, ezzel jelentősen felgyorsítva a renderelést.
+    \item[\texttt{OctTreeNode}] A \textit{NetOctree} repository~\cite{octree_mcserep} alapján lett implementálva, csak a projekthez szükséges metódusokkal, és kiegészítve erőapproximálással. Implementálja a Barnes–Hut algoritmust három dimenziós térre.
+\end{description}
+
+
+Még említésre való osztályok a nézet rétegben:
+\begin{description}
+\item[\texttt{Camera3d}] A \texttt{GraphScene}-hez tartozik ortogonális projekciójú 3D kamera mozgással, forgatással és nagyítással az állapotgráf részletesebb megtekintéséhez. A \textit{3D-RTS-Camera} repository alapján készült. ~\cite{3d_rts_camera}
+\item[\texttt{AlgoPlayer}] Vezérli az algoritmus futásának időzítését, feliratkozik/leiratkozik a solver eseményeiről, kezeli a lejátszást/szünetet/léptetést/újraindítást.
+\item[\texttt{SolverSettingsTab}] Felhasználói felület az algoritmus- és heurisztika-választáshoz, tabu mérethez, véletlenszerűséghez és a BFS/DFS felfedezéshez.
+
+\end{description}
 
 \subsection{Adattárolás}
 
@@ -209,38 +234,43 @@ A tabu keresés \emph{nem} garantálja a megoldás megtalálását, sem annak op
 
 A visszalépéses keresés minden állapothoz a szomszédos még az úton még azelőtt nem látogatott állapotok heurisztika szerint rendezett sorozatát tartja fenn: minden lépésben a jelenlegi út utolsó állapotának a legjobb még nem próbált opciót vizsgálja meg. Ha már nincs új opció akkor leveszi az állapotot feléített út végéről, azaz algoritmus visszalép.
 
+
+% TODO cite from https://people.inf.elte.hu/gt/mi/
 \textbf{Leállási garancia}: a backtracking algoritmus véges állapotú állapotgráfra garantáltan leáll. Ha megoldás nélkül áll le, akkor a kezdőállapotból nem érhető el megoldás. Ugyanakkor csak az aktuális útvonalon lévő állapotokat kerüli el, a korábban már bejártakat nem. Ez azt jelenti, hogy többször is feltárhat nagy állapotcsoportokat, ami jelentős redundáns munkához vezethet.
 
+% TODO cite cite this
 \textbf{Időbonyolultság}: legrosszabb esetben a backtracking $O(V!)$ útvonalat jár be, ahol $V$ az elérhető állapotok száma. Pontosabban, minden egyszerű utat feltárhat a kezdőállapotból. Egy $b$ elágazási tényezőjű és $V$ állapotú térben a legrosszabb eset $O(b^V)$. A Rush Hour esetében egy adott feladványra az elágazási tényező legfeljebb $2 N_{\text{jármű}}$ ahol $N_{\text{jármű}}$ az autók és buszok száma összesen. Megfelelő heurisztikával az algoritmus a legtöbb esetben ennél sokkal gyorsabban talál megoldást, amennyiben elérhető.
 
 \subsubsection{A\textsuperscript{C} gráfkeresés}
 \label{sec:graphsearch}
 
+% TODO cite A* ?
 Az A$^C$ gráfkeresés egy informált keresőalgoritmus, amely az $f(n) = g(n) + h(n)$ kiértékelő függvényt használja, ahol $g(n)$ a mélység, $h(n)$ pedig a heurisztikus pontszám.
-% TODO ~\cite{hart1968astar}.
 
 Mivel minden alkalmazható heurisztika nemnegatív, megengedhető és monoton, a következő tulajdonság teljesül: amikor egy állapotot kiveszünk a prioritási sorból kiterjeszteni, az az útvonal, amelyen elértük, a legrövidebb út az adott állapothoz. Ezért minden állapotot legfeljebb egyszer kell kiterjeszteni (az A$^C$-ben a „C” a „closed list”-re utal – a már kiterjesztett állapotokat nem terjesztjük ki újra).
 
 Ez kiküszöböli a backtracking körbejárási és újrafelfedezési problémáit, de az algoritmus sok olyan állapotot is feltárhat, amelyek nem szükségesek a megoldáshoz, mivel megvizsgál minden állapotot, amelynek $f$-értéke kisebb az optimális megoldás költségénél.
 
-\textbf{Időbonyolultság}: Az A$^C$ gráfkeresés minden állapotot legfeljebb egyszer fejt ki, ami $O(V)$ kifejtést jelent. Minden kifejtés legfeljebb $O(b)$ utódot generál ($b$ az elágazási tényező, max $2 \times N_{\text{jármű}}$), és minden beillesztés a prioritási sorba $O(\log V)$ költségű. Összesen: $O(V \cdot b \cdot \log V)$. A tárigény $O(V)$ a felfedezett és kiterjesztett állapotok szótára miatt.
+\textbf{Időbonyolultság}: Az A$^C$ gráfkeresés minden állapotot legfeljebb egyszer terjeszt ki, ami legfeljebb $O(V)$ kiterjesztést jelent. Minden kiterjesztés legfeljebb $O(b)$ utódot generál ($b$ az elágazási tényező, max $2 \times N_{\text{jármű}}$), és minden beillesztés a prioritási sorba $O(\log V)$ költségű. Összesen: $O(V \cdot b \cdot \log V)$. A tárigény $O(V)$ a felfedezett és kiterjesztett állapotok szótára miatt.
 
 \subsubsection{Barnes–Hut algoritmus és a nyolcasfa}
 \label{sec:barneshut}
 
 % TODO ~\cite{fruchterman1991graph}
-Az erő-alapú gráfelrendezés megköveteli a taszítóerők kiszámítását minden csúcspár között, ami képkockánként $O(V^2)$. Több ezer csúcsnál ez teljesítménybeli szűk keresztmetszetté válik.
+Az erőalapú gráfelrendezés megköveteli a taszítóerők kiszámítását minden csúcspár között, ami képkockánként $O(V^2)$. Több ezer csúcsnál ez teljesítménybeli szűk keresztmetszetté válik.
 
 A Barnes–Hut algoritmus~\cite{barneshut1986} ezt $O(V \log V)$-re csökkenti egy térbeli hierarchikus adatszerkezet – 3D-ben egy \textbf{nyolcasfa (octree)} – használatával. Az algoritmus menete:
 
 \begin{enumerate}
-\item \textbf{Nyolcasfa felépítése}: kiszámítjuk az összes csúcsot befoglaló tengelypárhuzamos kockát azaz amibe minden csúcs belefér, ezt vesszük alapul és rekurzívan beillesztjük a csúcsokat. Minden belső csomópont tárolja a részfájában lévő csúcsok számát és tömegközéppontját. A levelek egyetlen csúcsot tartalmaznak.
-\item \textbf{Erők kiszámítása}: minden $v$ csúcsra bejárjuk a fát. Minden belső csomópontnál:
-\begin{compactitem}
-\item Ha $s / d < \theta$ (ahol $s$ a cella mérete, $d$ pedig $v$ távolsága a tömegközépponttól), akkor az egész cellát egyetlen testként kezeljük, amelynek tömege megegyezik a benne lévő csúcsok számával. Ez a \emph{Barnes–Hut kritérium}.
-\item Ellenkező esetben rekurzívan bejárjuk a csomópont gyerekeit.
-\end{compactitem}
-\item A tipikusan $0.5 -- 1.5$ intervallumra beállított $\theta$ paraméter szabályozza a pontosság és a sebesség közötti kompromisszumot. Az alkalmazás a $\theta = 1.0$ értéket használja.
+\item \textbf{Nyolcasfa felépítése}: kiszámítjuk az összes csúcsot befoglaló tengelypárhuzamos kockát, azaz amibe minden csúcs belefér, ezt vesszük alapul és sorra beillesztjük a csúcsokat. Minden belső csomópont tárolja a részfájában lévő csúcsok számát és tömegközéppontját. A levelek egyetlen csúcsot tartalmaznak. A felépítés $V$ csúcsra $O(V \log V)$ időt igényel.\cite{barneshut1986}
+\item \textbf{Erők kiszámítása}: minden $v$ csúcsra meghívjuk a fa gyökerére az erőkiszámítást. Minden $o$ csomópontnál:
+    \begin{compactitem}
+        \item Ha $s / d < \theta$ (ahol $s$ az $o$ kockájának oldalhosszúsága, $d$ pedig $v$ távolsága $o$ tömegközéppontjától), akkor az egész cellát egyetlen testként kezeljük, amelynek tömege megegyezik a benne lévő csúcsok számával. Ez a \emph{Barnes–Hut kritérium}.
+        \item Ellenkező esetben rekurzívan bejárjuk $o$ csomópont gyerekeit, minden gyerekre kiszámítva/approximálva a $v$ csúcsra ható erőt és ezeket applikáljuk a $v$ csúcsra
+    \end{compactitem}
+    Az eljárás egy csúcsra átlagosan $O(\log V)$ időt igényel.~\cite{barneshut1986} Minden csúcsra összesen az erőkiszámítás is $O(V \log V)$ időt igényel.
+% TODO find a citation for theta
+\item A tipikusan $0.5 - 1.5$ intervallumra beállított $\theta$ paraméter szabályozza a pontosság és a sebesség közötti kompromisszumot. Az alkalmazás a $\theta = 1.0$ értéket használja.
 \end{enumerate}
 
 A két pont közötti taszítóerő a fordított négyzetes törvényt követi: $\vec{F} = -k \cdot m / d^2 \cdot \hat{r}$.
@@ -258,18 +288,18 @@ A nyolcasfát minden fizikai frissítésnél elölről felépítjük, mivel a cs
 \item \textbf{C\# és .NET SDK 10.0}~\cite{dotnet10}: az összes alkalmazáslogika ezen a nyelven készült. Az egyike a Godot által támogatott nyelvek közül és ideális az objektum orientált logikához.
 \end{compactitem}
 
-Kihasznált motorfunkciók:
+Kihasznált godot funkciók:
 \begin{compactitem}
-\item \texttt{RigidBody3D} a csúcsok fizikájához (erők, sebességkorlátozás, alvás).
-\item \texttt{ImmediateMesh} a dinamikus élvonalak kirajzolásához.
-\item \texttt{CollisionShape3D} a csúcsok kattintás érzékeléséhez (ray-cast).
-\item A Godot \texttt{\_PhysicsProcess} metódusa prioritásos sorrenddel a folyamatok ütemezéséhez és párhuzamosításához.
+\item \texttt{MultiMeshInstance3D} A csúcsok és élek batchelt rendereléséhez.
+\item \texttt{Container} objektumok alkalmazása a felhasználói felület felépítéséhez. Beépítetett gombra, \texttt{CollisionShape2D}-re kattintási események használata.
+\item \texttt{\_PhysicsProcess} metódus futtatása háttérszálon, hogy az interakciót ne blokkolja.
 \end{compactitem}
 
 \subsection{Eltérések az eredeti tervtől}
 
-\paragraph{Erő kíértékelés és alvási optimalizáció.}
-A fejlesztés során az élek vizuális vonalainak frissítése számításigényesnek bizonyult. Ennek megoldására a csúcsokra kifejtett erőt nem közvetlen a motor függvényein keresztül alkalmazzuk:
+\paragraph{Erő kiértékelés és alvási optimalizáció.}
+A fejlesztés során először minden csúcs és él egy saját megjelenítéssel rendelkező godot objektum volt.
+A több ezer él és csúcs külön meghívott megjelenítése minden képkockán rendkívül számításigényesnek bizonyult. Ennek megoldására először az alábbi megoldás került implementációra:
 
 \begin{compactenum}
 \item Ahelyett, hogy az erőket közvetlenül a Godot fizikai API-ján keresztül alkalmaznánk, az erők egy csúcsonkénti (\texttt{Vector3 \_pendingForces}) mezőben gyűlnek.
@@ -279,7 +309,7 @@ A fejlesztés során az élek vizuális vonalainak frissítése számításigén
 \item Azok az élek, amelyeknek mindkét végpontja alszik, kihagyják a vonal-mesh frissítését, jelentős renderelési terhet levéve a rendszerről.
 \end{compactenum}
 
-Ez a lépcsőzetes optimalizáció (erőküszöb $\to$ fizikai alvás $\to$ render-kihagyás) jelentős teljesítménynövekedést eredményez nagy, már beállt gráfok esetén.
+Ez a lépcsőzetes optimalizáció (erőküszöb $\to$ fizikai alvás $\to$ render-kihagyás) jelentős teljesítménynövekedést eredményezzet, amikor az állapotgráf már a nyugalmi helyzetébe rendeződött. Viszont a legtöbb többezer csúcsos állapotgráfra a nyugalmi helyzet elérése túl hosszú volt ahhoz, hogy aktuális lehessen ez az optimalizáció, ezért ezt teljesen újra kellett gondolni és átalakítani a csúcsokat és éleket nem godotból származó osztályokká, és a kirajzolásukat kiszervezni külön osztályokba. Ez az optimalizáció már aktívan mozgó állapotgráfra is sokkal gyorsabb renderelést eredményezett. Ezen felül még több ezer csúcs esetén, a fizikai frissítések számát levisszük $60/s \rightarrow 10/s$-ra, így nem kell az alkalmazásnak bevárnia minden UI frissítéshez az elvárt egy fizikai frissítés lefutását, hanem több UI képkocka lefuthat fizikai frissítések között, és így reszponzív tud maradni a felhasználói felület.
 
 %% ============================================================
 \section{Tesztelés}
@@ -393,6 +423,14 @@ U16
 \end{longtable}
 \end{center}
 
+Az egységtesztek futtatásához a projekt könyvtárában az alábbi parancsot kell futtatni:
+
+\begin{lstlisting}
+dotnet add package gdUnit4.api --version 5.1.0-rc1
+\end{lstlisting}
+
+Ezután a szerkesztőből futtathatóak az egységtesztek.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{unit_tests}
@@ -450,7 +488,7 @@ E3
 E4
 & Felfedezés leállítása
 & Felfedezés fut
-& Stop gomb
+& Megállítás (\textit{Pause}) gomb
 & A folyamat megáll; a csúcsok megmaradnak.
 \\ \hline
 
@@ -464,7 +502,7 @@ E5
 E6
 & Algoritmus léptetése
 & Algoritmus nem terminált
-& Step gomb
+& Léptetés (\textit{Step}) gomb
 & Egy lépés lefut; a lépésszámláló nő.
 \\ \hline
 
@@ -477,7 +515,7 @@ E7
 
 E8
 & Ugrás csúcsra
-& Több csúcs van, nincs futás
+& Egy szint be van töltve, valamennyi csúcs fel van fedezve
 & Bal klikk egy csúcsra
 & Tábla Kézi módba vált az adott állapottal; a csúcs piros lesz.
 \\ \hline
