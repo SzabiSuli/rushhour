@@ -78,7 +78,7 @@ Kilépni a programból & A program fut & Bezárom a program ablakát & A program
 
 \subsection{Kapcsolódó munkák}
 
-Az állapottér-keresés vizualizálása nem új gondolat a tologatós rejtvények kontextusában. A 2swap YouTube-csatorna~\cite{2swap_klotski} a Rush Hour játékhoz nagyon hasonló japán Klotski rejtvényt. Az ott bemutatott gráfstruktúra szemléletesen demonstrálja, hogyan lehet a rejtvények kombinatorikus szerkezetét feltárni vizuális eszközökkel.
+Az állapottér-keresés vizualizálása nem új gondolat a tologatós rejtvények kontextusában. A 2swap YouTube-csatorna~\cite{2swap_klotski} a Rush Hour játékhoz hasonló japán Klotski rejtvényt. Az ott bemutatott gráfstruktúra szemléletesen demonstrálja, hogyan lehet a rejtvények kombinatorikus szerkezetét feltárni vizuális eszközökkel.
 
 A jelen alkalmazás ezen felül biztosítja, hogy különböző keresőalgoritmusokat futtathassunk a feladványokra, ezzel lehetővé téve a különböző heurisztikák és algoritmusok összehasonlítását valós időben.
 
@@ -209,8 +209,7 @@ Mind a négy heurisztika megfelel három alapvető tulajdonságnak:
 \item \textbf{Monotonitás} (konzisztencia): bármely $s$ állapotra és annak egyetlen lépéssel elérhető $s'$ utódjára $| h(s) - h(s') | \leq 1$.
 \end{compactitem}
 
-Ezek a tulajdonságok szükségesek, hogy a gráfkeresés egyben A$^C$ gráfkeresés legyen, mivel ekkor egy állapot első kiterjesztésekor a hozzá vezető legrövidebb utat már megtaláltuk, többé nincs szükség kiterjeszteni azt az állapotot.~\cite{gregorics_grafker_ac}
-
+Ezek a tulajdonságok szükségesek, hogy a gráfkeresés egyben A$^C$ gráfkeresés legyen, mivel ekkor egy állapot első kiterjesztésekor a hozzá vezető legrövidebb utat már megtaláltuk, többé nincs szükség kiterjeszteni azt az állapotot.~\cite[69.~oldal, 4.3-as tétel]{gregorics_2006_bevezetes} \cite[16.~oldal]{gregorics_grafker}
 
 \paragraph{Null heurisztika.} $h(s) = 0$ minden állapotra. Nem ad információt az állapotról; a keresés nem informált brute-force felfedezéssé válik. Hasznos az alap algoritmus-viselkedés megfigyeléséhez.
 
@@ -242,18 +241,16 @@ A tabu keresés \emph{nem} garantálja a megoldás megtalálását, sem annak op
 A visszalépéses keresés minden állapothoz a szomszédos, még az aktuális úton nem látogatott állapotok heurisztika szerint rendezett sorozatát tartja fenn. Minden lépésben a jelenlegi út utolsó állapotának a legjobb még nem próbált opcióját vizsgálja meg. Ha már nincs új opció, leveszi az állapotot a felépített út végéről, azaz az algoritmus visszalép.
 
 
-% TODO make more precise citation
-\textbf{Leállási garancia}: a backtracking algoritmus véges állapotú állapotgráfra garantáltan leáll.~\cite{gregorics_backtrack, gregorics2002mi, futo1999mi} Ha megoldás nélkül áll le, akkor a kezdőállapotból nem érhető el megoldás. Ugyanakkor csak az aktuális útvonalon lévő állapotokat kerüli el, a korábban már bejártakat nem. Ez azt jelenti, hogy többször is feltárhat nagy állapotcsoportokat, ami jelentős redundáns munkához vezethet.
+\textbf{Leállási garancia}: a backtracking algoritmus véges állapotú állapotgráfra garantáltan leáll.~\cite[46.~oldal, 3. bekezdés]{gregorics_2006_bevezetes} \cite[19.~oldal]{gregorics_backtrack} (Mivel az állapotgráf véges, tekinthetünk úgy, mintha a visszalépéses keresésnek  $V$ a mélységi korlátja.) Ha megoldás nélkül áll le, akkor a kezdőállapotból nem érhető el megoldás. Ugyanakkor csak az aktuális útvonalon lévő állapotokat kerüli el, a korábban már bejártakat nem. Ez azt jelenti, hogy többször is feltárhat nagy állapotcsoportokat, ami jelentős redundáns munkához vezethet.
 
-% TODO make more precise citation
-\textbf{Időbonyolultság}: legrosszabb esetben a backtracking $O(V!)$ útvonalat jár be~\cite{futo1999mi, gregorics2002mi, russellnorvig2020}, ahol $V$ az elérhető állapotok száma. Pontosabban, minden egyszerű utat feltárhat a kezdőállapotból. Egy $b$ elágazási tényezőjű és $V$ állapotú térben a legrosszabb eset $O(b^V)$.~\cite{futo1999mi, gregorics2002mi, russellnorvig2020} A Rush Hour esetében egy adott feladványra az elágazási tényező legfeljebb $2 N_{\text{jármű}}$ ahol $N_{\text{jármű}}$ az autók és buszok száma összesen. Megfelelő heurisztikával az algoritmus a legtöbb esetben ennél sokkal gyorsabban talál megoldást, amennyiben elérhető.
+\textbf{Időbonyolultság}: Legrosszabb esetben minden egyszerű utat feltárhat a kezdőállapotból. A Rush Hour problémára speciálisan létezik $b$ természetes elágazási faktor, hogy minden állapotnak nincs több szomszédja $b$-nél. Egy $b$ elágazási tényezőjű és $V$ állapotú térben a legrosszabb eset $O(b^V)$ utat viszgál meg az algoritmus, ekkor egyben a lépések száma is $O(b^V)$.~\cite[Section~3.4]{russellnorvig2020} Az Rush Hour szabályai alapján minden feladványra az elágazási tényező legfeljebb $2 N_{\text{jármű}}$ ahol $N_{\text{jármű}}$ az autók és buszok száma összesen. Megfelelő heurisztikával az algoritmus a legtöbb esetben ennél sokkal gyorsabban talál megoldást, amennyiben elérhető.
 
 \subsubsection{A\textsuperscript{C} gráfkeresés}
 \label{sec:graphsearch}
 
-Az A$^C$ gráfkeresés egy informált keresőalgoritmus, amely az $f(n) = g(n) + h(n)$ kiértékelő függvényt használja~\cite{gregorics_grafker_ac}, ahol $g(n)$ a mélység, $h(n)$ pedig a heurisztikus pontszám. Az A$^C$ elnevezés Gregorics Tibor MI jegyzet jelölését követi: a \enquote{C} a \emph{closed list}-re (zárt lista) utal, vagyis a már kiterjesztett állapotokat nem terjesztjük ki újra. Ez az A$^*$ algoritmus~\cite{hart1968astar} speciális változata, amely monoton heurisztikával garantálja, hogy egy állapot első kiterjesztésekor a hozzá vezető legrövidebb utat már megtaláltuk.
+Az A$^C$ gráfkeresés (vagy következetes algoritmus~\cite[4.4 fejezet]{gregorics_2006_bevezetes}) egy informált keresőalgoritmus, amely az $f(n) = g(n) + h(n)$ kiértékelő függvényt használja~\cite[16.~oldal]{gregorics_grafker}, ahol $g(n)$ a mélység, $h(n)$ pedig a heurisztikus pontszám. Az A$^C$ elnevezés Gregorics Tibor MI jegyzet jelölését követi: a \enquote{C} a \emph{closed list}-re (zárt lista) utal, vagyis a már kiterjesztett állapotokat nem terjesztjük ki újra. Ez az A$^*$ algoritmus~\cite{hart1968astar} speciális változata, amely monoton heurisztikával garantálja, hogy egy állapot első kiterjesztésekor a hozzá vezető legrövidebb utat már megtaláltuk.
 
-Mivel minden alkalmazható heurisztika nemnegatív, megengedhető és monoton, a következő tulajdonság teljesül: amikor egy állapotot kiveszünk a prioritási sorból kiterjeszteni, az az útvonal, amelyen elértük, a legrövidebb út az adott állapothoz. Ezért minden állapotot legfeljebb egyszer kell kiterjeszteni.~\cite{gregorics_grafker_ac}
+Mivel minden alkalmazható heurisztika nemnegatív, megengedhető és monoton, a következő tulajdonság teljesül: amikor egy állapotot kiveszünk a prioritási sorból kiterjeszteni, az az útvonal, amelyen elértük, a legrövidebb út az adott állapothoz. Ezért minden állapotot legfeljebb egyszer kell kiterjeszteni.~\cite[16.~oldal]{gregorics_grafker}
 
 Ez kiküszöböli a backtracking körbejárási és újrafelfedezési problémáit, de az algoritmus sok olyan állapotot is feltárhat, amelyek nem szükségesek a megoldáshoz, mivel megvizsgál minden állapotot, amelynek $f$-értéke kisebb az optimális megoldás költségénél.
 

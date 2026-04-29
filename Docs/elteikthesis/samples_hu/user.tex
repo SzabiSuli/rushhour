@@ -26,7 +26,7 @@ Az alkalmazás három keresőalgoritmust valósít meg, amelyek mindegyike heuri
     \item[A\textsuperscript{C} gráfkeresés] Módosítható stratégiájú gráfkeresés, amely az $f(n) = g(n) + h(n)$ kiértékelő függvényt használja, ahol $g(n)$ a mélység (a kezdőállapottól megtett lépések száma), $h(n)$ pedig a heurisztikus érték. Megengedhető és monoton heurisztikákkal ez az algoritmus megtalálja az optimális megoldást.
 \end{description}
 
-Négy heurisztikus függvény áll rendelkezésre, amelyek mindegyike nemnegatív, megengedhető és monoton~\cite{gregorics_grafker_heuristic}:
+Négy heurisztikus függvény áll rendelkezésre, amelyek mindegyike nemnegatív, megengedhető és monoton:~\cite[14--15.~oldal]{gregorics_grafker}
 \begin{compactitem}
     \item \textbf{Null heurisztika} ($h = 0$): nem ad útmutatást; a \enquote{brute-force} viselkedés megfigyelésére hasznos.
     \item \textbf{Távolság heurisztika}: a kijuttatandó autó távolsága a kijárattól (tartománya: 0--4).
@@ -34,7 +34,7 @@ Négy heurisztikus függvény áll rendelkezésre, amelyek mindegyike nemnegatí
     \item \textbf{Legkevesebb lépés heurisztika}: Még erősebb alsó becslést ad a megoldásig szükséges lépésekre: a távolság, plusz a főautó útjába álló járművek elmozdításához szükséges minimális lépésszámot.
 \end{compactitem}
 
-A megengedhetőség azt jelenti, hogy a heurisztika sosem becsüli túl a tényleges minimális költséget, a monotonitás pedig azt, hogy egy lépés legfeljebb 1-gyel változtathatja meg a heurisztika értékét. Ezek a tulajdonságok biztosítják, hogy az A$^C$ gráfkeresés optimális megoldást találjon~\cite{gregorics_grafker_heuristic}.
+A megengedhetőség azt jelenti, hogy a heurisztika sosem becsüli túl a tényleges minimális költséget, a monotonitás pedig azt, hogy egy lépés legfeljebb 1-gyel változtathatja meg a heurisztika értékét. Ezek a tulajdonságok biztosítják, hogy az A$^C$ gráfkeresés optimális megoldást találjon.~\cite[16.~oldal]{gregorics_grafker}.
 
 A 3D-s állapotgráf elrendezéséhez erőalapú megközelítést alkalmazunk: az élek rugókként működnek, amelyek adott távolság felé húzzák a szomszédos állapotokat, míg minden csúcspár egymásra a távolságuk négyzetével fordítottan arányos taszítóerőt fejtenek ki egymásra. A számításigényes $O(V^2)$ komplexitású taszítást a Barnes–Hut algoritmus~\cite{barneshut1986} nyolcasfa (octree) térbeli adatszerkezet implementálásával approximáljuk, és ezzel az idő komplexitását le tudjuk csökkenteni $O(V \log V)$-re.
 
