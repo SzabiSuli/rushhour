@@ -17,6 +17,7 @@ export_credentials.cfg
 build/
 *.old
 *.old.[0-9]
+**/export_presets.cfg
 
 # Imported translations (automatically generated from CSV files)
 *.translation
@@ -27,5 +28,5 @@ data_*/
 mono_crash.*.json
 
 # Visual Studio Code specific ignores
-# .vscode/
-# .vs/
+.vscode/
+.vs/
