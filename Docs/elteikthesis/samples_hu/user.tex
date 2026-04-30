@@ -5,7 +5,7 @@ Ez a fejezet az alkalmazás teljes leírását nyújtja a felhasználó számár
 
 \section{A probléma meghatározása}
 
-A Rush Hour rejtvény~\cite{rushhour_puzzle} egy tologatós játék, amelyet egy $6 \times 6$-os négyzetrácsos táblán játszanak. A tábla több féle járművet tartalmazhat: $1 \times 2$ mezőt elfoglaló \textbf{autókat} és $1 \times 3$ mezőt elfoglaló \textbf{buszokat}. Minden jármű csak előre és hátra, a hosszabbik tengelye mentén mozoghat, és nem tudják egymást elmozdítani. A cél a kijelölt (piros színű) \textbf{főautó} vízszintes elcsúsztatása, amíg az el nem éri a tábla jobb szélén található kijáratot (3. sor, a tábla jobb oldalán).
+A Rush Hour rejtvény~\cite{rushhour_puzzle} egy tologatós játék, amelyet egy $6 \times 6$-os négyzetrácsos táblán játszanak. A tábla több féle járművet tartalmazhat: $1 \times 2$ mezőt elfoglaló \textbf{autókat} és $1 \times 3$ mezőt elfoglaló \textbf{buszokat}. Minden jármű csak előre és hátra, a hosszabbik tengelye mentén mozoghat és nem tudják egymást elmozdítani. A cél a kijelölt (piros színű) \textbf{főautó} vízszintes elcsúsztatása, amíg az el nem éri a tábla jobb szélén található kijáratot a 3. sorban.
 
 A rejtvény akkor tekinthető \textbf{megoldottnak}, ha a főautó orra közvetlenül a kijáratnál helyezkedik el. A játék állapottere az összes a kezdőállapotból elérhető konfigurációból áll, az állapotok közötti átmenetek pedig egy-egy jármű egy mezővel való elmozdításának felelnek meg a megengedett irányban.
 
@@ -36,14 +36,15 @@ Négy heurisztikus függvény áll rendelkezésre, amelyek mindegyike nemnegatí
 
 A megengedhetőség azt jelenti, hogy a heurisztika sosem becsüli túl a tényleges minimális költséget, a monotonitás pedig azt, hogy egy lépés legfeljebb 1-gyel változtathatja meg a heurisztika értékét. Ezek a tulajdonságok biztosítják, hogy az A$^C$ gráfkeresés optimális megoldást találjon.~\cite[16.~oldal]{gregorics_grafker}.
 
-A 3D-s állapotgráf elrendezéséhez erőalapú megközelítést alkalmazunk: az élek rugókként működnek, amelyek adott távolság felé húzzák a szomszédos állapotokat, míg minden csúcspár egymásra a távolságuk négyzetével fordítottan arányos taszítóerőt fejtenek ki egymásra. A számításigényes $O(V^2)$ komplexitású taszítást a Barnes–Hut algoritmus~\cite{barneshut1986} nyolcasfa (octree) térbeli adatszerkezet implementálásával approximáljuk, és ezzel az idő komplexitását le tudjuk csökkenteni $O(V \log V)$-re.
+A 3D-s állapotgráf elrendezéséhez erőalapú megközelítést alkalmazunk: az élek rugóként működnek, amelyek adott távolság felé húzzák a szomszédos állapotokat, míg minden csúcspár egymásra a távolságuk négyzetével fordítottan arányos taszítóerőt fejtenek ki egymásra. A számításigényes $O(V^2)$ komplexitású taszítást a Barnes–Hut algoritmus~\cite{barneshut1986} nyolcasfa (octree) térbeli adatszerkezet implementálásával approximáljuk, és ezzel az idő komplexitását le tudjuk csökkenteni $O(V \log V)$-re.
 
 
 \section{Rendszerkövetelmények}
 
-Az alkalmazás önállóan futtatható fájlként érhető el Windowson és Linuxon, és nem igényel további szoftvertelepítést.
+Az alkalmazás futtatható fájlként érhető el Windowson és Linuxon, és nem igényel további szoftvertelepítést.
 Van lehetőség a projektet a Godot editorből futtatni és exportálni futtatható fájl formátumba egyéb platformokra.
-Ajánlott minimum képernyőfelbontás: $1280 \times 720$
+Ajánlott minimum képernyőfelbontás: $1280 \times 720$.
+A futtatható fájlok a szakdolgozat \href{https://github.com/SzabiSuli/rushhour/}{\underbar{Github repository}}-ján érhetőek el.
 
 \begin{table}[H]
     \centering
@@ -51,11 +52,11 @@ Ajánlott minimum képernyőfelbontás: $1280 \times 720$
         \hline
         \textbf{Platform} & \textbf{Futtatás} \\
         \hline \hline
-        \emph{Windows} & Futtassa közvetlenül a mellékelt \texttt{rushhour.exe} fájlt. \\
+        \emph{Windows} & Töltse le és csomagolja ki a \texttt{windows\_build.zip} fájlt majd futtasa benne a \texttt{rushhour.exe} fájlt. \\
         \hline
-        \emph{Linux} & Futtassa közvetlenül a mellékelt \texttt{rushhour.x86\_64} fájlt. \\
+        \emph{Linux} & Töltse le és csomagolja ki a \texttt{linux\_build.zip} fájlt majd futtasa benne a \texttt{rushhour.x86\_64} fájlt. \\
         \hline
-        \emph{MacOS / egyéb} & Töltse le és csomagolja ki a \texttt{rushhour.zip} fájlt és nyissa meg (Import project) a kicsomagolt \texttt{project.godot} fájlt a Godot 4.6 Mono szerkesztővel, majd jobb felüli gombbal futtassa. \\
+        \emph{MacOS / egyéb} & Klónolja vagy töltse le a repository tartalmát, (Import project) a kicsomagolt \texttt{rushhour/project.godot} fájlt a Godot 4.6 Mono szerkesztővel, majd jobb felüli gombbal futtassa. \\
         \hline
     \end{tabular}
     \caption{Támogatott platformok és futtatási utasításaik}
@@ -133,6 +134,15 @@ A forrásból való fordításhoz, ha az előfeltételek adottak, a projekt megn
 
 \section{Az alkalmazás áttekintése}
 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.70\textwidth]{app_preview}
+    \caption{Az alkalmazás egy algoritmus futása közben}
+    \label{fig:app-preview}
+\end{figure}
+
+
 Az alkalmazás ablaka két fő területre oszlik:
 \begin{compactitem}
     \item \textbf{Bal oldali panel}: a 3D-s állapotgráf vizualizációs színtere. 
@@ -140,21 +150,14 @@ Az alkalmazás ablaka két fő területre oszlik:
 \end{compactitem}
 
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{app_preview}
-    \caption{Az alkalmazás egy algoritmus futása közben}
-    \label{fig:app-preview}
-\end{figure}
-
 A bal oldali panelen belül található:
 
 \begin{compactitem}
-    \item Bal alul az állapotgráffal való interakciónak az irányításai
+    \item Bal alul az állapotgráffal való interakciónak az irányításai, színek jelentése
     \item Jobb felül a jelenleg futó algoritmushoz kapcsolódó információk:
     \begin{compactitem}
-        \item Az algoritmus jelenlegi státusza
         \item Az algoritmus által megtett lépések száma
+        \item Az algoritmus jelenlegi státusza
         \item A megtalált megoldás lépésszáma
         \item A jelenleg táblán mutatott állás heurisztikus értéke
     \end{compactitem}
@@ -174,7 +177,7 @@ Bármikor másik feladvány választható az alábbi módon:
 \begin{enumerate}
     \item Navigáljon a jobb felül a füleken belül a \textbf{Levels} fülre.
     \item Kattintson a kívánt rejtvénynek megfelelő gombra.
-    \item A játéktábla betölti a kezdeti konfigurációt, a 3D-s állapotgráf térben pedig megjelenik az a csúcs, amely a kezdőállapotot reprezentálja.
+    \item A játéktábla betölti a kezdeti konfigurációt, a 3D-s állapotgráf térben pedig kéken megjelenik az a csúcs, amely a kezdőállapotot reprezentálja.
 \end{enumerate}
 
 \section{Kézi játék}
@@ -184,11 +187,11 @@ A rejtvény manuálisan is játszható a játéktáblával való közvetlen inte
 \begin{enumerate}
     \item Minden mozgatható jármű mellett piros nyíl indikátorok jelennek meg, mutatva a lehetséges mozgási irányokat.
     \item Kattintson egy nyílra a megfelelő jármű egy mezővel való eltolásához.
-    \item Minden kézi lépés egy új állapotot, valamint egy hozzá tartozó csúcsot és élt hoz létre a 3D-s gráfon, lehetővé téve a felhasználó számára az állapotgráf interaktív felépítését.
+    \item Minden kézi lépés egy új állapotot, valamint egy hozzá tartozó csúcsot és élt hoz létre a 3D-s gráfon (ha az az állapot még nincs felfedezve), lehetővé téve a felhasználó számára az állapotgráf interaktív felépítését.
 \end{enumerate}
 
 
-A manuális módba bármikor át lehet kapcsolni a \textbf{Manual} gombra nyomással, vagy egy már felfedezett állapot csúcsára kattintással. Mindkét esetben a tábla a kiválasztott állapotot jeleníti meg és manuális módba vált. Ha ekkor épp fut keresőalgoritmus, az a háttérben tovább fut.
+A manuális módba bármikor át lehet kapcsolni a \textbf{Manual} gombra nyomással, vagy egy már felfedezett állapot csúcsára kattintással. Mindkét esetben a tábla a kiválasztott állapotot jeleníti meg és manuális módba vált. Ha ekkor épp fut keresőalgoritmus, az a háttérben tovább fut. Az állapotgráfon pirossal van feltüntetve a manuálisan kiválasztott állapot csúcsa.
 \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.32\textwidth}
@@ -222,7 +225,7 @@ A keresőalgoritmus futtatása előtt a felhasználó a \textbf{Solver settings}
         \item $n = 1$: hegymászó algoritmus --- csak az előző állapotra emlékszik, és elkerüli az oda való visszalépést.
         \item $n > 1$: elkerüli az utolsó $n$ meglátogatott állapotot. Ha minden lehetséges lépés tabu állapotba vezetne, az algoritmus megoldás nélkül terminál.
     \end{compactitem}
-    \item[Heurisztikus függvény] Válasszon a négy elérhető heurisztika közül (Null, Distance, Distance + blocks, Least-moves).
+    \item[Heurisztikus függvény] Válasszon a négy elérhető heurisztika közül (Null, Távolság, Távolság + blokkok, Legkevesebb lépés becslés).
     \item[Véletlenszerűség kapcsoló] Ha engedélyezve van, az azonos heurisztikus pontszámú állapotok közül az algoritmus véletlenszerűen választ a determinisztikus választás helyett, ami ismételt futtatásoknál különböző bejárási utakat eredményezhet.
     \item[Alkalmaz (Apply) gomb] Nyomja meg, hogy a beállítások szerinti keresőalgoritmus inicializálva legyen a betöltött feladványra.
 \end{description}
@@ -240,9 +243,9 @@ A keresőalgoritmus futtatása előtt a felhasználó a \textbf{Solver settings}
 A szint betöltése és a megoldó konfigurálás és alkalmazás (Apply gomb) után az algoritmus az \textbf{Game board} fülről vezérelhető:
 
 \begin{description}
-    \item[Lejátszás/Szünet] Az algoritmus folyamatos futtatásának indítása vagy megállítása.
+    \item[Lejátszás/Szünet (Play/Pause)] Az algoritmus folyamatos futtatásának indítása vagy megállítása.
     \item[Léptetés (Step)] Az algoritmus egyetlen lépésének végrehajtása, ami hasznos a részletes megfigyeléshez.
-    \item[Újraindítás] Az algoritmus visszaállítása a kezdőállapotba a jelenlegi beállítások megtartásával.
+    \item[Újraindítás (Restart)] Az algoritmus visszaállítása a kezdőállapotba a jelenlegi beállítások megtartásával.
     \item[Sebességcsúszka] Az algoritmus lépései közötti késleltetés beállítása. A csúszka jobbra tolásával a sebesség nő; a maximum állásban az algoritmus a lehető leggyorsabban fut, képkockánként több száz lépést is végrehajthat.
 \end{description}
 
@@ -253,27 +256,19 @@ A szint betöltése és a megoldó konfigurálás és alkalmazás (Apply gomb) u
     \label{fig:algorithm-controls}
 \end{figure}
 
-A játéktábla alatti állapotsor a következőket jeleníti meg:
-\begin{compactitem}
-    \item Az algoritmus által végrehajtott aktuális \textbf{lépésszám} (step count).
-    \item A \textbf{megoldó állapota} (Inicializálva, Fut, Megoldva, Nincs megoldás, Zsákutcába jutott).
-    \item A \textbf{megoldás hossza} (lépések száma), ha talált az algoritmus megoldást.
-    \item Az éppen megjelenített állapot \textbf{heurisztikus értéke}.
-\end{compactitem}
-
 Amikor az algoritmus megoldást talál, a megoldási útvonal zölddel kiemelve jelenik meg az állapotgráfon, és láthatóvá válik a megoldás hossza.
 
 
 \section{Állapotok felfedezése}
 
-A keresőalgoritmusokon kívül az alkalmazás \textbf{BFS} (szélességi keresés) és \textbf{DFS} (mélységi keresés) felfedező módokat is kínál, amelyek a Solver settings fülről érhetők el. Ezek a módok anélkül tárják fel az állapotteret, hogy megoldást keresnének, minden elérhető állapotot és élt hozzáadva az állapotgráfhoz:
+A keresőalgoritmusokon kívül az alkalmazás \textbf{BFS} (szélességi keresés) és \textbf{DFS} (mélységi keresés) felfedező módokat is kínál, amelyek a Solver settings fülről érhetőek el. Ezek a módok anélkül tárják fel az állapotteret, hogy megoldást keresnének, minden elérhető állapotot és élt hozzáadva az állapotgráfhoz:
 
 \begin{compactitem}
     \item Beállítható egy \textbf{maximális állapotszám} a felfedezett állapotok korlátozására. Ez ajánlott a nehezebb feladványoknál, ahol az állapottér több ezer elemet is tartalmazhat, mivel a túl sok csúcs átláthatatlanná teheti az állapotgráfot, lelassíthatja a fizikai szimulációt.
     \item Az \textbf{unlimited} kapcsoló eltávolítja az állapotlimitet.
 \end{compactitem}
 
-A felfedezés nagy sebességgel fut és feltölti a gráfot, ami után a felhasználó futtathat egy keresőalgoritmust a már teljesen (vagy részben) feltérképezett állapottéren.
+A felfedezés nagy sebességgel fut és feltölti a gráfot, ami után a felhasználó futtathat egy keresőalgoritmust a már teljesen (vagy részben) feltérképezett állapottéren. A felfedezést is lehet vezérelni a lejátszás/szünet, léptetés a gombokkal és csúszkával.
 
 
 \section{Interakció a 3D-s állapotgráffal}
@@ -285,7 +280,7 @@ Az alkalmazás bal oldalán található 3D-s térben jeleníti meg az állapotgr
     \item[Kamera mozgatása] Használja a \texttt{W}, \texttt{A}, \texttt{S}, \texttt{D} billentyűket a kamera aktuális irányához képesti eltolásához. \texttt{Shift} nyomva tartásával a mozgás gyorsabb.
     \item[Zoom] Használja az egérgörgőt a közelítéshez és távolításhoz.
     \item[Csúcsra kattintás] Kattintson a bal egérgombbal egy csúcsra az adott állapotba ugráshoz: a játéktábla Kézi módba vált és a kiválasztott állapotot mutatja.
-    \item[Csúcsok/élek elrejtése] Egy kapcsológombbal minden csúcs és él szinte teljesen átlátszóvá tehető. Ez hasznos lehet a vizuális zaj csökkentésére nagy gráfok felfedezésekor.
+    \item[Csúcsok/élek elrejtése] A játéktábla fülen egy kapcsológombbal minden nem kitüntetett csúcs és él elrejthető. Ez hasznos lehet a vizuális zaj csökkentésére nagy gráfok felfedezésekor.
 \end{description}
 
 
@@ -314,9 +309,9 @@ A 3D-s gráf csúcsai és élei színkódoltak a szerepük szemléltetésére:
         \hline
         \emph{Él} & Zöld & A megtalált megoldási útvonal része \\
         \hline
-        \emph{Él} & Sárga (áttetsző) & Az algoritmus memóriájában tárolt lépés \\
+        \emph{Él} & Sárga & Az algoritmus memóriájában tárolt lépés \\
         \hline
-        \emph{Él} & Fehér (halvány) & Felfedezett lépés \\
+        \emph{Él} & Fehér & Felfedezett lépés \\
         \hline
     \end{tabular}
     \caption{A 3D-s állapotgráf csúcsainak és éleinek színmagyarázata}
@@ -340,4 +335,4 @@ A 3D-s gráf csúcsai és élei színkódoltak a szerepük szemléltetésére:
 \end{figure}
 
 Egy állapot csúcsára egyszerre több tulajdonság is vonatkozhat, például épp kiválasztott és algoritmus memóriájában tárolt állapot. Ekkor a táblázatban felsorolt sorrend szerint a legelső tulajdonság megjelenítése élvez prioritást.
-Az első négy tulajdonság (kézi aktuális, megoldott, kezdő, algoritmus aktuális) nem csak színben mások, de kétszeres méretben jelennek meg. Az algoritmus memóriájában tárolt csúcsok másfélszeres méretben vannak megjelenítve.
+Az első négy tulajdonság (kézi aktuális, megoldott, kezdő, algoritmus aktuális) nem csak színben mások, de nagyobb méretben jelennek meg. Az algoritmus memóriájában tárolt csúcsok szintén kicsit nagyobban jelennek meg.
