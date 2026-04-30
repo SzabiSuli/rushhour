@@ -76,7 +76,30 @@ public class ModelTests {
     }
 
     [TestCase]
-    public void U03_LevelMoves() {
+    public void U03_AllBuiltInLevelsLoad() {
+        var levels = Levels.LoadLevels().ToList();
+
+        // There must be at least one built-in level.
+        AssertBool(levels.Count > 0).IsTrue();
+
+        foreach (Level level in levels) {
+            // Title must be non-empty.
+            AssertBool(level.Title.Trim().Length > 0).IsTrue();
+
+            // State must have at least the main car.
+            AssertBool(level.State.PlacedPieces.Count > 0).IsTrue();
+            AssertThat(level.State.PlacedPieces[0].Piece.GetType()).Equals(typeof(MainCar));
+
+            // The initial state of a puzzle must not already be solved.
+            AssertBool(level.State.IsSolved()).IsFalse();
+
+            // The state must have at least one possible move (it can't be immediately stuck).
+            AssertBool(level.State.GetPossibleMoves().Any()).IsTrue();
+        }
+    }
+
+    [TestCase]
+    public void U04_LevelMoves() {
         RHGameState state = Levels.LoadLevelString(testLevelString).State;
 
         var possibleMoves = state.GetPossibleMoves().ToList();
@@ -105,7 +128,7 @@ public class ModelTests {
 
     }
     [TestCase]
-    public void U04_StateImmutability() {
+    public void U05_StateImmutability() {
         RHGameState original = Levels.LoadLevelString(testLevelString).State;
         Move firstMove = original.GetPossibleMoves().First();
 
@@ -121,7 +144,7 @@ public class ModelTests {
     }
 
     [TestCase]
-    public void U05_StateEquality() {
+    public void U06_StateEquality() {
         RHGameState state1 = Levels.LoadLevelString(testLevelString).State;
         RHGameState state2 = Levels.LoadLevelString(testLevelString).State;
 
@@ -170,7 +193,7 @@ public class ModelTests {
     }
 
     [TestCase]
-    public void U06_HashConsistency() {
+    public void U07_HashConsistency() {
         RHGameState state1 = Levels.LoadLevelString(testLevelString).State;
         RHGameState state2 = Levels.LoadLevelString(testLevelString).State;
 
@@ -195,7 +218,7 @@ public class ModelTests {
     """;
 
     [TestCase]
-    public void U07_SolvedDetection() {
+    public void U08_SolvedDetection() {
         RHGameState unsolved = Levels.LoadLevelString(testLevelString).State;
         AssertBool(unsolved.IsSolved()).IsFalse();
 
@@ -208,7 +231,7 @@ public class ModelTests {
     }
 
     [TestCase]
-    public void U08_NullHeuristic() {
+    public void U09_NullHeuristic() {
         NullHeuristic h = new NullHeuristic();
         RHGameState state = Levels.LoadLevelString(testLevelString).State;
 
@@ -221,7 +244,7 @@ public class ModelTests {
     }
 
     [TestCase]
-    public void U09_DistanceHeuristicRange() {
+    public void U10_DistanceHeuristicRange() {
         DistanceHeuristic h = new DistanceHeuristic();
 
         // Explore some states and test them
@@ -251,9 +274,81 @@ public class ModelTests {
             }
         }
     }
+    // Test level:
+    // .....b
+    // .....b
+    // aA.C.B
+    // ...c..
+    // .Ddd..
+    // ......
+
+    string testLevelString2 = """
+    Test level
+    ..F..b
+    ..f.eb
+    aAfCEB
+    ...c..
+    .Ddd..
+    ......
+    """;
+    string testLevelString3 = """
+    Test level
+    F....b
+    f...eb
+    faACEB
+    ...cg.
+    .DddG.
+    ......
+    """;
 
     [TestCase]
-    public void U10_HeuristicAdmissibility() {
+    public void U11_FreeSpacesHeuristicKnownValue() {
+        Heuristic<RHGameState> h = new FreeSpacesHeuristic();
+
+        RHGameState state = Levels.LoadLevelString(testLevelString).State;
+        // The initial state of test level 1 must have a heuristic score of:
+        // 4 distance + 2 blocks = 6
+        AssertInt(h.Evaluate(state)).Equals(6);
+
+        RHGameState state2 = Levels.LoadLevelString(testLevelString2).State;
+        // 4 distance + 4 blocks = 8
+        AssertInt(h.Evaluate(state2)).Equals(8);
+
+        RHGameState state3 = Levels.LoadLevelString(testLevelString3).State;
+        // 3 distance + 3 blocks = 6
+        // only the blocks in front of the main car should count
+        AssertInt(h.Evaluate(state2)).Equals(6);
+
+
+        // On the solved state h must return 0.
+        RHGameState solved = Levels.LoadLevelString(testSolvedLevelString).State;
+        AssertInt(h.Evaluate(solved)).Equals(0);
+    }
+    [TestCase]
+    public void U12_MoverHeuristicKnownValue() {
+        Heuristic<RHGameState> h = new MoverHeuristic();
+
+        RHGameState state = Levels.LoadLevelString(testLevelString).State;
+        // The initial state of test level 1 must have a heuristic score of:
+        // 4 + Min(2, 1 + 1) + 3 = 9
+        // 4 distance, 2 moves to put C out of the way, 3 moves to put B out of the way 
+        AssertInt(h.Evaluate(state)).Equals(9);
+
+        RHGameState state2 = Levels.LoadLevelString(testLevelString2).State;
+        // 4 + (3 + 1) + Min(2, 1 + 1) + Min (1, 2) + 3 = 14
+        AssertInt(h.Evaluate(state2)).Equals(14);
+
+        RHGameState state3 = Levels.LoadLevelString(testLevelString3).State;
+        // 3 + Min(2, 1 + 1) + Min(1, 2 + 2) + 3 = 9
+        AssertInt(h.Evaluate(state2)).Equals(9);
+
+        // On the solved state h must return 0.
+        RHGameState solved = Levels.LoadLevelString(testSolvedLevelString).State;
+        AssertInt(h.Evaluate(solved)).Equals(0);
+    }
+
+    [TestCase]
+    public void U13_HeuristicAdmissibility() {
         // Start from a solved state
         RHGameState solved = Levels.LoadLevelString(testSolvedLevelString).State;
         AssertBool(solved.IsSolved()).IsTrue();
@@ -293,7 +388,7 @@ public class ModelTests {
     }
 
     [TestCase]
-    public void U11_HeuristicMonotonicity() {
+    public void U14_HeuristicMonotonicity() {
         MonotoneHeuristic<RHGameState>[] heuristics = {
             new NullHeuristic(),
             new DistanceHeuristic(),
@@ -326,7 +421,7 @@ public class ModelTests {
     }
 
     [TestCase]
-    public void U12_TabuSolverTermination() {
+    public void U15_TabuSolverTermination() {
         // The state
         // .....b
         // .....b
@@ -370,11 +465,12 @@ public class ModelTests {
     }
 
     [TestCase]
-    public void U13_BacktrackingCompleteness() {
+    public void U16_BacktrackingCompleteness() {
         RHGameState solvable = Levels.LoadLevelString(testLevelString).State;
-        var solver = new BacktrackingSolver(new NullHeuristic());
+        var solver = new BacktrackingSolver(new MoverHeuristic());
         solver.Start(solvable);
 
+        // Assume that with the mover heuristic the solution can be found within 100_000 steps
         int maxSteps = 100_000;
         while (solver.Status == SolverStatus.Running && solver.StepCount <= maxSteps) {
             solver.Step();
@@ -391,7 +487,7 @@ public class ModelTests {
     }
 
     [TestCase]
-    public void U14_AcGraphOptimality() {
+    public void U17_AcGraphOptimality() {
         RHGameState initial = Levels.LoadLevelString(testLevelString).State;
 
 
@@ -435,32 +531,118 @@ public class ModelTests {
 
         AssertThat(solver.Status).Equals(SolverStatus.Solved);
 
-        var path = solver.GetSolutionPath().ToList();
-        AssertInt(path.Count).Equals(optimalCost);
+        var solutionPath = solver.GetSolutionPath().ToList();
+        AssertInt(solutionPath.Count).Equals(optimalCost);
+
+        // assert that the route is correctly constructed
+        AssertThat(solutionPath.First().From).Equals(initial);
+        AssertBool(solutionPath.Last().To.IsSolved()).IsTrue();
+
+        // the route is correctly connected
+        for (int i = 0; i < optimalCost - 1; i++) {
+            AssertThat(solutionPath[i].To).Equals(solutionPath[i+1].From);
+        }
+    }
+
+    // An unsolvable state: the B bus cannot be put on the bottom to clear the way
+    string testUnsolvableLevelString = """
+    Unsolvable
+    .....B
+    .....b
+    aA...b
+    ......
+    ......
+    ddDccC
+    """;
+
+
+    [TestCase]
+    public void U18_BacktrackingNoSolution() {
+        RHGameState unsolvable = Levels.LoadLevelString(testUnsolvableLevelString).State;
+
+        // state is indeed not solved.
+        AssertBool(unsolvable.IsSolved()).IsFalse();
+
+        var solver = new BacktrackingSolver(new NullHeuristic());
+        solver.Start(unsolvable);
+
+        // with V = 4 * 3 = 12 states and b = 4 max moves for each state,
+        // a maximum of b^V = 4^12 routes will be inspected, each with a maximum step count of V
+        // So the algorithm must temrinate in b^V * V = 4^12 * 12 = 201326592 steps
+        int maxSteps = 201_326_592; 
+        while (solver.Status == SolverStatus.Running && solver.StepCount <= maxSteps) {
+            solver.Step();
+        }
+
+        // Backtracking is complete: it must report NoSolution for an unsolvable puzzle.
+        AssertThat(solver.Status).Equals(SolverStatus.NoSolution);
     }
 
     [TestCase]
-    public void U15_StateMoveSymmetry() {
-        RHGameState stateA = Levels.LoadLevelString(testLevelString).State;
-        Move move = stateA.GetPossibleMoves().First();
-        RHGameState stateB = stateA.WithMove(move);
+    public void U19_AcGraphNoSolution() {
+        RHGameState unsolvable = Levels.LoadLevelString(testUnsolvableLevelString).State;
+        AssertBool(unsolvable.IsSolved()).IsFalse();
 
-        StateMove ab = new StateMove(stateA, stateB, move);
-        // Construct the reverse move (same piece, opposite direction).
-        Move reverseMove = new Move {
-            PieceIndex = move.PieceIndex,
-            Dir = move.Dir.GetOpposite()
+        var solver = new AcGraphSolver(new NullHeuristic());
+        solver.Start(unsolvable);
+
+        // The solver must terminate in V steps
+        int maxSteps = 400;
+        while (solver.Status == SolverStatus.Running && solver.StepCount <= maxSteps) {
+            solver.Step();
+        }
+
+        // Ac is complete: it must report NoSolution for an unsolvable puzzle.
+        AssertThat(solver.Status).Equals(SolverStatus.NoSolution);
+    }
+
+    
+
+    [TestCase]
+    public void U20_SolverEventsAreFired() {
+        RHGameState initial = Levels.LoadLevelString(testLevelString).State;
+        var solver = new AcGraphSolver(new DistanceHeuristic());
+
+        int newEdgeCount = 0;
+        int newCurrentCount = 0;
+        int pathChangedCount = 0;
+        bool terminatedFired = false;
+        SolverStatus terminatedStatus = SolverStatus.NotStarted;
+
+        solver.NewEdge     += (_, _)      => newEdgeCount++;
+        solver.NewCurrent  += (_, _)      => newCurrentCount++;
+        solver.Terminated  += (_, status) => { 
+            terminatedFired = true;
+            terminatedStatus = status; 
         };
-        StateMove ba = new StateMove(stateB, stateA, reverseMove);
 
-        // Equality must hold in both directions.
-        AssertBool(ab == ba).IsTrue();
-        AssertBool(ba == ab).IsTrue();
-        AssertInt(ab.GetHashCode()).Equals(ba.GetHashCode());
+        solver.Start(initial);
+
+        int maxSteps = 500;
+        while (solver.Status == SolverStatus.Running && solver.StepCount <= maxSteps) {
+            solver.Step();
+            // NewEdge should be at least the number of states discovered (apart from the initial states)
+            // And every step taken (apart from the solution verification last step) extended a new state
+            AssertInt(newEdgeCount).IsGreaterEqual(solver.StepCount - 1);
+        
+            // NewCurrent should be triggered once every step.
+            AssertInt(newCurrentCount).Equals(solver.StepCount);
+            
+            // PathChanged should be triggered once every step, apart from the last step.
+            if (solver.Status == SolverStatus.Running) {
+                AssertInt(pathChangedCount).Equals(solver.StepCount);
+            } else {
+                AssertInt(pathChangedCount).Equals(solver.StepCount - 1);
+            }
+        }
+
+        // The solver must have reached a terminal state, it should be Solved.
+        AssertBool(terminatedFired).IsTrue();
+        AssertThat(terminatedStatus).Equals(SolverStatus.Solved);
     }
 
     [TestCase]
-    public void U16_DiscovererStateLimit() {
+    public void U21_DiscovererStateLimit() {
         RHGameState initial = Levels.LoadLevelString(testLevelString).State;
 
         int maxStates = 400;
@@ -513,4 +695,25 @@ public class ModelTests {
         AssertThat(dfsd2.Status).Equals(SolverStatus.DiscoverEndLimitReached);
         AssertInt(dfsd2.StepCount).Equals(limit);
     }
+
+     [TestCase]
+    public void U22_StateMoveSymmetry() {
+        RHGameState stateA = Levels.LoadLevelString(testLevelString).State;
+        Move move = stateA.GetPossibleMoves().First();
+        RHGameState stateB = stateA.WithMove(move);
+
+        StateMove ab = new StateMove(stateA, stateB, move);
+        // Construct the reverse move (same piece, opposite direction).
+        Move reverseMove = new Move {
+            PieceIndex = move.PieceIndex,
+            Dir = move.Dir.GetOpposite()
+        };
+        StateMove ba = new StateMove(stateB, stateA, reverseMove);
+
+        // Equality must hold in both directions.
+        AssertBool(ab == ba).IsTrue();
+        AssertBool(ba == ab).IsTrue();
+        AssertInt(ab.GetHashCode()).Equals(ba.GetHashCode());
+    }
+
 }
