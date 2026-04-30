@@ -11,8 +11,6 @@ using rushhour.src.Nodes.UI;
 public class Edge {
     // Physics constants
     public const int springLength = 1;
-    public const double optimalIntervalLowerBound = springLength * 0.9;
-    public const double optimalIntervalUpperBound = springLength * 1.1;
     public const float springForce = 100;
 
     // Instance data
@@ -67,10 +65,6 @@ public class Edge {
     public void ApplySpringForce() {
         Vector3 distanceVector = To.Position - From.Position;
         var length = distanceVector.Length();
-        if (optimalIntervalLowerBound < length && length < optimalIntervalUpperBound) {
-            // Spring is close to the optimal length, skip for performance
-            return;
-        }
         Vector3 force = distanceVector * ((length - springLength) / length) * springForce;
 
         From.ApplyPendingForce(force);

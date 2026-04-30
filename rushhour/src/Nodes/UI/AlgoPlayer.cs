@@ -67,7 +67,7 @@ public partial class AlgoPlayer : VBoxContainer {
     public void LoadLevel(RHGameState level) {
         InitialState = level;
 
-        SetupControlButtons(false);
+        SetupControlButtons(false, true);
 
         UnSubFromSolver();
         
@@ -89,10 +89,10 @@ public partial class AlgoPlayer : VBoxContainer {
         TabCont.CurrentTab = 1;
     }
 
-    public void SetupControlButtons(bool startPlaying) {
+    public void SetupControlButtons(bool startPlaying, bool allowRestart) {
         playPauseButton.Disabled = false;
         stepButton.Disabled = false;
-        restartButton.Disabled = false;
+        restartButton.Disabled = !allowRestart;
         
         playPauseButton.ButtonPressed = startPlaying;
         if (!startPlaying) {
@@ -154,7 +154,7 @@ public partial class AlgoPlayer : VBoxContainer {
 
     public void ResetSolver() => ResetSolver(SolverSettingsTab.Instance.GetSolver());
 
-    public void ResetSolver(RHSolver newSolver, bool startPlaying = false) {
+    public void ResetSolver(RHSolver newSolver) {
         if (InitialState is null) {
             throw new Exception("Can't restart with no level loaded");
         }
@@ -173,7 +173,13 @@ public partial class AlgoPlayer : VBoxContainer {
 
         Solver.Start(InitialState);
 
-        SetupControlButtons(startPlaying);
+        if (newSolver is Discoverer) {
+            // For discoverers start playing, and don't allow a restart
+            SetupControlButtons(true, false);
+        } else {
+            // For solvers don't start playing, and allow restarts
+            SetupControlButtons(false, true);
+        }
 
         // Switch to the AlgoPlayer tab
         TabCont.CurrentTab = 2;

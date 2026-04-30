@@ -55,13 +55,13 @@ public partial class SolverSettingsTab : VBoxContainer {
     public void OnUnlimitedSearchButtonToggled(bool on) => searchCountBox.Editable = !on;
     public void StartBfsSearcher() {
         // assume a level is loaded
-        AlgoPlayer.Instance.ResetSolver(new BFSDiscoverer(maxStatesToDiscover), true);
+        AlgoPlayer.Instance.ResetSolver(new BFSDiscoverer(maxStatesToDiscover));
         Slider s = AlgoPlayer.Instance.slider;
         s.Value = s.MaxValue - 1; 
     }
     public void StartDfsSearcher() {
         // assume a level is loaded
-        AlgoPlayer.Instance.ResetSolver(new DFSDiscoverer(maxStatesToDiscover), true);
+        AlgoPlayer.Instance.ResetSolver(new DFSDiscoverer(maxStatesToDiscover));
         Slider s = AlgoPlayer.Instance.slider;
         s.Value = s.MaxValue - 1; 
     }
