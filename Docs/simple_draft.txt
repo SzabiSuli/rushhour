@@ -2,59 +2,41 @@
     - Forrás kód elérhető
     - Letölthető és futtatható fájlok
 - Program célja
-    - "A dolgozatom célja a mesterséges intelligencia állapotgráf kereső algoritmusainak szemléltetése,  és azok személyre szabott futtatása, valamint az állapotgráf áttekintése."
-    - "A Rush hour játék megfelelőnek bizonyult, ugyanis általános verziója PSPACE teljes probléma, így a játék probléma tere gyorsan tud nőni, így a mesterséges intelligencia eszközeivel tudjuk hatékonyan megoldani a feladványokat."
-    - A program godot és c# ban készült
+    - "A dolgozatom célja a mesterséges intelligencia állapotgráf kereső algoritmusainak szemléltetése, és azok személyre szabott futtatása, valamint az állapotgráf áttekintése."
+    - "A Rush hour játék megfelelőnek bizonyult, a szabályai nagyon egyszerűek, de rengetegkülöünböző pályát felállíthatunk, valamint általános verziója PSPACE teljes probléma, így a játék probléma tere rendkívül gyorsan tud nőni, így a mesterséges intelligencia eszközeivel tudjuk hatékonyan megoldani a feladványokat."
+    - A program godot és c# ban készült MV architektúrában
 - Kézi játék
     - Szabályok elmagyarázása
     - Manuális lépések, megoldás
+        - Négyzet rajzolás
 - Állapotgráf irányítás
-    - Szomszédos állapotok
     - Belekattintás
     - Színkódok
 - Állapottér felfedezés
-    - BFS
-    - State limit - Level 9
-    - DFS - Level 4
+    - BFS - Hollowed cube
+        - State limit - 30
+            - Jó arra hogy az állapotgráf egy kis részét fedezzük fel
+        - Unlimited
 
-- Az állapotgráf szimulálása - Erő alapú elrendezés
+- Az állapotgráf szimulálása - Erő alapú elrendezés 
+    - Csúcsok mágnesek - fordítottan négyzetesen taszítják egymást
     - Szomszédok között rugó - szomszédok viszonylag közel maradjanak
-    - Csúocsok mágnesek - fordítottan négyzetesen taszítják egymást
+    - Sokat kellett optimalizálni
 
-- Állapotgráf strukturális jelentése
-    - Level 6   - Két különböző irányba is elkezdhetünk megoldást keresni
-    - Level 35  - szűk labirintus 
-    - Level 39  - Egy utat meg kell találni
-    - Level 30  - Több dolog is
-
-- Heurisztikák
+- Keresőalgoritmusok, Heurisztikák
     - Mind a négy heurisztika Nem negatív, Megengedhető és monoton, így az Ac egy csúcsot csak egyszer fog kiterjeszteni, a legrövidebb megoldást találja.
-    - Manuális lépésekkel:
-    - Első 3 - Demo on hollowed cube
-    - Least moves - Demo on level 1
-
-
-- Keresések
-    - Tabu Keresés - Nem terminál garantálatan egyszerű feladványokra jó
-        - Sűrűre jó - Level 5, 6, 8
-        - level 10 -re nem jó
-
-    - Backtrack - Garantáltan terminál a megoldással, ha van - Bár ez lehet O((2n)^V)
-        - Level 6
-        - Sűrű zsákutcára nem jó - level 31
-
-    - Gráf keresés - Mindig polinom időben megtalálja a legrövidebb megoldást (O(V) kiterjesztéssel azaz lépéssel)
-        - Level 20
+    - Follow vertieces
+    - Level 5 - Distance heuristic - Tabu 50 - Random off
+    - Jobb felül mutatni a dolgokat
+    - Sárga - keresőgráf
+    - Léptetés heurisztika mutatása
+    - then random on
+    - Zöld megoldás
+    - Level 35 már nem jó
+    - Distance + blocks heuristic - Backtracking algorithm
+    - Least moves heuristic
+    - Level 20 - Ac search - Least moves heuristic
+    - kiterjesztett csúcsokból elérhető csúcsok közül a távolság + heurisztika minimális
 
 - Tesztelés
     - A szerkesztőben futtassuk le a teszteket ha változtatunk valamit
-
-
-
-
-
-
-Írni kell a a bizottságnak, hogy saját gépről szeretnénk bemutatni
-
--- KERESŐ GRÁF
-ezeket elsőre tisztázzuk
